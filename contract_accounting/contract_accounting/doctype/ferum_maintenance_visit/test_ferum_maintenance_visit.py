@@ -7,6 +7,7 @@ from uuid import uuid4
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+from frappe.utils.file_manager import save_file
 
 from contract_accounting.api.execution import (
 	accept_visit,
@@ -116,14 +117,13 @@ class TestFerumMaintenanceExecution(FrappeTestCase):
 		with self.assertRaises(frappe.ValidationError):
 			review_visit(visit_name, "Approved")
 
-		file_doc = frappe.get_doc(
-			{
-				"doctype": "File",
-				"file_name": f"ca03-{uuid4().hex[:10]}.jpg",
-				"file_url": f"/private/files/ca03-{uuid4().hex[:10]}.jpg",
-				"is_private": 1,
-			}
-		).insert(ignore_permissions=True)
+		file_doc = save_file(
+			f"ca03-{uuid4().hex[:10]}.jpg",
+			b"CA-03 disposable evidence",
+			"Ferum Maintenance Visit",
+			visit_name,
+			is_private=1,
+		)
 		visit = frappe.get_doc("Ferum Maintenance Visit", visit_name)
 		visit.append(
 			"checklist",
