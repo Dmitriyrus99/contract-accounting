@@ -420,7 +420,7 @@ def _calculate(service_project: str) -> tuple[dict[str, Any], dict[str, Any]]:
 				contractor_cost += flt(row.base_approved_amount)
 	other_cost = 0.0
 	for invoice in purchase_invoices:
-		kind = classifications.get(invoice.name, ("Other", ""))[0]
+		kind, _source = classifications.setdefault(invoice.name, ("Other", ""))
 		if kind == "Material":
 			material_cost += flt(invoice.base_net_total)
 		elif kind == "Contractor":

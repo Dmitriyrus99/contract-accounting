@@ -200,9 +200,12 @@ class TestFerumProjectFinanceSummary(FrappeTestCase):
 		self.assertEqual(result["contractor_cost_without_vat"], 0)
 
 	def _make_sales_invoice(self, amount: float, *, is_opening: bool = False, overdue: bool = True):
-		income_account = frappe.db.get_value(
-			"Account", {"company": self.project.company, "root_type": "Income", "is_group": 0}, "name"
+		account_filters = (
+			{"company": self.project.company, "account_type": "Temporary", "is_group": 0}
+			if is_opening
+			else {"company": self.project.company, "root_type": "Income", "is_group": 0}
 		)
+		income_account = frappe.db.get_value("Account", account_filters, "name")
 		cost_center = frappe.db.get_value(
 			"Cost Center", {"company": self.project.company, "is_group": 0}, "name"
 		)
