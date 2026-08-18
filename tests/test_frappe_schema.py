@@ -376,11 +376,23 @@ class TestFrappeSchema(unittest.TestCase):
 		source = (ROOT / "contract_accounting" / "api" / "findings.py").read_text(
 			encoding="utf-8"
 		)
-		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 4)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 5)
 		self.assertEqual(source.count("@frappe.whitelist()"), 1)
 		self.assertIn("ALLOWED_SOURCE_DOCTYPES", (
 			DOCTYPE_ROOT / "ferum_finding" / "ferum_finding.py"
 		).read_text(encoding="utf-8"))
+
+	def test_ca04_photo_evidence_keeps_file_as_binary_ssot(self) -> None:
+		photo = fields(schema("ferum_photo_evidence"))
+		self.assertEqual(photo["source_name"]["fieldtype"], "Dynamic Link")
+		self.assertEqual(photo["source_name"]["options"], "source_doctype")
+		self.assertEqual(photo["file"]["fieldtype"], "Link")
+		self.assertEqual(photo["file"]["options"], "File")
+		self.assertEqual(photo["content_hash"]["read_only"], 1)
+		self.assertEqual(
+			photo["review_status"]["options"].splitlines(),
+			["Pending", "Accepted", "Rejected"],
+		)
 
 
 if __name__ == "__main__":

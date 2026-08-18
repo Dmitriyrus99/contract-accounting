@@ -1,0 +1,1 @@
+"""Ferum Photo Evidence DocType."""

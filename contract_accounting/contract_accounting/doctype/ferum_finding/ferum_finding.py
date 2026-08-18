@@ -240,7 +240,18 @@ class FerumFinding(Document):
 				frappe.throw(_("Closed/Rejected Finding требует due/closed dates и actor."))
 
 	def _validate_evidence(self) -> None:
-		if not self.get("evidence"):
+		accepted_photo_exists = bool(
+			self.name
+			and frappe.db.exists(
+				"Ferum Photo Evidence",
+				{
+					"source_doctype": DOCTYPE,
+					"source_name": self.name,
+					"review_status": "Accepted",
+				},
+			)
+		)
+		if not self.get("evidence") and not accepted_photo_exists:
 			frappe.throw(_("Finding resolution/close требует evidence."))
 		for row in self.evidence:
 			if not frappe.db.exists("File", row.file):

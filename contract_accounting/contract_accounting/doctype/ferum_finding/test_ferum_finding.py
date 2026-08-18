@@ -17,6 +17,7 @@ from contract_accounting.api.findings import (
 	create_service_request_from_finding,
 	get_finding_exception_report,
 	link_finding_execution,
+	review_photo_evidence,
 	triage_finding,
 )
 from contract_accounting.contract_accounting.doctype.ferum_service_project.test_ferum_service_project import (
@@ -121,16 +122,24 @@ class TestFerumFinding(FrappeTestCase):
 			)
 		finding.reload()
 		file_doc = self._save_evidence_file(finding.name)
-		finding.append(
-			"evidence",
+		photo = frappe.get_doc(
 			{
-				"evidence_type": "Photo",
+				"doctype": "Ferum Photo Evidence",
+				"source_doctype": "Ferum Finding",
+				"source_name": finding.name,
+				"category": "After",
 				"file": file_doc.name,
-				"captured_at": datetime.now(),
-				"captured_by": "Administrator",
-			},
-		)
-		finding.save(ignore_permissions=True)
+			}
+		).insert(ignore_permissions=True)
+		self.assertEqual(photo.content_hash, file_doc.content_hash)
+		with self.assertRaises(frappe.ValidationError):
+			change_finding_status(
+				finding.name,
+				"Resolved",
+				resolution_class="Eliminated",
+				resolution="Control panel repaired",
+			)
+		review_photo_evidence(photo.name, "Accepted")
 		resolved = change_finding_status(
 			finding.name,
 			"Resolved",
@@ -144,6 +153,10 @@ class TestFerumFinding(FrappeTestCase):
 		finding.comment = "attempted silent rewrite"
 		with self.assertRaises(frappe.ValidationError):
 			finding.save(ignore_permissions=True)
+		photo.reload()
+		photo.comment = "attempted photo rewrite"
+		with self.assertRaises(frappe.ValidationError):
+			photo.save(ignore_permissions=True)
 
 	def test_explicit_request_creation_is_idempotent_and_preserves_source(self) -> None:
 		finding = self._make_confirmed_finding(decision="Additional Work")

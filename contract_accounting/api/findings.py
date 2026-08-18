@@ -11,6 +11,7 @@ from frappe.utils import get_datetime, now_datetime
 
 FINDING_DOCTYPE: Final[str] = "Ferum Finding"
 REQUEST_DOCTYPE: Final[str] = "Ferum Service Request"
+PHOTO_EVIDENCE_DOCTYPE: Final[str] = "Ferum Photo Evidence"
 
 
 @frappe.whitelist(methods=["POST"])
@@ -165,6 +166,23 @@ def create_service_request_from_finding(
 		"finding": finding.name,
 		"service_request": request.name,
 		"created": True,
+	}
+
+
+@frappe.whitelist(methods=["POST"])
+def review_photo_evidence(evidence_name: str, decision: str) -> dict[str, object]:
+	"""Review a specialized photo; accepted provenance becomes immutable."""
+
+	document = frappe.get_doc(PHOTO_EVIDENCE_DOCTYPE, evidence_name)
+	document.check_permission("write")
+	document.review_status = decision
+	document.save()
+	return {
+		"name": document.name,
+		"review_status": document.review_status,
+		"reviewed_at": document.reviewed_at,
+		"reviewed_by": document.reviewed_by,
+		"content_hash": document.content_hash,
 	}
 
 
