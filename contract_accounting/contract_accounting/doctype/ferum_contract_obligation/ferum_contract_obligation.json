@@ -39,7 +39,11 @@
   {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
  ],
  "index_web_pages_for_search": 0,
- "links": [],
+ "links": [
+  {"group": "Execution", "link_doctype": "Ferum Maintenance Schedule", "link_fieldname": "contract_obligation"},
+  {"group": "Execution", "link_doctype": "Ferum Maintenance Visit", "link_fieldname": "contract_obligation"},
+  {"group": "Execution", "link_doctype": "Ferum Service Request", "link_fieldname": "contract_obligation"}
+ ],
  "module": "Contract Accounting",
  "name": "Ferum Contract Obligation",
  "naming_rule": "Expression (old style)",

@@ -278,6 +278,55 @@ class TestFrappeSchema(unittest.TestCase):
 		for fieldname in ("deadline_rule", "acceptance_rule", "evidence_rule"):
 			self.assertEqual(obligation[fieldname]["fieldtype"], "JSON")
 
+	def test_ca03_schedule_has_obligation_period_provenance(self) -> None:
+		schedule = fields(schema("ferum_maintenance_schedule"))
+		self.assertEqual(schedule["contract_obligation"]["options"], "Ferum Contract Obligation")
+		self.assertEqual(schedule["contract_obligation"]["reqd"], 1)
+		for fieldname in (
+			"period_key",
+			"planned_date",
+			"window_start",
+			"window_end",
+			"due_date",
+		):
+			self.assertEqual(schedule[fieldname]["reqd"], 1)
+		controller = (
+			DOCTYPE_ROOT
+			/ "ferum_maintenance_schedule"
+			/ "ferum_maintenance_schedule.py"
+		).read_text(encoding="utf-8")
+		self.assertIn('"ca_sched_period_uniq"', controller)
+
+	def test_ca03_visit_separates_plan_fact_review_and_acceptance(self) -> None:
+		visit = fields(schema("ferum_maintenance_visit"))
+		self.assertEqual(visit["maintenance_schedule"]["options"], "Ferum Maintenance Schedule")
+		self.assertEqual(visit["contract_obligation"]["options"], "Ferum Contract Obligation")
+		self.assertEqual(visit["planned_date"]["fieldtype"], "Date")
+		self.assertEqual(visit["actual_start"]["fieldtype"], "Datetime")
+		self.assertEqual(visit["actual_end"]["fieldtype"], "Datetime")
+		self.assertEqual(visit["checklist"]["options"], "Ferum Visit Checklist Item")
+		self.assertEqual(visit["evidence"]["options"], "Ferum Execution Evidence")
+		self.assertEqual(visit["review_status"]["read_only"], 1)
+		self.assertEqual(visit["acceptance_status"]["read_only"], 1)
+		self.assertEqual(schema("ferum_visit_checklist_item")["istable"], 1)
+		self.assertEqual(schema("ferum_execution_evidence")["istable"], 1)
+
+	def test_ca03_service_request_is_independent_unplanned_fact(self) -> None:
+		request = fields(schema("ferum_service_request"))
+		self.assertNotIn("maintenance_schedule", request)
+		self.assertEqual(request["service_project"]["options"], "Ferum Service Project")
+		self.assertEqual(request["project_object"]["options"], "Ferum Project Object")
+		self.assertEqual(request["service_object"]["read_only"], 1)
+		self.assertEqual(request["customer"]["read_only"], 1)
+		self.assertEqual(request["evidence"]["options"], "Ferum Execution Evidence")
+
+	def test_ca03_mutating_commands_are_post_only(self) -> None:
+		source = (ROOT / "contract_accounting" / "api" / "execution.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 5)
+		self.assertEqual(source.count("@frappe.whitelist()"), 1)
+
 
 if __name__ == "__main__":
 	unittest.main()

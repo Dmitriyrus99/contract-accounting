@@ -1,0 +1,45 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FMS-.YYYY.-.######",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "service_project", "contract_obligation", "project_object", "object_system",
+  "work_type", "period_key", "planned_date", "window_start", "window_end",
+  "due_date", "status", "generated_visit", "generation_source", "comment"
+ ],
+ "fields": [
+  {"fieldname": "service_project", "fieldtype": "Link", "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "read_only": 1, "reqd": 1},
+  {"fieldname": "contract_obligation", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Contract Obligation", "options": "Ferum Contract Obligation", "read_only": 1, "reqd": 1},
+  {"fieldname": "project_object", "fieldtype": "Link", "in_standard_filter": 1, "label": "Project Object", "options": "Ferum Project Object", "read_only": 1, "reqd": 1},
+  {"fieldname": "object_system", "fieldtype": "Link", "in_standard_filter": 1, "label": "Object System", "options": "Ferum Object System", "read_only": 1, "reqd": 1},
+  {"fieldname": "work_type", "fieldtype": "Data", "label": "Work Type Snapshot", "read_only": 1, "reqd": 1},
+  {"fieldname": "period_key", "fieldtype": "Data", "in_list_view": 1, "label": "Period Key", "read_only": 1, "reqd": 1},
+  {"fieldname": "planned_date", "fieldtype": "Date", "in_list_view": 1, "label": "Planned Date", "read_only": 1, "reqd": 1},
+  {"fieldname": "window_start", "fieldtype": "Date", "label": "Window Start", "read_only": 1, "reqd": 1},
+  {"fieldname": "window_end", "fieldtype": "Date", "label": "Window End", "read_only": 1, "reqd": 1},
+  {"fieldname": "due_date", "fieldtype": "Date", "label": "Due Date", "read_only": 1, "reqd": 1},
+  {"default": "Planned", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Status", "options": "Planned\nVisit Generated\nCompleted\nCancelled", "read_only": 1, "reqd": 1},
+  {"fieldname": "generated_visit", "fieldtype": "Link", "label": "Generated Visit", "options": "Ferum Maintenance Visit", "read_only": 1},
+  {"default": "Contract Obligation", "fieldname": "generation_source", "fieldtype": "Select", "label": "Generation Source", "options": "Contract Obligation", "read_only": 1, "reqd": 1},
+  {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {"group": "Execution", "link_doctype": "Ferum Maintenance Visit", "link_fieldname": "maintenance_schedule"}
+ ],
+ "module": "Contract Accounting",
+ "name": "Ferum Maintenance Schedule",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"create": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "read": 1, "report": 1, "role": "Руководитель проектов", "write": 1},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"},
+  {"read": 1, "report": 1, "role": "Инженер"}
+ ],
+ "sort_field": "planned_date",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

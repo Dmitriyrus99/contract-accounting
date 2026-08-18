@@ -1,0 +1,1 @@
+"""Ferum Maintenance Schedule DocType."""

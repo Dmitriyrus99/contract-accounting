@@ -32,7 +32,9 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [
-  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Obligation", "link_fieldname": "object_system"}
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Obligation", "link_fieldname": "object_system"},
+  {"group": "Execution", "link_doctype": "Ferum Maintenance Visit", "link_fieldname": "object_system"},
+  {"group": "Execution", "link_doctype": "Ferum Service Request", "link_fieldname": "object_system"}
  ],
  "module": "Contract Accounting",
  "name": "Ferum Object System",
