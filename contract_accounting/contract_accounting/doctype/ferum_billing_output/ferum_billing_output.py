@@ -145,7 +145,9 @@ class FerumBillingOutput(Document):
 			if not (getdate(self.period_start) <= getdate(expected["result_date"]) <= getdate(self.period_end)):
 				frappe.throw(_("Billing Basis source вне периода Output."))
 			for fieldname, value in expected.items():
-				if row.get(fieldname) != value:
+				if _canonical_basis_value(fieldname, row.get(fieldname)) != _canonical_basis_value(
+					fieldname, value
+				):
 					frappe.throw(_("Billing Basis snapshot определяется accepted source."))
 			row.inclusion_state = "Included"
 			row.active_claim_key = key if self.status in ACTIVE_STATUSES else None
@@ -267,7 +269,23 @@ def _basis_payload(rows: list[Any]) -> list[dict[str, Any]]:
 		"amount_snapshot", "currency", "acceptance_actor", "acceptance_time",
 		"source_snapshot_json", "source_hash",
 	)
-	return [{field: row.get(field) for field in fields} for row in rows]
+	return [
+		{field: _canonical_basis_value(field, row.get(field)) for field in fields}
+		for row in rows
+	]
+
+
+def _canonical_basis_value(fieldname: str, value: Any) -> Any:
+	if value is None or value == "":
+		return None
+	if fieldname in {"result_date", "acceptance_time"}:
+		return str(get_datetime(value))
+	if fieldname in {"quantity_snapshot", "amount_snapshot"}:
+		return flt(value)
+	if fieldname == "source_snapshot_json":
+		payload = json.loads(value) if isinstance(value, str) else value
+		return json.dumps(payload, ensure_ascii=False, sort_keys=True)
+	return value
 
 
 def on_doctype_update() -> None:
