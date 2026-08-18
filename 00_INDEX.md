@@ -51,6 +51,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-02/schema_v0_3_0.md](implementation/CA-02/schema_v0_3_0.md) | физическая schema Requirement/Obligation/Recurrence, FSM и integrity guards |
 | [implementation/CA-02/runtime_evidence_v0_3_0_2026-08-18.md](implementation/CA-02/runtime_evidence_v0_3_0_2026-08-18.md) | exact v0.3.0 versions, 15/15 runtime и rollback/reinstall |
 | [implementation/CA-02/traceability_v0_3_0.md](implementation/CA-02/traceability_v0_3_0.md) | CODE/runtime mapping CA-02 с явными downstream OPEN |
+| [implementation/CA-03/README.md](implementation/CA-03/README.md) | CA-03 plan→fact core, generation/replacement/review/acceptance и границы billing/Finding |
+| [implementation/CA-03/schema_v0_4_0.md](implementation/CA-03/schema_v0_4_0.md) | Schedule/Visit/Service Request physical schema и server invariants |
+| [implementation/CA-03/runtime_evidence_v0_4_0_2026-08-18.md](implementation/CA-03/runtime_evidence_v0_4_0_2026-08-18.md) | exact v0.4.0 versions, 19/19 runtime и rollback/reinstall |
+| [implementation/CA-03/traceability_v0_4_0.md](implementation/CA-03/traceability_v0_4_0.md) | CODE/runtime mapping CA-03 с явными CA-04/06/07/08 OPEN |
 
 ## Принятый baseline
 

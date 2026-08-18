@@ -1,6 +1,6 @@
 # CA-02 — Contract Requirement and Contract Obligation
 
-**Статус:** `CA-02 CORE CODE COMPLETE — SCHEMA v0.3.0 BENCH VERIFIED; CA-03/SLA/MIGRATION GATES PENDING`
+**Статус:** `CA-02 CORE CODE COMPLETE — SCHEMA v0.3.0 BENCH VERIFIED; CA-03 WRITER DELIVERED IN v0.4.0; SLA/MIGRATION GATES PENDING`
 
 Инкремент добавляет явный слой между договором и будущим графиком:
 
@@ -27,4 +27,4 @@ Implementation traceability: [traceability_v0_3_0.md](traceability_v0_3_0.md).
 
 ## Граница инкремента
 
-`Ferum Project Document` появится в CA-05, поэтому source document пока честно хранится как `Data`, не ложный Link. `work_type` остаётся typed `Data` до согласованного каталога. Preview не создаёт Schedule/Visit: provenance `Obligation → Schedule/period_key → Visit` и идемпотентный writer принадлежат CA-03. SLA timestamp/calendar engine принадлежит CA-09. Legacy Scope importer не запускался: источники discovery read-only и на disposable site legacy app не установлен; неоднозначный backfill запрещён.
+`Ferum Project Document` появится в CA-05, поэтому source document пока честно хранится как `Data`, не ложный Link. `work_type` остаётся typed `Data` до согласованного каталога. Preview сам не пишет данные; provenance `Obligation → Schedule/period_key → Visit` и идемпотентный writer реализованы CA-03 v0.4.0. SLA timestamp/calendar engine принадлежит CA-09. Legacy Scope importer не запускался: источники discovery read-only и на disposable site legacy app не установлен; неоднозначный backfill запрещён.
