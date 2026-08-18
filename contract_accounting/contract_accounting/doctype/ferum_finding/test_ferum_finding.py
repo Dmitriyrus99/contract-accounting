@@ -91,7 +91,7 @@ class TestFerumFinding(FrappeTestCase):
 		finding = self._make_finding(severity="Critical")
 		with self.assertRaises(frappe.ValidationError):
 			triage_finding(finding.name, "Confirmed")
-		due = datetime.now() + timedelta(minutes=5)
+		due = frappe.utils.get_datetime(finding.found_at) + timedelta(minutes=5)
 		triage_finding(
 			finding.name,
 			"Confirmed",
@@ -241,7 +241,7 @@ class TestFerumFinding(FrappeTestCase):
 			"Confirmed",
 			decision=decision,
 			responsible="Administrator",
-			due_date=str(datetime.now() + timedelta(days=2)),
+			due_date=str(frappe.utils.get_datetime(finding.found_at) + timedelta(days=2)),
 		)
 		finding.reload()
 		return finding
