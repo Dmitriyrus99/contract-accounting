@@ -151,8 +151,38 @@ class TestFerumServiceProjectLifecycle(FrappeTestCase):
 
 def _make_project():
 	doc = _project_document()
-	doc.insert(ignore_permissions=True, ignore_links=True)
+	doc.company = _make_company(doc.company)
+	doc.customer = _make_customer(doc.customer)
+	doc.insert(ignore_permissions=True)
 	return doc
+
+
+def _make_company(company_name: str) -> str:
+	doc = frappe.get_doc(
+		{
+			"doctype": "Company",
+			"company_name": company_name,
+			"abbr": uuid4().hex[:5].upper(),
+			"default_currency": "RUB",
+			"country": "Russia",
+		}
+	)
+	doc.insert(ignore_permissions=True)
+	return doc.name
+
+
+def _make_customer(customer_name: str) -> str:
+	doc = frappe.get_doc(
+		{
+			"doctype": "Customer",
+			"customer_name": customer_name,
+			"customer_type": "Company",
+			"customer_group": "All Customer Groups",
+			"territory": "All Territories",
+		}
+	)
+	doc.insert(ignore_permissions=True)
+	return doc.name
 
 
 def _project_document(**overrides: object):
