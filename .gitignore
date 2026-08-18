@@ -1,0 +1,21 @@
+# Local/editor artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+*.swp
+
+# Runtime/cache artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets and local configuration
+.env
+*.env
+site_config.json
+private/
+backups/
