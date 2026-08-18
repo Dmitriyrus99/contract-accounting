@@ -67,6 +67,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-06/schema_v0_7_0.md](implementation/CA-06/schema_v0_7_0.md) | физическая schema Billing Output/Basis/Artifact/Event и Sales Invoice adapter |
 | [implementation/CA-06/runtime_evidence_v0_7_0_2026-08-18.md](implementation/CA-06/runtime_evidence_v0_7_0_2026-08-18.md) | exact v0.7.0 versions, 35/35 runtime и clean reinstall 28 DocType |
 | [implementation/CA-06/traceability_v0_7_0.md](implementation/CA-06/traceability_v0_7_0.md) | CODE/runtime mapping CA-06 без подмены UAT/production gates |
+| [implementation/CA-07/README.md](implementation/CA-07/README.md) | rebuildable finance read-model, guarded cost classification и standard accounting boundary |
+| [implementation/CA-07/schema_v0_8_0.md](implementation/CA-07/schema_v0_8_0.md) | физическая schema Finance Summary/Material Expense/Contractor Settlement и PI adapter |
+| [implementation/CA-07/runtime_evidence_v0_8_0_2026-08-18.md](implementation/CA-07/runtime_evidence_v0_8_0_2026-08-18.md) | exact v0.8.0 versions, 41/41 runtime и clean reinstall 31 DocType |
+| [implementation/CA-07/traceability_v0_8_0.md](implementation/CA-07/traceability_v0_8_0.md) | CODE/runtime mapping CA-07 с явными VAT/tool-rent/UAT OPEN |
 
 ## Принятый baseline
 

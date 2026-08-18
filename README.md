@@ -15,6 +15,7 @@ Current delivery state:
 - CA-04 schema v0.5.0 adds one independent Finding with Defect category, immutable Visit provenance, confirmation/resolution gates, idempotent Service Request links and reviewed Photo Evidence over standard File; 24 runtime tests plus 21-DocType rollback/reinstall are verified at `5bc0bc9`;
 - CA-05 schema v0.6.0 adds the universal Project Document registry, independent digital-copy/original custody, immutable transition events and accepted-File deletion guards; 29 runtime tests plus 24-DocType rollback/reinstall are verified at `0c8546d`;
 - CA-06 schema v0.7.0 adds immutable accepted-work Billing Basis, versioned Billing Output/Artifact/Event, CA-05 document projection and a narrow adapter to standard Sales Invoice without custom ledger writes; 35 runtime tests plus 28-DocType clean reinstall are verified at `5b2d79a`;
+- CA-07 schema v0.8.0 adds a rebuildable Finance Summary over standard Sales/Purchase Invoice and Payment Entry, guarded Material Expense/Contractor Settlement classification, reconciliation and Company-currency portfolio rollup; 41 runtime tests plus 31-DocType clean reinstall are verified at `f7217f3`;
 - runtime W2 evidence was inspected on the available test stand;
 - full backup restore rehearsal remains open because `bench restore` required an interactive DB-root credential that was not read or exposed.
 

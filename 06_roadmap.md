@@ -394,6 +394,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - rebuild повторяем и не изменяет бухгалтерские документы/GL.
 
+**Результат реализации v0.8.0 — 2026-08-18:** `CA-07 CORE CODE COMPLETE / BENCH VERIFIED`. Реализованы service-managed `Ferum Project Finance Summary`, standard Sales/Purchase Invoice adapters, Payment Entry trace, opening-balance rule, guarded `Ferum Material Expense`/`Ferum Contractor Settlement`, exact PI classification, reconciliation и Company-currency portfolio rollup. Migrate и clean reinstall 31 DocType прошли; standalone suite `89/89`, полный Frappe suite до и после reinstall `41/41`. Положительный VAT tax-row сценарий и отдельная tool/rent аналитика остаются PARTIAL; legacy comparison, async worker/load/race, Finance UAT/sign-off и production deployment не выполнялись. Evidence: [implementation/CA-07/README.md](implementation/CA-07/README.md), [runtime evidence](implementation/CA-07/runtime_evidence_v0_8_0_2026-08-18.md), [traceability](implementation/CA-07/traceability_v0_8_0.md).
+
 **Оценка:** M.
 
 ### CA-08. Contractor Assignment и готовность исполнителей
