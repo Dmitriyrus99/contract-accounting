@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FBE-.YYYY.-.######",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["billing_output", "event_type", "related_invoice", "related_output", "related_artifact", "timestamp", "actor", "reason", "correlation_id", "metadata_json"],
+ "fields": [
+  {"fieldname": "billing_output", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Billing Output", "options": "Ferum Billing Output", "read_only": 1, "reqd": 1},
+  {"fieldname": "event_type", "fieldtype": "Select", "in_list_view": 1, "label": "Event Type", "options": "Created\nGenerated\nIssued\nSigned\nSuperseded\nCancelled\nCorrected\nArtifact Added", "read_only": 1, "reqd": 1},
+  {"fieldname": "related_invoice", "fieldtype": "Link", "label": "Related Invoice", "options": "Sales Invoice", "read_only": 1},
+  {"fieldname": "related_output", "fieldtype": "Link", "label": "Related Output", "options": "Ferum Billing Output", "read_only": 1},
+  {"fieldname": "related_artifact", "fieldtype": "Link", "label": "Related Artifact", "options": "Ferum Billing Artifact", "read_only": 1},
+  {"fieldname": "timestamp", "fieldtype": "Datetime", "in_list_view": 1, "label": "Timestamp", "read_only": 1, "reqd": 1, "search_index": 1},
+  {"fieldname": "actor", "fieldtype": "Link", "label": "Actor", "options": "User", "read_only": 1, "reqd": 1},
+  {"fieldname": "reason", "fieldtype": "Small Text", "label": "Reason", "read_only": 1},
+  {"fieldname": "correlation_id", "fieldtype": "Data", "in_standard_filter": 1, "label": "Correlation ID", "read_only": 1, "reqd": 1},
+  {"fieldname": "metadata_json", "fieldtype": "JSON", "label": "Metadata JSON", "read_only": 1, "reqd": 1}
+ ],
+ "in_create": 1,
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Billing Event",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"export": 1, "read": 1, "report": 1, "role": "System Manager"},
+  {"export": 1, "read": 1, "report": 1, "role": "Бухгалтер"},
+  {"read": 1, "report": 1, "role": "Генеральный директор"},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"},
+  {"read": 1, "report": 1, "role": "Юрист"}
+ ],
+ "sort_field": "timestamp",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

@@ -33,6 +33,8 @@ ALLOWED_SOURCE_DOCTYPES: Final[frozenset[str]] = frozenset(
 		"Ferum Service Request",
 		"Ferum Finding",
 		"Ferum Photo Evidence",
+		"Ferum Billing Output",
+		"Ferum Billing Artifact",
 		"Ferum Inspection",
 	}
 )

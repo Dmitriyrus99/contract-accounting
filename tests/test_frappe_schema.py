@@ -470,6 +470,75 @@ class TestFrappeSchema(unittest.TestCase):
 		self.assertIn('"File": {', hooks)
 		self.assertIn("prevent_locked_file_delete", hooks)
 
+	def test_ca06_output_is_documentary_layer_over_standard_sales_invoice(self) -> None:
+		output = fields(schema("ferum_billing_output"))
+		self.assertEqual(output["sales_invoice"]["options"], "Sales Invoice")
+		self.assertEqual(
+			output["output_type"]["options"].splitlines(),
+			["Invoice Print", "Act", "UPD", "Invoice Factura", "Correction"],
+		)
+		self.assertEqual(output["basis_items"]["options"], "Ferum Billing Basis Item")
+		self.assertFalse((DOCTYPE_ROOT / "ferum_sales_invoice").exists())
+		self.assertFalse((DOCTYPE_ROOT / "ferum_payment_entry").exists())
+		self.assertFalse((DOCTYPE_ROOT / "ferum_gl_entry").exists())
+
+	def test_ca06_basis_rows_are_typed_immutable_snapshots(self) -> None:
+		basis = schema("ferum_billing_basis_item")
+		self.assertEqual(basis["istable"], 1)
+		by_name = fields(basis)
+		for fieldname in (
+			"source_doctype",
+			"source_name",
+			"period_key",
+			"amount_snapshot",
+			"source_snapshot_json",
+			"source_hash",
+			"active_claim_key",
+		):
+			self.assertEqual(by_name[fieldname]["read_only"], 1)
+		self.assertEqual(by_name["source_name"]["fieldtype"], "Dynamic Link")
+		self.assertEqual(by_name["active_claim_key"]["unique"], 1)
+
+	def test_ca06_artifact_versions_standard_file_and_projects_to_registry(self) -> None:
+		artifact = fields(schema("ferum_billing_artifact"))
+		self.assertEqual(artifact["file"]["fieldtype"], "Link")
+		self.assertEqual(artifact["file"]["options"], "File")
+		self.assertEqual(artifact["project_document"]["options"], "Ferum Project Document")
+		self.assertEqual(artifact["version"]["read_only"], 1)
+		self.assertEqual(artifact["current_key"]["unique"], 1)
+
+	def test_ca06_billing_event_is_insert_only(self) -> None:
+		event = schema("ferum_billing_event")
+		by_name = fields(event)
+		self.assertTrue(
+			{"billing_output", "event_type", "actor", "timestamp", "correlation_id", "metadata_json"}.issubset(by_name)
+		)
+		self.assertTrue(all(field.get("read_only") == 1 for field in by_name.values()))
+		for permission in event["permissions"]:  # type: ignore[index,union-attr]
+			self.assertNotIn("create", permission)
+			self.assertNotIn("write", permission)
+			self.assertNotIn("delete", permission)
+
+	def test_ca06_commands_are_typed_and_mutations_are_post_only(self) -> None:
+		source = (ROOT / "contract_accounting" / "api" / "billing.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 5)
+		self.assertEqual(source.count("@frappe.whitelist()"), 2)
+		self.assertNotIn("GL Entry", source)
+		self.assertNotIn("Payment Entry", source)
+
+	def test_ca06_installs_narrow_sales_invoice_project_adapter(self) -> None:
+		setup = (ROOT / "contract_accounting" / "setup" / "custom_fields.py").read_text(
+			encoding="utf-8"
+		)
+		hooks = (ROOT / "contract_accounting" / "hooks.py").read_text(encoding="utf-8")
+		self.assertIn('"Sales Invoice": [', setup)
+		self.assertIn('"fieldname": "ferum_service_project"', setup)
+		self.assertIn("after_install =", hooks)
+		self.assertIn("before_migrate =", hooks)
+		self.assertIn("prevent_active_output_cancel", hooks)
+
 
 if __name__ == "__main__":
 	unittest.main()

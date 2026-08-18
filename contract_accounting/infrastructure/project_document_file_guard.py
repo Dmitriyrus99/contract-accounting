@@ -12,6 +12,13 @@ def prevent_locked_file_delete(doc: object, method: str | None = None) -> None:
 		return
 	if not frappe.db.table_exists("Ferum Project Document"):
 		return
+	if frappe.db.table_exists("Ferum Billing Artifact") and frappe.db.exists(
+		"Ferum Billing Artifact", {"file": file_name}
+	):
+		frappe.throw(
+			_("File является неизменяемым Billing Artifact."),
+			frappe.PermissionError,
+		)
 	if frappe.db.exists(
 		"Ferum Project Document Event", {"evidence_file": file_name}
 	):

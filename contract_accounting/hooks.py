@@ -9,6 +9,9 @@ app_license = "Proprietary"
 
 required_apps = ["erpnext"]
 
+after_install = "contract_accounting.install.after_install"
+before_migrate = "contract_accounting.install.before_migrate"
+
 fixtures = [
 	{
 		"dt": "Role",
@@ -33,5 +36,9 @@ fixtures = [
 doc_events = {
 	"File": {
 		"on_trash": "contract_accounting.infrastructure.project_document_file_guard.prevent_locked_file_delete"
-	}
+	},
+	"Sales Invoice": {
+		"validate": "contract_accounting.infrastructure.sales_invoice_guard.validate_project_context",
+		"before_cancel": "contract_accounting.infrastructure.sales_invoice_guard.prevent_active_output_cancel",
+	},
 }

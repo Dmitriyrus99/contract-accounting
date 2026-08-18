@@ -23,10 +23,10 @@ from contract_accounting.contract_accounting.doctype.ferum_project_document.feru
 
 
 _DOCUMENT_ROLES: Final[frozenset[str]] = frozenset(
-	{"Юрист", "Менеджер проектов", "Руководитель проектов", "System Manager"}
+	{"Юрист", "Бухгалтер", "Менеджер проектов", "Руководитель проектов", "System Manager"}
 )
 _DIGITAL_ROLES: Final[frozenset[str]] = frozenset(
-	{"Юрист", "Менеджер проектов", "Руководитель проектов", "System Manager"}
+	{"Юрист", "Бухгалтер", "Менеджер проектов", "Руководитель проектов", "System Manager"}
 )
 _ORIGINAL_ROLES: Final[frozenset[str]] = frozenset(
 	{

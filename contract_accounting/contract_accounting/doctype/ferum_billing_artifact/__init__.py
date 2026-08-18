@@ -1,0 +1,1 @@
+"""Versioned Ferum Billing Artifact."""

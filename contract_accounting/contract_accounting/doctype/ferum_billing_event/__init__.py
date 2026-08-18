@@ -1,0 +1,1 @@
+"""Immutable Ferum Billing Event."""
