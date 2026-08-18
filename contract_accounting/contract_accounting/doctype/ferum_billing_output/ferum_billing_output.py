@@ -90,8 +90,6 @@ class FerumBillingOutput(Document):
 			"customer": project.customer,
 			"currency": project.currency,
 		}.items():
-			if self.get(fieldname) and self.get(fieldname) != value:
-				frappe.throw(_("Billing Output context определяется Service Project."))
 			self.set(fieldname, value)
 
 	def _validate_period(self) -> None:
