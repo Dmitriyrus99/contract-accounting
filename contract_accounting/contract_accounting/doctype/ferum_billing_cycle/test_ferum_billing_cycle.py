@@ -22,6 +22,7 @@ from contract_accounting.api.billing_cycles import (
     get_billing_cycle_projection,
     resolve_billing_cycles_for_source,
 )
+from contract_accounting.api.contract_360 import get_contract_360
 from contract_accounting.api.lifecycle import change_status
 from contract_accounting.api.processes import (
     add_process_evidence,
@@ -133,6 +134,14 @@ class TestFerumBillingCycle(FrappeTestCase):
         self.assertEqual(result["work"]["expected_count"], 1)
         self.assertEqual(result["work"]["accepted_count"], 1)
         self.assertEqual(result["work"]["unbilled_count"], 1)
+        card = get_contract_360(
+            self.project.name,
+            as_of=str(getdate() + timedelta(days=60)),
+        )
+        self.assertIn(
+            "Overdue Billing Cycle",
+            {row["rule"] for row in card["exceptions"]},
+        )
 
         output = self._create_output(result["billing_cycle"])["billing_output"]
         final_file = self._save_file("Ferum Billing Output", output, "final.txt")
