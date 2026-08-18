@@ -46,7 +46,11 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-01/schema_v0_2_0.md](implementation/CA-01/schema_v0_2_0.md) | Direct Service Project links, Amendment/Stage/Security/Financial Plan и Object hierarchy |
 | [implementation/CA-01/runtime_evidence_v0_2_0_2026-08-18.md](implementation/CA-01/runtime_evidence_v0_2_0_2026-08-18.md) | Exact v0.2.0 bench versions, 11/11 runtime, physical schema и rollback/reinstall |
 | [implementation/CA-01/traceability_v0_2_0.md](implementation/CA-01/traceability_v0_2_0.md) | CODE/runtime mapping CA-01 без подмены исходной SPEC/TARGET traceability |
-| [implementation/CA-01/runtime_test_plan.md](implementation/CA-01/runtime_test_plan.md) | отдельный bench/site protocol и versioned runtime acceptance suite, пока NOT RUN |
+| [implementation/CA-01/runtime_test_plan.md](implementation/CA-01/runtime_test_plan.md) | отдельный bench/site protocol и versioned runtime acceptance suite |
+| [implementation/CA-02/README.md](implementation/CA-02/README.md) | CA-02 Requirement/Obligation core, границы CA-03/05/09/11 и фактические gates |
+| [implementation/CA-02/schema_v0_3_0.md](implementation/CA-02/schema_v0_3_0.md) | физическая schema Requirement/Obligation/Recurrence, FSM и integrity guards |
+| [implementation/CA-02/runtime_evidence_v0_3_0_2026-08-18.md](implementation/CA-02/runtime_evidence_v0_3_0_2026-08-18.md) | exact v0.3.0 versions, 15/15 runtime и rollback/reinstall |
+| [implementation/CA-02/traceability_v0_3_0.md](implementation/CA-02/traceability_v0_3_0.md) | CODE/runtime mapping CA-02 с явными downstream OPEN |
 
 ## Принятый baseline
 

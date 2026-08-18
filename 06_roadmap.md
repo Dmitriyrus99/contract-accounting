@@ -230,6 +230,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 **Цель:** создать явный слой между договором и графиком, отвечающий на «что сделать, где, с какой периодичностью и когда».
 
+**Статус реализации, 2026-08-18:** CA-02 core CODE/schema v0.3.0 реализован и подтверждён на отдельном ERPNext v15 site: Requirement assessment/routing, Contract Obligation, typed recurrence, effective-version/foreign-context guards, deterministic no-write preview, migrate и controlled schema reinstall — [runtime evidence](implementation/CA-02/runtime_evidence_v0_3_0_2026-08-18.md). Это не закрывает Schedule/Visit writer (`TCA-A-04-07…08`, CA-03), SLA/Holiday timestamp engine (CA-09), Project Document Link (CA-05), one-time Process Step writer (CA-11) и legacy combined-app migration gate; точный статус — [implementation traceability](implementation/CA-02/traceability_v0_3_0.md).
+
 **AS-IS:** `Ferum Project Scope` содержит правило работ/периодичности, а генератор создаёт визиты из Scope/Schedule, но отдельного `Ferum Contract Obligation` нет (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/ferum_custom/doctype/ferum_project_scope/ferum_project_scope.json#work_type`; `Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/services/maintenance_visit_generation.py:L527-L638`; `contract-accounting/03_asis_model.md:L326-L328`). Requirement, одноразовый Process Step и повторяющийся Scope нормативно разделены (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/plan/owner_decisions_2026-08-17_target_structure.md:L74-L94`).
 
 **Состав:**
