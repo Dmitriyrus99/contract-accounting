@@ -213,6 +213,7 @@ class TestFerumProjectFinanceSummary(FrappeTestCase):
 				"doctype": "Sales Invoice",
 				"company": self.project.company,
 				"customer": self.project.customer,
+				"set_posting_time": 1,
 				"posting_date": posting_date,
 				"due_date": due_date,
 				"is_opening": "Yes" if is_opening else "No",
