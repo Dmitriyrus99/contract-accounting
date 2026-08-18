@@ -112,5 +112,6 @@ def on_doctype_update() -> None:
 	frappe.db.add_index(
 		DOCTYPE,
 		["service_project", "source_document_reference", "source_clause", "requirement_type"],
+		"ca_req_source_idx",
 	)
 	frappe.db.add_index(DOCTYPE, ["service_project", "assessment_status"])
