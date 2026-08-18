@@ -61,6 +61,7 @@ def get_deadline_timeline(
 	_document_rows(rows, project.name, classification_at)
 	_finding_rows(rows, project.name, classification_at)
 	_invoice_rows(rows, project.name, classification_at)
+	_billing_cycle_rows(rows, project.name, classification_at)
 	_process_step_rows(rows, project.name, classification_at)
 
 	if not cint(include_closed):
@@ -286,6 +287,29 @@ def _invoice_rows(rows: list[dict[str, Any]], project: str, as_of: datetime | No
 			value=row.due_date,
 			status=row.status,
 			terminal=float(row.outstanding_amount or 0) <= 0,
+			date_only=True,
+			as_of=as_of,
+		)
+
+
+def _billing_cycle_rows(
+	rows: list[dict[str, Any]], project: str, as_of: datetime | None
+) -> None:
+	for row in _readable_rows(
+		"Ferum Billing Cycle",
+		project,
+		["name", "due_date", "status", "created_by"],
+	):
+		_add(
+			rows,
+			kind="Billing Cycle Due",
+			doctype="Ferum Billing Cycle",
+			name=row.name,
+			fieldname="due_date",
+			value=row.due_date,
+			status=row.status,
+			owner=row.created_by,
+			terminal=row.status in {"Completed", "Cancelled"},
 			date_only=True,
 			as_of=as_of,
 		)

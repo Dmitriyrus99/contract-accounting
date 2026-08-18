@@ -42,7 +42,13 @@ _TEMPLATE_ROLES: Final[frozenset[str]] = frozenset(
 	{"Владелец процесса", "Руководитель проектов", "System Manager"}
 )
 _PROCESS_ROLES: Final[frozenset[str]] = frozenset(
-	{"Владелец процесса", "Менеджер проектов", "Руководитель проектов", "System Manager"}
+	{
+		"Владелец процесса",
+		"Менеджер проектов",
+		"Руководитель проектов",
+		"Бухгалтер",
+		"System Manager",
+	}
 )
 _OVERRIDE_ROLES: Final[frozenset[str]] = frozenset(
 	{"Руководитель проектов", "System Manager"}
@@ -281,6 +287,14 @@ def add_process_evidence(
 		source_modified = source.modified
 	else:
 		source_modified = None
+	from contract_accounting.api.billing_cycles import validate_billing_process_evidence
+
+	validate_billing_process_evidence(
+		step,
+		evidence_type,
+		source_doctype,
+		source_name,
+	)
 	if evidence_file:
 		file_hash = frappe.db.get_value("File", evidence_file, "content_hash")
 		if not file_hash:

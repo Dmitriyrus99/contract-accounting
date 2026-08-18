@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FBC-.YYYY.-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["service_project", "project_process", "period_start", "period_end", "period_key", "due_date", "status", "expected_work_snapshot", "completion_snapshot", "idempotency_key", "created_at", "created_by", "completed_at", "completed_by", "cancellation_reason"],
+ "fields": [
+  {"fieldname": "service_project", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "read_only": 1, "reqd": 1},
+  {"fieldname": "project_process", "fieldtype": "Link", "in_list_view": 1, "label": "Billing Process", "options": "Ferum Project Process", "read_only": 1, "reqd": 1},
+  {"fieldname": "period_start", "fieldtype": "Date", "in_list_view": 1, "label": "Period Start", "read_only": 1, "reqd": 1},
+  {"fieldname": "period_end", "fieldtype": "Date", "in_list_view": 1, "label": "Period End", "read_only": 1, "reqd": 1},
+  {"fieldname": "period_key", "fieldtype": "Data", "in_standard_filter": 1, "label": "Period Key", "read_only": 1, "reqd": 1},
+  {"fieldname": "due_date", "fieldtype": "Date", "label": "Closing Due Date", "read_only": 1, "reqd": 1},
+  {"default": "Open", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Status", "options": "Open\nCompleted\nCancelled", "read_only": 1, "reqd": 1},
+  {"default": "{}", "fieldname": "expected_work_snapshot", "fieldtype": "JSON", "label": "Expected Work Snapshot", "read_only": 1, "reqd": 1},
+  {"default": "{}", "fieldname": "completion_snapshot", "fieldtype": "JSON", "label": "Completion Snapshot", "read_only": 1, "reqd": 1},
+  {"fieldname": "idempotency_key", "fieldtype": "Data", "hidden": 1, "label": "Idempotency Key", "read_only": 1, "reqd": 1, "unique": 1},
+  {"fieldname": "created_at", "fieldtype": "Datetime", "label": "Created At", "read_only": 1, "reqd": 1},
+  {"fieldname": "created_by", "fieldtype": "Link", "label": "Created By", "options": "User", "read_only": 1, "reqd": 1},
+  {"fieldname": "completed_at", "fieldtype": "Datetime", "label": "Completed At", "read_only": 1},
+  {"fieldname": "completed_by", "fieldtype": "Link", "label": "Completed By", "options": "User", "read_only": 1},
+  {"fieldname": "cancellation_reason", "fieldtype": "Small Text", "label": "Cancellation Reason", "read_only": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {"group": "Billing", "link_doctype": "Ferum Billing Output", "link_fieldname": "billing_cycle"},
+  {"group": "Process", "link_doctype": "Ferum Project Stage", "link_fieldname": "project_process"}
+ ],
+ "module": "Contract Accounting",
+ "name": "Ferum Billing Cycle",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"export": 1, "read": 1, "report": 1, "role": "System Manager"},
+  {"export": 1, "read": 1, "report": 1, "role": "Бухгалтер"},
+  {"read": 1, "report": 1, "role": "Генеральный директор"},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"}
+ ],
+ "sort_field": "period_end",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

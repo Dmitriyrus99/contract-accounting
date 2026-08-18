@@ -525,7 +525,7 @@ class TestFrappeSchema(unittest.TestCase):
 		source = (ROOT / "contract_accounting" / "api" / "billing.py").read_text(
 			encoding="utf-8"
 		)
-		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 5)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 6)
 		self.assertEqual(source.count("@frappe.whitelist()"), 2)
 		self.assertNotIn("GL Entry", source)
 		self.assertNotIn("Payment Entry", source)

@@ -187,6 +187,11 @@ def _build_contract_360(
 		{"service_project": project.name},
 		["name", "output_type", "document_date", "period_start", "period_end", "status", "final_artifact_status", "sales_invoice"],
 	)
+	billing_cycles = _rows(
+		"Ferum Billing Cycle",
+		{"service_project": project.name},
+		["name", "project_process", "period_start", "period_end", "due_date", "status"],
+	)
 	assignments = _rows(
 		"Ferum Contractor Assignment",
 		{"service_project": project.name},
@@ -243,6 +248,7 @@ def _build_contract_360(
 		},
 		"documents": _widget(documents),
 		"billing": _widget(billing_outputs),
+		"billing_cycles": _widget(billing_cycles),
 		"contractors": _widget(assignments),
 		"processes": {
 			"count": len(processes),
@@ -484,6 +490,7 @@ def _deadline_exception(kind: str) -> tuple[str | None, str, str]:
 		"Invoice Payment Due": ("Overdue Invoice", "Invoice payment deadline is overdue", "High"),
 		"Document Original Expected": ("Original Document Overdue", "Expected original document is overdue", "High"),
 		"Process Step Due": ("Overdue Process Step", "Process step deadline is overdue", "High"),
+		"Billing Cycle Due": ("Overdue Billing Cycle", "Period closing cycle is overdue", "High"),
 	}.get(kind, (None, "", "Low"))
 
 

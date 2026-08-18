@@ -29,7 +29,6 @@ from contract_accounting.contract_accounting.doctype.ferum_billing_output.ferum_
 	snapshot_for_source,
 )
 
-
 OUTPUT_DOCTYPE: Final[str] = "Ferum Billing Output"
 ARTIFACT_DOCTYPE: Final[str] = "Ferum Billing Artifact"
 EVENT_DOCTYPE: Final[str] = "Ferum Billing Event"
@@ -96,6 +95,7 @@ def create_billing_output(
 	period_end: str,
 	source_refs: str | list[dict[str, str]],
 	upd_status: str | None = None,
+	billing_cycle: str | None = None,
 ) -> dict[str, Any]:
 	"""Create a Draft Output with server-derived immutable basis rows."""
 
@@ -111,6 +111,7 @@ def create_billing_output(
 			period_end=period_end,
 			source_refs=_source_refs(source_refs),
 			upd_status=upd_status,
+			billing_cycle=billing_cycle,
 		)
 		correlation = uuid4().hex
 		_event(doc, "Created", "Billing Output created", correlation)
@@ -118,6 +119,29 @@ def create_billing_output(
 	except BaseException:
 		frappe.db.rollback(save_point=save_point)
 		raise
+
+
+@frappe.whitelist(methods=["POST"])
+def attach_billing_output_to_cycle(
+	billing_output: str,
+	billing_cycle: str,
+) -> dict[str, Any]:
+	"""Explicitly bind only a non-legal Draft/Generated legacy Output."""
+
+	_require_billing_role()
+	output = _locked_output(billing_output)
+	_validate_output_write(output)
+	if output.billing_cycle:
+		if output.billing_cycle != billing_cycle:
+			frappe.throw(_("Billing Output уже принадлежит другому Billing Cycle."))
+		return _output_result(output, "")
+	if output.status not in {"Draft", "Generated"}:
+		frappe.throw(_("Issued/Signed/terminal Billing Output нельзя привязать backfill-командой."))
+	output.billing_cycle = _required(billing_cycle, "billing_cycle")
+	_with_flag(OUTPUT_UPDATE_FLAG, lambda: output.save(ignore_permissions=True))
+	correlation = uuid4().hex
+	_event(output, "Cycle Linked", "Explicit CA-13 Billing Cycle link", correlation)
+	return _output_result(output, correlation)
 
 
 @frappe.whitelist(methods=["POST"])
@@ -141,9 +165,8 @@ def register_billing_artifact(
 		if artifact_type == "Generated" and generation_mode == "Final":
 			if output.status != "Draft":
 				frappe.throw(_("Final Generated Artifact требует Draft Output."))
-		elif artifact_type == "Signed Scan":
-			if output.status not in {"Issued", "Signed"}:
-				frappe.throw(_("Signed Scan требует Issued/Signed Output."))
+		elif artifact_type == "Signed Scan" and output.status not in {"Issued", "Signed"}:
+			frappe.throw(_("Signed Scan требует Issued/Signed Output."))
 
 		previous = frappe.db.get_value(
 			ARTIFACT_DOCTYPE,
@@ -315,6 +338,7 @@ def supersede_billing_output(
 			period_end=str(old.period_end),
 			source_refs=refs,
 			supersedes=old.name,
+			billing_cycle=old.billing_cycle,
 		)
 		old.superseded_by = new.name
 		_save_output(old, "Superseded")
@@ -337,6 +361,7 @@ def get_billing_trace(billing_output: str) -> dict[str, Any]:
 	output.check_permission("read")
 	return {
 		"billing_output": output.name,
+		"billing_cycle": output.billing_cycle,
 		"service_project": output.service_project,
 		"sales_invoice": output.sales_invoice,
 		"status": output.status,
@@ -376,11 +401,13 @@ def _new_output(
 	source_refs: list[dict[str, str]],
 	upd_status: str | None = None,
 	supersedes: str | None = None,
+	billing_cycle: str | None = None,
 ) -> Any:
 	project = _authorized_project(service_project)
 	frappe.db.get_value("Sales Invoice", sales_invoice, "name", for_update=True)
 	doc = frappe.new_doc(OUTPUT_DOCTYPE)
 	doc.service_project = project.name
+	doc.billing_cycle = billing_cycle
 	doc.sales_invoice = sales_invoice
 	doc.output_type = output_type
 	doc.upd_status = upd_status
@@ -488,6 +515,7 @@ def _event(
 			"basis_hash": output.basis_hash,
 			"document_number": output.document_number,
 			"final_artifact_status": output.final_artifact_status,
+			"billing_cycle": output.billing_cycle,
 		},
 		ensure_ascii=False,
 		default=str,
@@ -575,6 +603,7 @@ def _with_flag(flag: str, callback: Any) -> Any:
 def _output_result(output: Any, correlation_id: str) -> dict[str, Any]:
 	return {
 		"billing_output": output.name,
+		"billing_cycle": output.billing_cycle,
 		"status": output.status,
 		"basis_hash": output.basis_hash,
 		"basis_count": len(output.basis_items),

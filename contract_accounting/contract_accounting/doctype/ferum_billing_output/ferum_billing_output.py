@@ -44,6 +44,7 @@ _IDENTITY_FIELDS: Final[tuple[str, ...]] = (
 	"supersedes",
 )
 _CONTROLLED_FIELDS: Final[tuple[str, ...]] = (
+	"billing_cycle",
 	"status",
 	"document_number",
 	"basis_items",
@@ -66,6 +67,7 @@ class FerumBillingOutput(Document):
 	def validate(self) -> None:
 		self._derive_context()
 		self._validate_period()
+		self._validate_cycle()
 		self._validate_type()
 		self._validate_invoice()
 		self._validate_basis()
@@ -95,6 +97,28 @@ class FerumBillingOutput(Document):
 	def _validate_period(self) -> None:
 		if getdate(self.period_end) < getdate(self.period_start):
 			frappe.throw(_("Billing period end не может быть раньше start."))
+
+	def _validate_cycle(self) -> None:
+		if not self.billing_cycle:
+			return
+		cycle = frappe.db.get_value(
+			"Ferum Billing Cycle",
+			self.billing_cycle,
+			("service_project", "period_start", "period_end", "status"),
+			as_dict=True,
+		)
+		if not cycle or (
+			cycle.service_project,
+			getdate(cycle.period_start),
+			getdate(cycle.period_end),
+		) != (
+			self.service_project,
+			getdate(self.period_start),
+			getdate(self.period_end),
+		):
+			frappe.throw(_("Billing Output не совпадает с Billing Cycle context/period."))
+		if self.is_new() and cycle.status != "Open":
+			frappe.throw(_("Новый Billing Output требует Open Billing Cycle."))
 
 	def _validate_type(self) -> None:
 		if self.output_type == "UPD":
@@ -291,6 +315,7 @@ def _canonical_basis_value(fieldname: str, value: Any) -> Any:
 def on_doctype_update() -> None:
 	frappe.db.add_index(DOCTYPE, ["service_project", "status", "period_end"], "ca_billing_output_project_idx")
 	frappe.db.add_index(DOCTYPE, ["sales_invoice", "status"], "ca_billing_output_invoice_idx")
+	frappe.db.add_index(DOCTYPE, ["billing_cycle", "status"], "ca_billing_output_cycle_idx")
 	frappe.db.add_unique(
 		DOCTYPE,
 		["company", "output_type", "document_number"],

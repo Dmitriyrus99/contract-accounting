@@ -4,9 +4,10 @@
  "autoname": "FBO-.YYYY.-.#####",
  "doctype": "DocType",
  "engine": "InnoDB",
- "field_order": ["service_project", "company", "customer", "sales_invoice", "output_type", "upd_status", "document_date", "period_start", "period_end", "status", "document_number", "basis_items", "basis_hash", "basis_amount", "currency", "invoice_grand_total_snapshot", "final_artifact_status", "issued_at", "issued_by", "signed_at", "signed_by", "supersedes", "superseded_by", "comment"],
+ "field_order": ["service_project", "billing_cycle", "company", "customer", "sales_invoice", "output_type", "upd_status", "document_date", "period_start", "period_end", "status", "document_number", "basis_items", "basis_hash", "basis_amount", "currency", "invoice_grand_total_snapshot", "final_artifact_status", "issued_at", "issued_by", "signed_at", "signed_by", "supersedes", "superseded_by", "comment"],
  "fields": [
   {"fieldname": "service_project", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "read_only": 1, "reqd": 1},
+  {"fieldname": "billing_cycle", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Billing Cycle", "options": "Ferum Billing Cycle", "read_only": 1},
   {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company", "read_only": 1, "reqd": 1},
   {"fieldname": "customer", "fieldtype": "Link", "label": "Customer", "options": "Customer", "read_only": 1, "reqd": 1},
   {"fieldname": "sales_invoice", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Sales Invoice", "options": "Sales Invoice", "read_only": 1, "reqd": 1},
