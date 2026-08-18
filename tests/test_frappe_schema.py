@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import json
-import tomllib
 import unittest
 from pathlib import Path
 
+import tomllib
+
 from contract_accounting import __version__
 from contract_accounting.domain.lifecycle import ExecutionStatus, LegalStatus
-
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCTYPE_ROOT = ROOT / "contract_accounting" / "contract_accounting" / "doctype"
@@ -607,7 +607,8 @@ class TestFrappeSchema(unittest.TestCase):
 			encoding="utf-8"
 		)
 		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 6)
-		self.assertEqual(source.count("@frappe.whitelist()"), 3)
+		self.assertEqual(source.count("@frappe.whitelist()"), 4)
+		self.assertIn("get_finance_summary_snapshot", source)
 		self.assertIn("source_fingerprint", source)
 		self.assertIn("assert_purchase_invoice_available", source)
 		self.assertNotIn('frappe.new_doc("GL Entry")', source)

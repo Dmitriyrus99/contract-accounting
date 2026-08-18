@@ -64,6 +64,44 @@ _MONEY_FIELDS: Final[tuple[str, ...]] = (
 )
 
 
+def can_read_finance(user: str | None = None) -> bool:
+	"""Return the single CA-07 authorization predicate for monetary projections."""
+
+	user = user or frappe.session.user
+	return user == "Administrator" or bool(
+		set(frappe.get_roles(user)).intersection(_FINANCE_READ_ROLES)
+	)
+
+
+@frappe.whitelist()
+def get_finance_summary_snapshot(service_project: str) -> dict[str, Any]:
+	"""Return the stored CA-07 read-model without recalculating upstream facts."""
+
+	_require_role(_FINANCE_READ_ROLES, "read Finance Summary")
+	_project(service_project).check_permission("read")
+	name = frappe.db.get_value(SUMMARY_DOCTYPE, {"service_project": service_project}, "name")
+	if not name:
+		return {
+			"access": "granted",
+			"status": "missing",
+			"service_project": service_project,
+		}
+	doc = frappe.get_doc(SUMMARY_DOCTYPE, name)
+	doc.check_permission("read")
+	return {
+		"access": "granted",
+		"status": "available",
+		"summary": doc.name,
+		"service_project": doc.service_project,
+		"company": doc.company,
+		"currency": doc.currency,
+		**{field: doc.get(field) for field in _MONEY_FIELDS},
+		"source_fingerprint": doc.source_fingerprint,
+		"last_recalculated_at": doc.last_recalculated_at,
+		"drilldown": {"doctype": SUMMARY_DOCTYPE, "name": doc.name},
+	}
+
+
 @frappe.whitelist(methods=["POST"])
 def create_material_expense(
 	service_project: str,
