@@ -454,6 +454,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - query latency укладывается в согласованный бюджет на репрезентативном объёме.
 
+**Результат реализации v0.10.0 — 2026-08-18:** `CA-09 PARTIAL / SOURCE TIMELINE BENCH VERIFIED`. Реализованы read-only normalized projection с точным `source_doctype/name/field`, source fingerprint и adapters Contract, Maintenance, Request, Stage acceptance/billing/payment, Security/Bank Guarantee, Project Document, Finding и submitted Sales Invoice; отдельный `Ferum Deadline/Milestone` не создан. Pure calendar engine требует явный immutable timezone/revision/holiday/cut-off snapshot и fail-closed отклоняет неизвестный trigger/config. Без `as_of` классификация выключена, а production warning/escalation остаётся `disabled_pending_MG-CA-013`. Migrate сохранил 35 DocType; standalone suite `100/100`, targeted Frappe `3/3`, полный suite `50/50`. Signature/customer-response/general-warranty source fields, BPM dates, representative-volume latency, notification delivery, UAT/sign-off и production deployment остаются OPEN; MG-CA-013 не закрыт. Evidence: [implementation/CA-09/README.md](implementation/CA-09/README.md), [runtime evidence](implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md), [traceability](implementation/CA-09/traceability_v0_10_0.md).
+
 **Оценка:** M.
 
 ### CA-10. Contract 360° и exception center

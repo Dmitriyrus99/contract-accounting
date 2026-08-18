@@ -17,6 +17,7 @@ Current delivery state:
 - CA-06 schema v0.7.0 adds immutable accepted-work Billing Basis, versioned Billing Output/Artifact/Event, CA-05 document projection and a narrow adapter to standard Sales Invoice without custom ledger writes; 35 runtime tests plus 28-DocType clean reinstall are verified at `5b2d79a`;
 - CA-07 schema v0.8.0 adds a rebuildable Finance Summary over standard Sales/Purchase Invoice and Payment Entry, guarded Material Expense/Contractor Settlement classification, reconciliation and Company-currency portfolio rollup; 41 runtime tests plus 31-DocType clean reinstall are verified at `f7217f3`;
 - CA-08 schema v0.9.0 adds effective-dated Contractor Assignment, separate Commercial Terms/margin, Assignment links to Settlement/Material and Supplier-isolated contractor read; 47 runtime tests plus 35-DocType clean reinstall are verified at `9af7a67`, while Worker/Credential records and PERSONNEL READY remain hard-blocked by MG-CA-015;
+- CA-09 v0.10.0 adds a non-persistent, source-linked deadline timeline and an explicit immutable-calendar calculator; 50 runtime tests are verified at `a08b709`, while automatic warning/escalation and production calendar selection remain hard-blocked by MG-CA-013;
 - runtime W2 evidence was inspected on the available test stand;
 - full backup restore rehearsal remains open because `bench restore` required an interactive DB-root credential that was not read or exposed.
 

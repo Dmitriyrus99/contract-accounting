@@ -75,6 +75,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-08/schema_v0_9_0.md](implementation/CA-08/schema_v0_9_0.md) | физическая Assignment/Terms schema и fail-closed Worker/Credential privacy spike |
 | [implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md](implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md) | exact v0.9.0 versions, 47/47 runtime и clean reinstall 35 DocType |
 | [implementation/CA-08/traceability_v0_9_0.md](implementation/CA-08/traceability_v0_9_0.md) | CODE/runtime mapping CA-08 с явным MG-CA-015/PERSONNEL READY OPEN |
+| [implementation/CA-09/README.md](implementation/CA-09/README.md) | derived source timeline, explicit calendar snapshot и MG-CA-013 boundary |
+| [implementation/CA-09/projection_v0_10_0.md](implementation/CA-09/projection_v0_10_0.md) | normalized row/source adapters и fail-closed classification contract |
+| [implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md](implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md) | exact v0.10.0 versions, 50/50 runtime и 35-DocType inventory |
+| [implementation/CA-09/traceability_v0_10_0.md](implementation/CA-09/traceability_v0_10_0.md) | CODE/runtime mapping TCA-A-14 с явными signature/customer-response gaps |
 
 ## Принятый baseline
 
