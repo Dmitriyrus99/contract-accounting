@@ -29,6 +29,16 @@ TRANSITIONS: Final[dict[str, frozenset[str]]] = {
 	STATE_APPLIED: frozenset(),
 	STATE_REJECTED: frozenset(),
 }
+TRANSITION_ROLES: Final[dict[tuple[str, str], frozenset[str]]] = {
+	(STATE_DRAFT, STATE_UNDER_REVIEW): frozenset({"Юрист", "System Manager"}),
+	(STATE_UNDER_REVIEW, STATE_APPROVED): frozenset(
+		{"Генеральный директор", "System Manager"}
+	),
+	(STATE_UNDER_REVIEW, STATE_REJECTED): frozenset(
+		{"Генеральный директор", "System Manager"}
+	),
+	(STATE_APPROVED, STATE_APPLIED): frozenset({"Генеральный директор", "System Manager"}),
+}
 
 AMENDABLE_PROJECT_FIELDS: Final[frozenset[str]] = frozenset(
 	{
@@ -53,6 +63,7 @@ _FROZEN_FIELDS: Final[tuple[str, ...]] = (
 	"change_type",
 	"source_document_reference",
 	"changes",
+	"comment",
 )
 
 
@@ -91,6 +102,13 @@ class FerumContractAmendment(Document):
 		new = self.get("approval_status")
 		if old != new and new not in TRANSITIONS.get(old, frozenset()):
 			frappe.throw(_("Недопустимый Amendment transition: {0} → {1}.").format(old, new))
+		if old != new and frappe.session.user != "Administrator":
+			allowed_roles = TRANSITION_ROLES.get((old, new), frozenset())
+			if not set(frappe.get_roles(frappe.session.user)).intersection(allowed_roles):
+				frappe.throw(
+					_("Недостаточно прав для Amendment transition {0} → {1}.").format(old, new),
+					frappe.PermissionError,
+				)
 
 	def _validate_changes(self) -> None:
 		if self.get("approval_status") in {STATE_APPROVED, STATE_APPLIED} and not self.get("changes"):

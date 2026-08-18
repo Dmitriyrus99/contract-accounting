@@ -231,7 +231,18 @@ class TestFerumServiceProjectLifecycle(FrappeTestCase):
 				],
 			}
 		).insert(ignore_permissions=True)
-		for status in ("Under Review", "Approved", "Applied"):
+		amendment.approval_status = "Under Review"
+		amendment.save(ignore_permissions=True)
+		frappe.set_user("ca.lawyer.runtime@example.com")
+		try:
+			with patch.object(frappe, "get_roles", return_value=["Юрист"]):
+				amendment.approval_status = "Approved"
+				with self.assertRaises(frappe.PermissionError):
+					amendment.save(ignore_permissions=True)
+		finally:
+			frappe.set_user("Administrator")
+		amendment.reload()
+		for status in ("Approved", "Applied"):
 			amendment.approval_status = status
 			amendment.save(ignore_permissions=True)
 		amendment.reload()
