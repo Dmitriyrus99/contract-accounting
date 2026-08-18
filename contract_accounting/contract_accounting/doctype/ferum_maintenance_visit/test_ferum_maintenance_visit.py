@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from base64 import b64decode
 from datetime import date, datetime, time, timedelta
 from uuid import uuid4
 
@@ -118,8 +119,11 @@ class TestFerumMaintenanceExecution(FrappeTestCase):
 			review_visit(visit_name, "Approved")
 
 		file_doc = save_file(
-			f"ca03-{uuid4().hex[:10]}.jpg",
-			b"CA-03 disposable evidence",
+			f"ca03-{uuid4().hex[:10]}.png",
+			b64decode(
+				"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+				"+A8AAQUBAScY42YAAAAASUVORK5CYII="
+			),
 			"Ferum Maintenance Visit",
 			visit_name,
 			is_private=1,
