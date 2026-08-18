@@ -260,7 +260,25 @@ class FerumMaintenanceVisit(Document):
 	def _signature(self, fieldname: str, document: Document | None = None) -> str:
 		document = document or self
 		value = document.get(fieldname)
-		if isinstance(value, list):
+		if fieldname == "checklist":
+			value = [
+				{
+					key: row.get(key)
+					for key in ("item_code", "description", "is_completed", "result", "comment")
+				}
+				for row in value or []
+			]
+		elif fieldname == "evidence":
+			value = [
+				{
+					key: row.get(key)
+					for key in (
+						"evidence_type", "file", "captured_at", "captured_by", "content_hash", "note"
+					)
+				}
+				for row in value or []
+			]
+		elif isinstance(value, list):
 			value = [row.as_dict(no_nulls=False) for row in value]
 		return frappe.as_json(value)
 
