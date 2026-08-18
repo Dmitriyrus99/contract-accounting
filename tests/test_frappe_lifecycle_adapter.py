@@ -164,6 +164,10 @@ class TestFrappeLifecycleAdapter(unittest.TestCase):
 			{row["correlation_id"] for row in runtime.audit_rows},
 			{"corr-frappe-001"},
 		)
+		self.assertEqual(
+			{row["occurred_at"] for row in runtime.audit_rows},
+			{NOW.replace(tzinfo=None)},
+		)
 		self.assertEqual(result.state.legal_status, LegalStatus.CANCELLED)
 		self.assertIsNone(runtime.flags.get(LIFECYCLE_WRITE_FLAG))
 		self.assertIsNone(runtime.flags.get(LIFECYCLE_AUDIT_WRITER_FLAG))

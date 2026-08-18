@@ -145,7 +145,10 @@ class FrappeLifecycleUnitOfWork:
 			doc.from_status = event.from_status
 			doc.to_status = event.to_status
 			doc.actor = event.actor
-			doc.occurred_at = event.occurred_at
+			# Frappe stores Datetime values as naive values in the site timezone.
+			# The API creates this aware timestamp in that same site timezone; keep
+			# the displayed wall time while removing the unsupported SQL offset.
+			doc.occurred_at = event.occurred_at.replace(tzinfo=None)
 			doc.reason = event.reason
 			doc.comment = event.comment
 			doc.effective_date = event.effective_date
