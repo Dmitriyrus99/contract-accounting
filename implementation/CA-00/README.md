@@ -8,7 +8,7 @@
 
 ## Результат текущего шага
 
-Официальный AS-IS baseline пока не tagged/synchronized, но clean post-W2 кандидат найден. Во время проверки две наблюдавшиеся документационные правки были зафиксированы внешним commit `63634f5`; checkout стал clean. Ветка на 16 commits опережает remote. Создавать baseline tag или push без отдельного согласования нельзя.
+Отдельный repository baseline аналитического проекта опубликован в `Dmitriyrus99/contract-accounting`: commit `33befac`, tag `discovery-baseline-2026-08-18`. Он фиксирует discovery/CA-00 пакет и не подменяет code-bearing baseline приложения Frappe. Clean post-W2 кандидат приложения найден на `63634f5`, но его remote sync остаётся вне этого репозитория и не выполнялся.
 
 | Кандидат | Branch / HEAD | Состояние | Вердикт |
 | --- | --- | --- | --- |
@@ -23,9 +23,9 @@
 - modified files: `0`;
 - untracked files: `0`;
 - staged changes: отсутствуют;
-- baseline tag намеренно не создавался: remote-sync и rollback gates не закрыты.
+- discovery baseline tag создан в отдельном проектном репозитории; code-bearing tag приложения не создавался.
 
-W2 runtime/DB и clean-tree gates подтверждены ниже, но tag/remote-sync и rollback rehearsal ещё не закрыты. Поэтому MG-CA-016 в целом остаётся OPEN.
+W2 runtime/DB и clean-tree gates подтверждены ниже, но code-bearing tag/remote-sync и полный restore ещё не закрыты. Поэтому MG-CA-016 в целом остаётся OPEN.
 
 Устаревший локальный Claude snapshot был статически приведён к `pre-commit` PASS точечными type-only правками; те же исправления уже присутствуют в истории актуального стенда (`W2-T12`, `docs/plan/09_task_breakdown.md`). Локальный snapshot не повышается до baseline.
 
@@ -63,7 +63,8 @@ Live inventory зафиксирован в [live_inventory_w2t12b_2026-08-18.md]
 | Gate | Owner | Статус | Evidence для закрытия |
 | --- | --- | --- | --- |
 | clean post-W2 SHA | Release Manager | READY | `63634f5c5191fdac566add7a69d56ee59bedcb24`, clean tree, empty diff hash |
-| baseline tag + remote sync | Release Manager | OPEN | approved tag name, push result and remote SHA |
+| discovery repository baseline | Release Manager | PASS | `contract-accounting` commit `33befac`, tag `discovery-baseline-2026-08-18` |
+| code-bearing baseline tag + remote sync | Release Manager | OPEN | approved application tag name, push result and remote SHA |
 | W2-T12 permission suite | Security reviewer | PASS | 17 permission tests + 31 Project Object tests; prior independent acceptance recorded in repo |
 | W2-V02 physical keys | DB owner | PASS | owner-executed immutable protocol + current read-only schema inspection |
 | live metadata inventory | Release Engineer | RECORDED | [live inventory](live_inventory_w2t12b_2026-08-18.md); повторить на frozen baseline |
@@ -73,8 +74,8 @@ Live inventory зафиксирован в [live_inventory_w2t12b_2026-08-18.md]
 
 ## Следующий исполнимый шаг
 
-1. Зафиксировать самостоятельный repository baseline текущего contract-accounting проекта.
-2. Повторить inventory на следующем code-bearing baseline и приложить hashes к release evidence.
-3. Повторить [rollback rehearsal](rollback_rehearsal_2026-08-18.md) с безопасно предоставленным DB-root credential и закрыть MG-CA-016.
+1. Повторить inventory на следующем code-bearing baseline и приложить hashes к release evidence.
+2. Повторить [rollback rehearsal](rollback_rehearsal_2026-08-18.md) с безопасно предоставленным DB-root credential и закрыть MG-CA-016.
+3. Продолжить CA-01 Frappe adapter/schema только с явным сохранением открытого MG-CA-016 в release gates.
 
-До выполнения этих шагов TARGET-код `CA-01+` не начинается: иначе официальный baseline будет загрязнён TARGET-изменениями.
+Чистая Python domain policy CA-01 ведётся в отдельном репозитории и не изменяет AS-IS приложение или БД. Frappe schema/cutover не считаются разрешёнными или выполненными до закрытия соответствующих migration/rollback gates.

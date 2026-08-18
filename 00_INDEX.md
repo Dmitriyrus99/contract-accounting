@@ -41,6 +41,7 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-00/live_inventory_w2t12b_2026-08-18.md](implementation/CA-00/live_inventory_w2t12b_2026-08-18.md) | live schema/patch/workflow/role/scheduler inventory post-W2 стенда |
 | [implementation/CA-00/migration_evidence_template.md](implementation/CA-00/migration_evidence_template.md) | обязательный формат migration/rollback evidence |
 | [implementation/CA-00/rollback_rehearsal_2026-08-18.md](implementation/CA-00/rollback_rehearsal_2026-08-18.md) | backup + compensating rollback evidence; full restore gate остаётся OPEN |
+| [implementation/CA-01/README.md](implementation/CA-01/README.md) | dual-status domain policy, границы и unit evidence первого инкремента CA-01 |
 
 ## Принятый baseline
 
