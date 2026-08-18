@@ -8,8 +8,8 @@
 - app: `contract_accounting 0.7.0`;
 - Frappe `15.118.0`, ERPNext `15.119.2`;
 - Bench Python `3.11.14`, MariaDB `10.11.14`, Redis `7.0.15`;
-- wheel: `contract_accounting-0.7.0-py3-none-any.whl`, `WHEEL_SIZE_BYTES` bytes;
-- wheel SHA-256: `WHEEL_SHA256`.
+- wheel: `contract_accounting-0.7.0-py3-none-any.whl`, 136,202 bytes;
+- wheel SHA-256: `8d2f35a2de368a25da8748ddd250524054bf5e22002ae8542f1a8eb92debb446`.
 
 Стенд: disposable `ca01.localhost`, отдельная user-owned MariaDB `127.0.0.1:3317` и cache Redis `127.0.0.1:13000`. Production/legacy site и business data не использовались; secrets/site configuration не читались.
 
