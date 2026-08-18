@@ -106,6 +106,15 @@ def get_end_to_end_trace(service_project: str, as_of: str | None = None) -> dict
 	)
 	documents = widgets["documents"]["items"]
 	finance_trace = _finance_trace(service_project)
+	audit_events = _visible_project_rows(
+		"Ferum Lifecycle Audit Event",
+		service_project,
+		["dimension", "from_status", "to_status", "actor", "occurred_at", "reason", "correlation_id"],
+	) + _visible_project_rows(
+		"Ferum Process Event",
+		service_project,
+		["event_type", "source_doctype", "source_name", "project_process", "occurred_at", "actor", "event_hash"],
+	)
 
 	segments = [
 		_segment("why", "Почему", widgets["requirements"]["items"] + widgets["obligations"]["items"]),
@@ -123,6 +132,24 @@ def get_end_to_end_trace(service_project: str, as_of: str | None = None) -> dict
 		"service_project": service_project,
 		"identity": card["identity"],
 		"segments": segments,
+		"cross_cutting_dimensions": [
+			_segment("contractors", "Подрядчики", widgets["contractors"]["items"]),
+			_segment("materials", "Материалы", finance_trace.get("material_expenses", []), access=finance_trace["access"]),
+			_segment(
+				"costs",
+				"Затраты",
+				finance_trace.get("purchase_invoices", []) + finance_trace.get("contractor_settlements", []),
+				access=finance_trace["access"],
+			),
+			_segment("documents", "Документы", documents),
+			_segment(
+				"communications",
+				"Коммуникации",
+				[row for row in documents if row.get("document_type") == "Correspondence"],
+			),
+			_segment("deadlines", "Сроки", widgets["deadlines"]["rows"]),
+			_segment("audit", "Аудит", audit_events),
+		],
 		"exceptions": card["exceptions"],
 		"policies": {
 			"project_ssot": "Ferum Service Project",
@@ -317,6 +344,13 @@ def _finance_trace(service_project: str) -> dict[str, Any]:
 		row.update({"source_doctype": "Sales Invoice", "source_name": row["name"], "drilldown": _drilldown("Sales Invoice", row["name"])})
 	for row in trace["payment_entries"]:
 		row.update({"source_doctype": "Payment Entry", "source_name": row["parent"], "drilldown": _drilldown("Payment Entry", row["parent"])})
+	for key, doctype in (
+		("purchase_invoices", "Purchase Invoice"),
+		("material_expenses", "Ferum Material Expense"),
+		("contractor_settlements", "Ferum Contractor Settlement"),
+	):
+		for row in trace[key]:
+			row.update({"source_doctype": doctype, "source_name": row["name"], "drilldown": _drilldown(doctype, row["name"])})
 	trace["access"] = "granted"
 	return trace
 

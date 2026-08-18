@@ -83,6 +83,10 @@ class TestIntegration(FrappeTestCase):
 		where = next(row for row in first["segments"] if row["key"] == "where")
 		self.assertIn(self.system.name, {row["source_name"] for row in where["items"]})
 		self.assertEqual(first["policies"]["import_batch"], "INACTIVE_NOT_PRODUCTION_PROVEN_PENDING_MG-CA-023")
+		self.assertEqual(
+			[row["key"] for row in first["cross_cutting_dimensions"]],
+			["contractors", "materials", "costs", "documents", "communications", "deadlines", "audit"],
+		)
 
 		manager = self._make_user("Менеджер проектов")
 		frappe.set_user(manager.name)
