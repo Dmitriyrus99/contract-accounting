@@ -43,6 +43,7 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-00/rollback_rehearsal_2026-08-18.md](implementation/CA-00/rollback_rehearsal_2026-08-18.md) | backup + compensating rollback evidence; full restore gate остаётся OPEN |
 | [implementation/CA-01/README.md](implementation/CA-01/README.md) | dual-status domain policy, границы и unit evidence первого инкремента CA-01 |
 | [implementation/CA-01/schema_v0_1_0.md](implementation/CA-01/schema_v0_1_0.md) | Frappe schema/adapter v0.1.0, permissions, static evidence и незакрытые runtime gates |
+| [implementation/CA-01/runtime_test_plan.md](implementation/CA-01/runtime_test_plan.md) | отдельный bench/site protocol и versioned runtime acceptance suite, пока NOT RUN |
 
 ## Принятый baseline
 

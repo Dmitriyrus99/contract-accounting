@@ -21,6 +21,7 @@
 Транзакционная граница: [`contract_accounting/application/lifecycle_service.py`](../../contract_accounting/application/lifecycle_service.py).
 Frappe adapter: [`contract_accounting/infrastructure/frappe_lifecycle.py`](../../contract_accounting/infrastructure/frappe_lifecycle.py).
 Schema evidence: [schema_v0_1_0.md](schema_v0_1_0.md).
+Bench plan и versioned runtime suite: [runtime_test_plan.md](runtime_test_plan.md).
 Тесты: [`tests/test_lifecycle.py`](../../tests/test_lifecycle.py), [`tests/test_lifecycle_service.py`](../../tests/test_lifecycle_service.py), [`tests/test_frappe_lifecycle_adapter.py`](../../tests/test_frappe_lifecycle_adapter.py) и [`tests/test_frappe_schema.py`](../../tests/test_frappe_schema.py).
 
 ## Проверка инкремента
@@ -36,3 +37,5 @@ Schema evidence: [schema_v0_1_0.md](schema_v0_1_0.md).
 ## Граница этого инкремента
 
 Domain/application модули не зависят от Frappe. Adapter реализует обязательный persistence contract (`lock_state` → `save_state` → `append_audit_events`) без implicit commit, а controller содержит direct-edit guard. Следующий шаг CA-01 — установить app на отдельный ERPNext v15 test site, выполнить runtime tests и затем добавить Amendment/Stage/Security/Financial Plan links. До bench-проверки direct-edit guard и транзакционный rollback считаются реализованными в CODE, но не подтверждёнными runtime evidence.
+
+Versioned `FrappeTestCase` suite уже присутствует, но имеет статус `PRESENT / NOT RUN`; наличие тестового файла не является runtime PASS.
