@@ -584,6 +584,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - overdue action попадает в My Actions/Director Center.
 
+**Результат реализации v0.14.0 — 2026-08-18:** `CA-13 PARTIAL / RECURRING BILLING CYCLE + PERIOD GATE BENCH VERIFIED`. Реализованы отдельный `Ferum Billing Cycle`, exact Published `FERUM-BILLING-CYCLE` v1 из 1 stage/9 blocking milestones, immutable expected-work snapshot, read-only expected/accepted/unbilled/billed/signed/sent/receipt/paid projection, Cycle→Basis→Output→Sales Invoice→Payment Entry trace и reverse resolver, correction inheritance, evidence-backed Passed Gate/Completed Cycle и overdue source в CA-09/10. Cycle не хранит ledger и не пишет GL. Explicit backfill допускает только Draft/Generated exact-period groups; Issued/Signed блокируются для manual legal reconciliation. Repeated migrate расширил схему с 47 до 48 DocType; standalone suite `128/128`, targeted CA-13 `2/2`, полный Frappe suite `65/65`. Automatic recurrence/scheduler, dedicated positive UPD/SF branch, external delivery/receipt, runtime legacy backfill rehearsal, CA-14 UI, performance, UAT/sign-off и production deployment остаются OPEN. Evidence: [implementation/CA-13/README.md](implementation/CA-13/README.md), [runtime evidence](implementation/CA-13/runtime_evidence_v0_14_0_2026-08-18.md), [traceability](implementation/CA-13/traceability_v0_14_0.md).
+
 **Оценка:** L.
 
 ### CA-14. «Мои действия» и «Запуск проектов»
