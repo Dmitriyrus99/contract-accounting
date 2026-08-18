@@ -63,6 +63,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-05/schema_v0_6_0.md](implementation/CA-05/schema_v0_6_0.md) | физическая schema Project Document/Document Link/Event и server invariants |
 | [implementation/CA-05/runtime_evidence_v0_6_0_2026-08-18.md](implementation/CA-05/runtime_evidence_v0_6_0_2026-08-18.md) | exact v0.6.0 versions, 29/29 runtime и rollback/reinstall 24 DocType |
 | [implementation/CA-05/traceability_v0_6_0.md](implementation/CA-05/traceability_v0_6_0.md) | CODE/runtime mapping CA-05 с явными downstream integration gates |
+| [implementation/CA-06/README.md](implementation/CA-06/README.md) | execution-to-billing trace, immutable Basis и граница стандартного ERPNext accounting |
+| [implementation/CA-06/schema_v0_7_0.md](implementation/CA-06/schema_v0_7_0.md) | физическая schema Billing Output/Basis/Artifact/Event и Sales Invoice adapter |
+| [implementation/CA-06/runtime_evidence_v0_7_0_2026-08-18.md](implementation/CA-06/runtime_evidence_v0_7_0_2026-08-18.md) | exact v0.7.0 versions, 35/35 runtime и clean reinstall 28 DocType |
+| [implementation/CA-06/traceability_v0_7_0.md](implementation/CA-06/traceability_v0_7_0.md) | CODE/runtime mapping CA-06 без подмены UAT/production gates |
 
 ## Принятый baseline
 
