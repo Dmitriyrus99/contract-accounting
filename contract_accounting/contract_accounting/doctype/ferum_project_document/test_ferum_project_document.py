@@ -217,9 +217,10 @@ class TestFerumProjectDocument(FrappeTestCase):
 
 	@staticmethod
 	def _save_file(document_name: str, filename: str):
+		unique_name = f"ca05-{uuid4().hex[:8]}-{filename}"
 		return save_file(
-			f"ca05-{uuid4().hex[:8]}-{filename}",
-			b"CA-05 immutable evidence",
+			unique_name,
+			f"CA-05 immutable evidence: {unique_name}".encode(),
 			"Ferum Project Document",
 			document_name,
 			is_private=1,
