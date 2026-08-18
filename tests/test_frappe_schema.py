@@ -85,10 +85,18 @@ class TestFrappeSchema(unittest.TestCase):
 		}
 		self.assertTrue(required.issubset(by_name))
 		self.assertTrue(all(by_name[name].get("read_only") == 1 for name in required))
+		self.assertEqual(by_name["correlation_id"].get("search_index"), 1)
 		for permission in document["permissions"]:  # type: ignore[index,union-attr]
 			self.assertNotIn("create", permission)
 			self.assertNotIn("write", permission)
 			self.assertNotIn("delete", permission)
+		controller = (
+			DOCTYPE_ROOT
+			/ "ferum_lifecycle_audit_event"
+			/ "ferum_lifecycle_audit_event.py"
+		).read_text(encoding="utf-8")
+		self.assertIn('["service_project", "occurred_at"]', controller)
+		self.assertNotIn('["correlation_id"]', controller)
 
 	def test_role_fixture_and_permission_levels_match_ca01_boundaries(self) -> None:
 		role_path = ROOT / "contract_accounting" / "fixtures" / "role.json"

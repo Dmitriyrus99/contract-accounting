@@ -34,4 +34,3 @@ class FerumLifecycleAuditEvent(Document):
 
 def on_doctype_update() -> None:
 	frappe.db.add_index(LIFECYCLE_AUDIT_DOCTYPE, ["service_project", "occurred_at"])
-	frappe.db.add_index(LIFECYCLE_AUDIT_DOCTYPE, ["correlation_id"])
