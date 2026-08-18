@@ -1,6 +1,6 @@
 # CA-01 bench runtime test plan
 
-**Статус:** `TESTS PRESENT / NOT RUN`
+**Статус:** `EXECUTED / PASS 8 OF 8 ON 2026-08-18`
 
 Этот протокол предназначен только для нового отдельного ERPNext v15 test site приложения `contract_accounting`. Использование существующего `ferum_custom` repository/site как целевого проекта запрещено решением владельца от 2026-08-18.
 
@@ -15,7 +15,7 @@
 
 ## Mutating setup gate
 
-Следующие команды являются планом и в текущем инкременте не выполнялись:
+Команды выполнены только на отдельном disposable site после разрешения владельца:
 
 ```bash
 bench get-app <local-or-git-contract-accounting-source>
@@ -56,3 +56,5 @@ Versioned suite проверяет:
 - skipped UAT/legal/finance gates отдельно от automation result.
 
 До появления этих данных CA-01 остаётся `IN PROGRESS`, даже если versioned runtime tests присутствуют в repository.
+
+Данные текущего прогона: [runtime_evidence_2026-08-18.md](runtime_evidence_2026-08-18.md). CA-01 остаётся `IN PROGRESS` из-за cross-module links и ручных gates, но core runtime gate закрыт.

@@ -1,6 +1,6 @@
 # CA-01 — Service Project contract root and dual-status lifecycle
 
-**Статус:** `IN PROGRESS — FRAPPE SCHEMA/ADAPTER STATIC VERIFIED; BENCH NOT RUN`
+**Статус:** `IN PROGRESS — CA-01 CORE BENCH VERIFIED; CROSS-MODULE LINKS/UAT PENDING`
 
 Первый кодовый инкремент реализует owner-approved OQ-CA-003/OQ-CA-020 как чистую server-side domain policy:
 
@@ -22,6 +22,7 @@
 Frappe adapter: [`contract_accounting/infrastructure/frappe_lifecycle.py`](../../contract_accounting/infrastructure/frappe_lifecycle.py).
 Schema evidence: [schema_v0_1_0.md](schema_v0_1_0.md).
 Bench plan и versioned runtime suite: [runtime_test_plan.md](runtime_test_plan.md).
+Runtime evidence: [runtime_evidence_2026-08-18.md](runtime_evidence_2026-08-18.md).
 Тесты: [`tests/test_lifecycle.py`](../../tests/test_lifecycle.py), [`tests/test_lifecycle_service.py`](../../tests/test_lifecycle_service.py), [`tests/test_frappe_lifecycle_adapter.py`](../../tests/test_frappe_lifecycle_adapter.py) и [`tests/test_frappe_schema.py`](../../tests/test_frappe_schema.py).
 
 ## Проверка инкремента
@@ -31,11 +32,14 @@ Bench plan и versioned runtime suite: [runtime_test_plan.md](runtime_test_plan.
 - JSON parse Service Project, Lifecycle Audit Event и Role fixture — PASS;
 - isolated PEP 517 wheel build — PASS, `contract_accounting-0.1.0-py3-none-any.whl`; Frappe metadata, DocType JSON и Role fixture присутствуют внутри wheel;
 - `git diff --check` — PASS.
+- отдельный ERPNext v15 site: install + migrate — PASS;
+- Frappe/MariaDB runtime suite — PASS, 8/8;
+- controlled app schema uninstall/reinstall и повторный suite — PASS.
 
-Это статические и unit-проверки Python, fake-Frappe adapter и versioned JSON schema. Bench/Frappe runtime, установка app, миграция schema и реальные DB-транзакции в этом инкременте не выполнялись.
+Точные версии, SHA, wheel hash, schema inventory, rollback и границы проверки записаны в [runtime evidence](runtime_evidence_2026-08-18.md).
 
 ## Граница этого инкремента
 
-Domain/application модули не зависят от Frappe. Adapter реализует обязательный persistence contract (`lock_state` → `save_state` → `append_audit_events`) без implicit commit, а controller содержит direct-edit guard. Следующий шаг CA-01 — установить app на отдельный ERPNext v15 test site, выполнить runtime tests и затем добавить Amendment/Stage/Security/Financial Plan links. До bench-проверки direct-edit guard и транзакционный rollback считаются реализованными в CODE, но не подтверждёнными runtime evidence.
+Domain/application модули не зависят от Frappe. Adapter реализует обязательный persistence contract (`lock_state` → `save_state` → `append_audit_events`) без implicit commit, а controller содержит direct-edit guard. Install, direct-edit guard, immutable audit, row-lock-backed transitions, savepoint rollback и schema uninstall/reinstall подтверждены на disposable bench. Следующий шаг CA-01 — добавить Amendment/Stage/Security/Financial Plan и Object/System links.
 
-Versioned `FrappeTestCase` suite уже присутствует, но имеет статус `PRESENT / NOT RUN`; наличие тестового файла не является runtime PASS.
+Versioned `FrappeTestCase` suite имеет подтверждённый статус `PASS 8/8` только для зафиксированного стенда и commit из runtime evidence; это не заменяет UAT/legal/finance или production deployment.

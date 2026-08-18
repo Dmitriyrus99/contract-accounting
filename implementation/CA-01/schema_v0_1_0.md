@@ -1,6 +1,6 @@
 # CA-01 schema evidence — v0.1.0
 
-**Статус:** `STATIC VERIFIED / BENCH RUNTIME NOT RUN`
+**Статус:** `STATIC + BENCH RUNTIME VERIFIED AT fae6581`
 
 **Дата:** 2026-08-18.
 
@@ -38,7 +38,7 @@ Composite unique key `(company, contract_number, contract_date)` регистр�
 Insert-only DocType хранит отдельное событие для каждой изменённой оси:
 
 - Service Project, dimension, from/to status;
-- actor и timezone-aware occurred_at;
+- actor и timezone-aware domain timestamp; при записи Frappe `Datetime` хранится naive wall time site timezone по конвенции Frappe;
 - reason, comment, effective date, evidence JSON;
 - termination basis и related document;
 - признак документированного исключения Terminated + Completed;
@@ -72,16 +72,17 @@ Whitelisted mutating commands:
 | `python -m compileall -q contract_accounting tests` | PASS | синтаксис; не импортирует Frappe runtime controllers |
 | `python -m unittest discover -s tests -v` | PASS, 52 tests | domain/application/authorization/fake-Frappe/schema/legacy-link tests |
 | JSON parse трёх versioned fixtures/schema | PASS | синтаксис JSON |
-| isolated PEP 517 wheel build + archive listing | PASS | package build; hooks/modules/patches, оба DocType JSON и Role fixture присутствуют; app на site не устанавливался |
+| isolated PEP 517 wheel build + archive listing | PASS | package build; hooks/modules/patches, оба DocType JSON и Role fixture присутствуют |
 | `git diff --check` | PASS | whitespace/conflict markers |
+| separate-site install + migrate | PASS | Frappe 15.118.0 / ERPNext 15.119.2 / MariaDB 10.11.14 |
+| versioned Frappe runtime suite | PASS, 8/8 | реальные DocType, permissions, savepoint/rollback и audit persistence |
+| schema uninstall/reinstall | PASS | disposable site; без backup/restore business data |
 
 ## Незакрытые CA-01 gates
 
-- app install/migrate на отдельном ERPNext v15 test site — `NOT RUN`;
-- runtime controller, DocPerm, row-lock и immutable audit tests под Frappe — `NOT RUN`;
 - schema/link перевод Amendment, Execution Stage, Security и Financial Plan на этот root — `PENDING`;
 - Service Project → Object → Object System integrity — `PENDING`;
-- controlled schema/config rollback — `PENDING`; старые business records и status history не восстанавливаются и не backfill-ятся;
+- full site backup/restore — `NOT RUN`; controlled app schema uninstall/reinstall — `PASS`;
 - UAT/legal/finance approval — `NOT RUN`.
 
-Следовательно, этот артефакт подтверждает installable-intent и локальную логику, но не утверждает успешную установку или миграцию Frappe.
+Точные runtime evidence и ограничения: [runtime_evidence_2026-08-18.md](runtime_evidence_2026-08-18.md). Успешная bench-проверка не утверждает production deployment или ручные approvals.

@@ -190,6 +190,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 **OQ-CA-003 — `APPROVED`, 2026-08-18:** legal FSM = Draft, On Approval, Approved, Signing, Signed, In Force, Cancelled, Terminated, Expired; execution FSM = Not Started, Launching, Active, Suspended, Completed, Stopped. Cancelled/Terminated/Expired и Completed/Stopped terminal; `Active` разрешён только при In Force; `Suspended→Completed` запрещён. OQ-CA-020 уточняет Resume: возврат только в сохранённый `suspended_from_status` Launching/Active. `Closed`/`Archived` вынесены из FSM. Полные matrices/audit rules зафиксированы в [05_target_model.md](05_target_model.md#4-двойная-статусная-модель-договора) и [08_open_questions.md](08_open_questions.md#oq-ca-003-какова-целевая-dual-status-fsm-договора). Legacy status migration не требуется.
 
+**Статус реализации, 2026-08-18:** core contract root schema, dual FSM, typed audit, atomic persistence и controlled app schema rollback/reinstall подтверждены на отдельном ERPNext v15 site: [runtime evidence](implementation/CA-01/runtime_evidence_2026-08-18.md). CA-01 не завершён: Amendment/Stage/Security/financial plan и Object/System links, полный backup restore и ручные UAT/legal/finance gates остаются открыты.
+
 **Состав:**
 
 - реализовать утверждённую OQ-CA-001/002 целевую топологию: один `Ferum Service Project` является Contract root, а ссылки Amendment, Stage, Security и других зависимых сущностей направлены на него; перенос существующих тестовых Contract↔Project записей не требуется;
