@@ -1,0 +1,14 @@
+{
+ "doctype": "Page",
+ "module": "Contract Accounting",
+ "name": "ferum-operations",
+ "page_name": "ferum-operations",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Руководитель проектов"},
+  {"role": "Менеджер проектов"}
+ ],
+ "standard": "Yes",
+ "system_page": 0,
+ "title": "Операционная работа"
+}

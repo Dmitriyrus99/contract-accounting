@@ -1,0 +1,54 @@
+"""Static CA-15 integration contract checks without a Frappe runtime."""
+
+from __future__ import annotations
+
+import csv
+import json
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class IntegrationSchemaTests(unittest.TestCase):
+	def test_all_traceability_rows_have_acceptance_and_owner(self) -> None:
+		with (ROOT / "07_traceability.csv").open(encoding="utf-8-sig", newline="") as handle:
+			rows = list(csv.DictReader(handle))
+		self.assertEqual(len(rows), 557)
+		self.assertEqual(len({row["req_id"] for row in rows}), 557)
+		self.assertFalse([row["req_id"] for row in rows if not row["acceptance_criterion"].strip()])
+		self.assertFalse([row["req_id"] for row in rows if not row["owner_role"].strip()])
+		ca15 = [row for row in rows if row["req_id"].startswith(("TCA-A-19-", "TCA-A-20-", "TCA-B-36-"))]
+		self.assertEqual(len(ca15), 51)
+
+	def test_named_workspaces_are_standard_pages_with_role_boundaries(self) -> None:
+		pages = {
+			"ferum_contract_360": "Контракт 360°",
+			"ferum_operations": "Операционная работа",
+			"ferum_director_control": "Центр контроля директора",
+		}
+		for folder, title in pages.items():
+			payload = json.loads(
+				(ROOT / "contract_accounting" / "contract_accounting" / "page" / folder / f"{folder}.json").read_text(encoding="utf-8")
+			)
+			self.assertEqual(payload["doctype"], "Page")
+			self.assertEqual(payload["standard"], "Yes")
+			self.assertEqual(payload["title"], title)
+			self.assertTrue(payload["roles"])
+		roles = json.loads(
+			(ROOT / "contract_accounting" / "contract_accounting" / "page" / "ferum_director_control" / "ferum_director_control.json").read_text(encoding="utf-8")
+		)["roles"]
+		self.assertNotIn("Менеджер проектов", {row["role"] for row in roles})
+
+	def test_integration_api_is_read_only_and_keeps_import_batch_inactive(self) -> None:
+		source = (ROOT / "contract_accounting" / "api" / "integration.py").read_text(encoding="utf-8")
+		self.assertIn("READ_ONLY_DRY_RUN", source)
+		self.assertIn("READ_ONLY_NO_CACHE_NO_SECOND_SSOT", source)
+		self.assertIn("INACTIVE_NOT_PRODUCTION_PROVEN_PENDING_MG-CA-023", source)
+		self.assertNotIn(".insert(", source)
+		self.assertNotIn(".save(", source)
+		self.assertNotIn("set_value(", source)
+
+
+if __name__ == "__main__":
+	unittest.main()

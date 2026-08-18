@@ -1,0 +1,14 @@
+{
+ "doctype": "Page",
+ "module": "Contract Accounting",
+ "name": "ferum-director-control",
+ "page_name": "ferum-director-control",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Генеральный директор"},
+  {"role": "Руководитель проектов"}
+ ],
+ "standard": "Yes",
+ "system_page": 0,
+ "title": "Центр контроля директора"
+}

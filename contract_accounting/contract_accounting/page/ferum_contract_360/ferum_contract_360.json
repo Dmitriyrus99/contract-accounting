@@ -1,0 +1,17 @@
+{
+ "doctype": "Page",
+ "module": "Contract Accounting",
+ "name": "ferum-contract-360",
+ "page_name": "ferum-contract-360",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Генеральный директор"},
+  {"role": "Руководитель проектов"},
+  {"role": "Менеджер проектов"},
+  {"role": "Бухгалтер"},
+  {"role": "Юрист"}
+ ],
+ "standard": "Yes",
+ "system_page": 0,
+ "title": "Контракт 360°"
+}
