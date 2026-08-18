@@ -111,6 +111,7 @@ class TestFrappeSchema(unittest.TestCase):
 				"Юрист",
 				"Бухгалтер",
 				"Инженер",
+				"Офис-менеджер",
 			},
 		)
 		document = schema("ferum_service_project")
@@ -393,6 +394,81 @@ class TestFrappeSchema(unittest.TestCase):
 			photo["review_status"]["options"].splitlines(),
 			["Pending", "Accepted", "Rejected"],
 		)
+
+	def test_ca05_project_document_has_exact_normative_types(self) -> None:
+		document = fields(schema("ferum_project_document"))
+		self.assertEqual(
+			document["document_type"]["options"].splitlines(),
+			[
+				"Contract",
+				"Technical Specification",
+				"Estimate",
+				"Procurement Documentation",
+				"Supplementary Agreement",
+				"Act",
+				"Invoice",
+				"UPD",
+				"Guarantee",
+				"Correspondence",
+				"Other",
+			],
+		)
+		for fieldname in ("document_number", "document_date", "version"):
+			self.assertEqual(document[fieldname]["reqd"], 1)
+
+	def test_ca05_uses_service_project_as_root_and_file_as_binary_ssot(self) -> None:
+		document = fields(schema("ferum_project_document"))
+		self.assertEqual(document["service_project"]["options"], "Ferum Service Project")
+		self.assertNotIn("contract", document)
+		self.assertEqual(document["file"]["fieldtype"], "Link")
+		self.assertEqual(document["file"]["options"], "File")
+		self.assertEqual(document["content_hash"]["read_only"], 1)
+		self.assertEqual(document["billing_reference_name"]["fieldtype"], "Dynamic Link")
+
+	def test_ca05_digital_and_original_axes_are_independent_and_guarded(self) -> None:
+		document = fields(schema("ferum_project_document"))
+		self.assertEqual(
+			document["digital_copy_status"]["options"].splitlines(),
+			["Missing", "Uploaded", "Verified", "Signed", "Rejected", "Superseded", "Not Required"],
+		)
+		self.assertEqual(
+			document["original_status"]["options"].splitlines(),
+			["Not Requested", "Requested", "In Transit", "Received", "Archived", "Not Required"],
+		)
+		self.assertEqual(document["digital_copy_status"]["read_only"], 1)
+		self.assertEqual(document["original_status"]["read_only"], 1)
+		controller = (
+			DOCTYPE_ROOT / "ferum_project_document" / "ferum_project_document.py"
+		).read_text(encoding="utf-8")
+		self.assertIn("DIGITAL_TRANSITIONS", controller)
+		self.assertIn("ORIGINAL_TRANSITIONS", controller)
+
+	def test_ca05_event_and_related_link_schemas_are_typed(self) -> None:
+		event = schema("ferum_project_document_event")
+		by_name = fields(event)
+		self.assertEqual(by_name["project_document"]["options"], "Ferum Project Document")
+		self.assertEqual(
+			by_name["dimension"]["options"].splitlines(),
+			["Document", "Digital Copy", "Original"],
+		)
+		self.assertTrue(all(field.get("read_only") == 1 for field in by_name.values()))
+		for permission in event["permissions"]:  # type: ignore[index,union-attr]
+			self.assertNotIn("create", permission)
+			self.assertNotIn("write", permission)
+			self.assertNotIn("delete", permission)
+		link = schema("ferum_document_link")
+		self.assertEqual(link["istable"], 1)
+		self.assertEqual(fields(link)["linked_name"]["fieldtype"], "Dynamic Link")
+
+	def test_ca05_mutations_are_post_only_and_file_delete_is_guarded(self) -> None:
+		source = (ROOT / "contract_accounting" / "api" / "documents.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 3)
+		self.assertEqual(source.count("@frappe.whitelist()"), 1)
+		hooks = (ROOT / "contract_accounting" / "hooks.py").read_text(encoding="utf-8")
+		self.assertIn('"File": {', hooks)
+		self.assertIn("prevent_locked_file_delete", hooks)
 
 
 if __name__ == "__main__":

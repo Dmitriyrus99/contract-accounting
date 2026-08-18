@@ -23,8 +23,15 @@ fixtures = [
 					"Юрист",
 					"Бухгалтер",
 					"Инженер",
+					"Офис-менеджер",
 				],
 			]
 		],
 	}
 ]
+
+doc_events = {
+	"File": {
+		"on_trash": "contract_accounting.infrastructure.project_document_file_guard.prevent_locked_file_delete"
+	}
+}

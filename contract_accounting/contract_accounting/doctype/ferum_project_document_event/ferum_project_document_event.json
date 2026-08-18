@@ -1,0 +1,40 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FPDE-.YYYY.-.######",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["project_document", "dimension", "from_status", "to_status", "actor", "occurred_at", "reason", "evidence_file", "stamp_reference", "correlation_id", "snapshot_json"],
+ "fields": [
+  {"fieldname": "project_document", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Project Document", "options": "Ferum Project Document", "read_only": 1, "reqd": 1},
+  {"fieldname": "dimension", "fieldtype": "Select", "in_list_view": 1, "label": "Dimension", "options": "Document\nDigital Copy\nOriginal", "read_only": 1, "reqd": 1},
+  {"fieldname": "from_status", "fieldtype": "Data", "in_list_view": 1, "label": "From Status", "read_only": 1, "reqd": 1},
+  {"fieldname": "to_status", "fieldtype": "Data", "in_list_view": 1, "label": "To Status", "read_only": 1, "reqd": 1},
+  {"fieldname": "actor", "fieldtype": "Link", "label": "Actor", "options": "User", "read_only": 1, "reqd": 1},
+  {"fieldname": "occurred_at", "fieldtype": "Datetime", "in_list_view": 1, "label": "Occurred At", "read_only": 1, "reqd": 1, "search_index": 1},
+  {"fieldname": "reason", "fieldtype": "Small Text", "label": "Reason", "read_only": 1},
+  {"fieldname": "evidence_file", "fieldtype": "Link", "label": "Evidence File", "options": "File", "read_only": 1},
+  {"fieldname": "stamp_reference", "fieldtype": "Data", "label": "Stamp Reference", "read_only": 1},
+  {"fieldname": "correlation_id", "fieldtype": "Data", "in_standard_filter": 1, "label": "Correlation ID", "read_only": 1, "reqd": 1, "search_index": 1},
+  {"fieldname": "snapshot_json", "fieldtype": "JSON", "label": "Snapshot JSON", "read_only": 1, "reqd": 1}
+ ],
+ "in_create": 1,
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Project Document Event",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"export": 1, "read": 1, "report": 1, "role": "System Manager"},
+  {"read": 1, "report": 1, "role": "Генеральный директор"},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"},
+  {"read": 1, "report": 1, "role": "Юрист"},
+  {"read": 1, "report": 1, "role": "Бухгалтер"},
+  {"read": 1, "report": 1, "role": "Офис-менеджер"}
+ ],
+ "sort_field": "occurred_at",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

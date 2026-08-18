@@ -40,5 +40,12 @@
   "doctype": "Role",
   "name": "Инженер",
   "role_name": "Инженер"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Офис-менеджер",
+  "role_name": "Офис-менеджер"
  }
 ]
