@@ -1,0 +1,15 @@
+{
+ "doctype": "Page",
+ "module": "Contract Accounting",
+ "name": "ferum-project-launches",
+ "page_name": "ferum-project-launches",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Владелец процесса"},
+  {"role": "Руководитель проектов"},
+  {"role": "Менеджер проектов"}
+ ],
+ "standard": "Yes",
+ "system_page": 0,
+ "title": "Запуск проектов"
+}

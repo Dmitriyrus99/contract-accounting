@@ -38,6 +38,8 @@
   "execution_status",
   "suspended_from_status",
   "documented_termination_completion_exception",
+  "launch_tab",
+  "launch_view",
   "archive_section",
   "is_archived",
   "archived_at",
@@ -273,6 +275,16 @@
    "hidden": 1,
    "label": "Documented Termination Completion Exception",
    "read_only": 1
+  },
+  {
+   "fieldname": "launch_tab",
+   "fieldtype": "Tab Break",
+   "label": "Запуск"
+  },
+  {
+   "fieldname": "launch_view",
+   "fieldtype": "HTML",
+   "label": "Project Launch"
   },
   {
    "fieldname": "archive_section",

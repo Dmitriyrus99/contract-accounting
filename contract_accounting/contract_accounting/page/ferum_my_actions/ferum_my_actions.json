@@ -1,0 +1,18 @@
+{
+ "doctype": "Page",
+ "module": "Contract Accounting",
+ "name": "ferum-my-actions",
+ "page_name": "ferum-my-actions",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Владелец процесса"},
+  {"role": "Руководитель проектов"},
+  {"role": "Менеджер проектов"},
+  {"role": "Инженер"},
+  {"role": "Офис-менеджер"},
+  {"role": "Бухгалтер"}
+ ],
+ "standard": "Yes",
+ "system_page": 0,
+ "title": "Мои действия"
+}
