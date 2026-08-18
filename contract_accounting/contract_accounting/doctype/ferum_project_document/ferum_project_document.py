@@ -42,6 +42,11 @@ ALLOWED_PARTY_DOCTYPES: Final[frozenset[str]] = frozenset(
 ALLOWED_BILLING_DOCTYPES: Final[frozenset[str]] = frozenset(
 	{"Ferum Billing Artifact", "Ferum Billing Output", "Sales Invoice", "Purchase Invoice"}
 )
+ALLOWED_RELATED_DOCTYPES: Final[frozenset[str]] = frozenset(
+	ALLOWED_SOURCE_DOCTYPES
+	| ALLOWED_BILLING_DOCTYPES
+	| {"Ferum Project Document"}
+)
 DOCUMENT_TRANSITIONS: Final[dict[str, frozenset[str]]] = {
 	"Draft": frozenset({"Active", "Cancelled"}),
 	"Active": frozenset({"Superseded", "Archived", "Cancelled"}),
@@ -230,13 +235,20 @@ class FerumProjectDocument(Document):
 					frappe.throw(_("Document Link effective period некорректен."))
 
 	def _validate_related_document(self, doctype: str, name: str) -> None:
+		if doctype not in ALLOWED_RELATED_DOCTYPES:
+			frappe.throw(_("Связанный DocType не разрешён."))
 		if not frappe.db.exists("DocType", doctype) or not frappe.db.exists(doctype, name):
 			frappe.throw(_("Связанный документ не найден."))
 		related = frappe.get_doc(doctype, name)
 		related.check_permission("read")
-		if related.meta.has_field("service_project"):
-			if related.get("service_project") != self.service_project:
-				frappe.throw(_("Связанный документ относится к другому Service Project."))
+		if doctype == "Ferum Service Project":
+			related_project = related.name
+		elif related.meta.has_field("service_project"):
+			related_project = related.get("service_project")
+		else:
+			frappe.throw(_("Связанный DocType не имеет Service Project adapter."))
+		if related_project != self.service_project:
+			frappe.throw(_("Связанный документ относится к другому Service Project."))
 
 	def _derive_version_key(self) -> None:
 		identity = [

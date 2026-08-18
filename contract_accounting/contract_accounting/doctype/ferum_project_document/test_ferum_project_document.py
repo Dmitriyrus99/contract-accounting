@@ -74,16 +74,25 @@ class TestFerumProjectDocument(FrappeTestCase):
 			"Original received by office",
 			evidence_file=file_doc.name,
 		)
+		change_original_status(
+			document.name,
+			"Archived",
+			"Original transferred to archive",
+			evidence_file=file_doc.name,
+			storage_location="Archive A / Shelf 7",
+		)
 		document.reload()
 		self.assertEqual(document.digital_copy_status, "Verified")
-		self.assertEqual(document.original_status, "Received")
+		self.assertEqual(document.original_status, "Archived")
 		self.assertTrue(document.original_received_at)
 		self.assertEqual(document.original_received_by, "Administrator")
+		self.assertTrue(document.original_archived_at)
+		self.assertEqual(document.original_storage_location, "Archive A / Shelf 7")
 		timeline = get_project_document_timeline(document.name)
-		self.assertEqual(len(timeline), 4)
+		self.assertEqual(len(timeline), 5)
 		self.assertEqual(
 			[item["dimension"] for item in timeline],
-			["Digital Copy", "Digital Copy", "Original", "Original"],
+			["Digital Copy", "Digital Copy", "Original", "Original", "Original"],
 		)
 		event = frappe.get_doc("Ferum Project Document Event", timeline[0]["name"])
 		event.reason = "attempted rewrite"
