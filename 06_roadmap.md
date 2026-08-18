@@ -558,6 +558,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - пилот проходит на B2G, B2B и subcontract сценариях с документированными различиями.
 
+**Результат реализации v0.13.0 — 2026-08-18:** `CA-12 PARTIAL / SEVEN-STAGE LAUNCH + INSPECTION CORE BENCH VERIFIED`. Реализованы idempotent Published `FERUM-LAUNCH` v1 из 7 stages/25 steps без автоматической генерации истории, explicit confirmed generation, отдельный `Ferum Inspection` с frozen template/inventory/report snapshots, checklist/team/evidence, независимыми manager/customer lifecycle, Project Document report, Finding/Photo outputs и exact Approved-Inspection Process Evidence. Финальный Passed Launch gate переводит project `Launching→Active` через CA-01 lifecycle audit. Migrate расширил схему с 44 до 47 DocType; standalone suite `123/123`, targeted CA-12 `4/4`, полный Frappe suite `63/63`. Все 84 req-id не объявляются закрытыми: Personnel/Credential positive gate остаётся заблокирован MG-CA-015; automatic award trigger, child Inspection process, automatic act/defect statement/Additional Work, B2G/B2B/subcontract pilots, CA-13 operational activation, performance, UAT/sign-off и production deployment остаются OPEN. Evidence: [implementation/CA-12/README.md](implementation/CA-12/README.md), [runtime evidence](implementation/CA-12/runtime_evidence_v0_13_0_2026-08-18.md), [traceability](implementation/CA-12/traceability_v0_13_0.md).
+
 **Оценка:** XL.
 
 ### CA-13. Первое закрытие периода и Billing Cycle

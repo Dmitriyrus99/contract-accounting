@@ -87,6 +87,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-11/schema_v0_12_0.md](implementation/CA-11/schema_v0_12_0.md) | physical Template/Instance/Evidence/Gate/Event schema и typed commands |
 | [implementation/CA-11/runtime_evidence_v0_12_0_2026-08-18.md](implementation/CA-11/runtime_evidence_v0_12_0_2026-08-18.md) | exact v0.12.0 versions, migrate, 59/59 runtime и 44-DocType inventory |
 | [implementation/CA-11/traceability_v0_12_0.md](implementation/CA-11/traceability_v0_12_0.md) | grouped CODE/runtime mapping 169 CA-11 req-id без blanket PASS |
+| [implementation/CA-12/README.md](implementation/CA-12/README.md) | reference seven-stage Launch graph, Inspection core и честная граница 84 req-id |
+| [implementation/CA-12/schema_v0_13_0.md](implementation/CA-12/schema_v0_13_0.md) | 7-stage/25-step graph, Inspection physical schema и typed lifecycle |
+| [implementation/CA-12/runtime_evidence_v0_13_0_2026-08-18.md](implementation/CA-12/runtime_evidence_v0_13_0_2026-08-18.md) | exact v0.13.0 versions, repeated migrate, 63/63 runtime и 47-DocType inventory |
+| [implementation/CA-12/traceability_v0_13_0.md](implementation/CA-12/traceability_v0_13_0.md) | grouped CODE/runtime mapping 84 CA-12 req-id без blanket PASS |
 
 ## Принятый baseline
 
