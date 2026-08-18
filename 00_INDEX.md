@@ -95,6 +95,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-13/schema_v0_14_0.md](implementation/CA-13/schema_v0_14_0.md) | Cycle physical schema, 9-step process, projection и backfill contract |
 | [implementation/CA-13/runtime_evidence_v0_14_0_2026-08-18.md](implementation/CA-13/runtime_evidence_v0_14_0_2026-08-18.md) | exact v0.14.0 versions, repeated migrate, 65/65 runtime и 48-DocType inventory |
 | [implementation/CA-13/traceability_v0_14_0.md](implementation/CA-13/traceability_v0_14_0.md) | CODE/runtime mapping 11 CA-13 req-id без blanket PASS |
+| [implementation/CA-14/README.md](implementation/CA-14/README.md) | permission-safe My Actions/Project Launches UI и честные открытые границы |
+| [implementation/CA-14/projection_v0_15_0.md](implementation/CA-14/projection_v0_15_0.md) | SSOT/de-duplication/sorting/Launch flag projection contract |
+| [implementation/CA-14/runtime_evidence_v0_15_0_2026-08-18.md](implementation/CA-14/runtime_evidence_v0_15_0_2026-08-18.md) | exact v0.15.0 versions, repeated migrate, 67/67 runtime и defect trail |
+| [implementation/CA-14/traceability_v0_15_0.md](implementation/CA-14/traceability_v0_15_0.md) | CODE/runtime mapping 14 CA-14 req-id без blanket PASS |
 
 ## Принятый baseline
 

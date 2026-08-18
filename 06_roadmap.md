@@ -610,6 +610,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - deep links ведут к process/source/evidence без потери фильтра/контекста.
 
+**Результат реализации v0.15.0 — 2026-08-18:** `CA-14 PARTIAL / PERMISSION-SAFE WORK QUEUES + LAUNCH UI BENCH VERIFIED`. Реализованы standard Desk Page «Мои действия»/«Запуск проектов», вкладка Service Project «Запуск», read-only projections без нового task/cache SSOT, canonical Step+ToDo de-duplication, actionable-only queue, stable overdue→today→upcoming ordering, stage/step progress, failed Gate criteria и source drill-down. Runtime подтверждены 7 stages/25 steps, explicit overdue ordering, 4 active actions вместо 25 future Planned, user isolation и MG-CA-015 blocker. Repeated migrate PASS; standalone `132/132`, targeted CA-14 `2/2`, полный Frappe suite `67/67`. Explicit contractor-required/counterparty semantics, positive credentials, browser/cross-role UAT, performance/load/race, notification delivery и production deployment остаются OPEN. Evidence: [implementation/CA-14/README.md](implementation/CA-14/README.md), [runtime evidence](implementation/CA-14/runtime_evidence_v0_15_0_2026-08-18.md), [traceability](implementation/CA-14/traceability_v0_15_0.md).
+
 **Оценка:** L.
 
 ### CA-15. Интеграционное укрепление и сквозная трассировка
