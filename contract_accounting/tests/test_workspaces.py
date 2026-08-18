@@ -14,6 +14,8 @@ from contract_accounting.api.launch import (
 from contract_accounting.api.lifecycle import change_status
 from contract_accounting.api.processes import (
 	evaluate_stage_gate,
+	generate_project_process,
+	publish_process_template,
 	transition_process_step,
 )
 from contract_accounting.api.workspaces import (
@@ -80,6 +82,17 @@ class TestWorkspaces(FrappeTestCase):
 		)
 		self.assertTrue(all(len(row["delivery_todos"]) == 1 for row in process_rows))
 		self.assertEqual(payload["ssot_policy"], "SOURCE_OPERATION_SSOT_TODO_DELIVERY_ONLY")
+		overdue_process = self._make_overdue_process()
+		classified = get_my_actions(as_of="2026-08-18 12:00:00")
+		overdue = next(
+			row
+			for row in classified["actions"]
+			if row["details"].get("project_process") == overdue_process
+		)
+		self.assertEqual(overdue["time_bucket"], "Overdue")
+		self.assertTrue(overdue["is_overdue"])
+		self.assertEqual(overdue["due_at"], "2026-08-17T12:00:00")
+		self.assertEqual(classified["actions"][0]["canonical_key"], overdue["canonical_key"])
 
 		user = self._engineer_user()
 		frappe.set_user(user.name)
@@ -149,6 +162,66 @@ class TestWorkspaces(FrappeTestCase):
 		).insert(ignore_permissions=True)
 		user.add_roles("Инженер")
 		return user
+
+	def _make_overdue_process(self) -> str:
+		key = uuid4().hex[:10].upper()
+		template = frappe.get_doc(
+			{
+				"doctype": "Ferum Process Template",
+				"code": f"CA14-{key}",
+				"title": "CA-14 overdue queue fixture",
+				"version": 1,
+				"process_type": "Other",
+				"scope_rule": {},
+				"change_note": "Runtime-only absolute deadline fixture",
+			}
+		).insert(ignore_permissions=True)
+		stage = frappe.get_doc(
+			{
+				"doctype": "Ferum Stage Template",
+				"process_template": template.name,
+				"stage_code": "OVERDUE",
+				"title": "Overdue action",
+				"sequence": 1,
+				"entry_rule": {},
+				"exit_rule": {},
+				"gate_policy": {},
+				"parallelism": "Sequential",
+				"active": 1,
+			}
+		).insert(ignore_permissions=True)
+		frappe.get_doc(
+			{
+				"doctype": "Ferum Step Template",
+				"stage_template": stage.name,
+				"step_code": "OVERDUE_ACTION",
+				"title": "Resolve overdue CA-14 action",
+				"sequence": 1,
+				"action_type": "Manual",
+				"step_type": "Manual",
+				"requirement_source_policy": "None",
+				"requirement_match_rule": {},
+				"responsible_role": "Менеджер проектов",
+				"responsible_user": "Administrator",
+				"deadline_type": "Absolute",
+				"absolute_due_at": "2026-08-17 12:00:00",
+				"condition_rule": {},
+				"activation_rule": {},
+				"criticality": "Mandatory",
+				"blocking": 1,
+				"completion_evidence_type": "None",
+				"active": 1,
+			}
+		).insert(ignore_permissions=True)
+		publish_process_template(template.name)
+		result = generate_project_process(
+			self.project.name,
+			template.name,
+			f"ca14-overdue:{self.project.name}:{key}",
+			"CA-14 runtime deadline classification",
+			self.requirement.name,
+		)
+		return str(result["project_process"])
 
 
 if __name__ == "__main__":
