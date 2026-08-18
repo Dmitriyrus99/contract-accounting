@@ -30,8 +30,8 @@ from contract_accounting.api.processes import (
     transition_process_step,
     validate_process_evidence,
 )
-from contract_accounting.contract_accounting.doctype.ferum_billing_output.test_ferum_billing_output import (
-    TestFerumBillingOutput,
+from contract_accounting.contract_accounting.doctype.ferum_billing_output import (
+    test_ferum_billing_output as billing_output_fixture,
 )
 from contract_accounting.contract_accounting.doctype.ferum_service_project.test_ferum_service_project import (
     _make_project,
@@ -43,10 +43,14 @@ from contract_accounting.setup.billing_cycle_template import (
 
 
 class TestFerumBillingCycle(FrappeTestCase):
-    _make_obligation = TestFerumBillingOutput._make_obligation
-    _make_accepted_visit = TestFerumBillingOutput._make_accepted_visit
-    _make_submitted_invoice = TestFerumBillingOutput._make_submitted_invoice
-    _save_file = staticmethod(TestFerumBillingOutput._save_file)
+    _make_obligation = billing_output_fixture.TestFerumBillingOutput._make_obligation
+    _make_accepted_visit = (
+        billing_output_fixture.TestFerumBillingOutput._make_accepted_visit
+    )
+    _make_submitted_invoice = (
+        billing_output_fixture.TestFerumBillingOutput._make_submitted_invoice
+    )
+    _save_file = staticmethod(billing_output_fixture.TestFerumBillingOutput._save_file)
 
     def setUp(self) -> None:
         super().setUp()
@@ -242,6 +246,8 @@ class TestFerumBillingCycle(FrappeTestCase):
             validate_process_evidence(
                 evidence["process_evidence"], "Validated", f"Validated {code}"
             )
+            if code == "DOCUMENTS_APPROVED":
+                transition_process_step(row.name, "Waiting Approval")
             transition_process_step(row.name, "Completed")
 
         stage = frappe.db.get_value(
