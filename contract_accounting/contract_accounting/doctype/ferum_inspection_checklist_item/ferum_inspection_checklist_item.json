@@ -1,0 +1,29 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["item_code", "object_system", "component_code", "component_name", "question", "result", "severity", "finding_title", "observation", "photo_file", "finding"],
+ "fields": [
+  {"fieldname": "item_code", "fieldtype": "Data", "in_list_view": 1, "label": "Item Code", "reqd": 1},
+  {"fieldname": "object_system", "fieldtype": "Link", "in_list_view": 1, "label": "Object System", "options": "Ferum Object System", "reqd": 1},
+  {"fieldname": "component_code", "fieldtype": "Data", "label": "Component Code"},
+  {"fieldname": "component_name", "fieldtype": "Data", "in_list_view": 1, "label": "Component", "reqd": 1},
+  {"fieldname": "question", "fieldtype": "Small Text", "label": "Inspection Question", "reqd": 1},
+  {"fieldname": "result", "fieldtype": "Select", "in_list_view": 1, "label": "Result", "options": "\nPass\nObservation\nDefect\nNot Applicable"},
+  {"default": "Medium", "fieldname": "severity", "fieldtype": "Select", "label": "Severity", "options": "Low\nMedium\nHigh\nCritical"},
+  {"fieldname": "finding_title", "fieldtype": "Data", "label": "Finding Title"},
+  {"fieldname": "observation", "fieldtype": "Text", "label": "Observation / Result Detail"},
+  {"fieldname": "photo_file", "fieldtype": "Link", "label": "Photo File", "options": "File"},
+  {"fieldname": "finding", "fieldtype": "Link", "label": "Generated Finding", "options": "Ferum Finding", "read_only": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Inspection Checklist Item",
+ "permissions": [],
+ "sort_field": "idx",
+ "sort_order": "ASC",
+ "states": []
+}

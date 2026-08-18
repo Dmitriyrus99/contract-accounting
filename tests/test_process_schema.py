@@ -84,7 +84,7 @@ class ProcessSchemaTests(unittest.TestCase):
 		)
 		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 8)
 		self.assertEqual(source.count("@frappe.whitelist()"), 1)
-		self.assertIn('version = "0.12.0"', (ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+		self.assertIn('version = "0.13.0"', (ROOT / "pyproject.toml").read_text(encoding="utf-8"))
 		roles = json.loads(
 			(ROOT / "contract_accounting" / "fixtures" / "role.json").read_text(encoding="utf-8")
 		)

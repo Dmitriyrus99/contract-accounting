@@ -11,6 +11,7 @@ required_apps = ["erpnext"]
 
 after_install = "contract_accounting.install.after_install"
 before_migrate = "contract_accounting.install.before_migrate"
+after_migrate = "contract_accounting.install.after_migrate"
 
 fixtures = [
 	{

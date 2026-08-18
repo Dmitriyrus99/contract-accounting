@@ -218,7 +218,11 @@ def generate_project_process(
 					"exit_result": "{}",
 				}
 			)
-			_with_flag(PROCESS_WRITER_FLAG, True, lambda: stage.insert(ignore_permissions=True))
+			_with_flag(
+				PROCESS_WRITER_FLAG,
+				True,
+				lambda stage=stage: stage.insert(ignore_permissions=True),
+			)
 			created_stages.append(stage)
 			step_count += _generate_stage_steps(
 				project=project,
@@ -269,6 +273,11 @@ def add_process_evidence(
 		frappe.throw(_("Evidence type не совпадает с completion_evidence_type шага."))
 	if source_doctype and source_name:
 		source = _authorized(source_doctype, source_name, "read")
+		if evidence_type == "Inspection":
+			if source_doctype != "Ferum Inspection" or source.status != "Approved":
+				frappe.throw(_("Inspection evidence требует Approved Ferum Inspection."))
+			if source.process_step != step.name:
+				frappe.throw(_("Inspection evidence относится к другому Process Step."))
 		source_modified = source.modified
 	else:
 		source_modified = None
@@ -367,6 +376,13 @@ def transition_process_step(
 		frappe.throw(_("Project Process Step не найден."), frappe.DoesNotExistError)
 	step = _authorized_step(process_step)
 	_require_step_actor(step, target_status)
+	if target_status in {"Completed", "Not Applicable"} and (
+		step.template_step_code == "PERSONNEL_READY"
+		or step.action_type == "Personnel Readiness"
+	):
+		frappe.throw(
+			_("PERSONNEL READY заблокирован до закрытия MG-CA-015; обход через Completed/Not Applicable запрещён.")
+		)
 	if target_status in {"Ready", "In Progress"}:
 		_require_dependencies_complete(step)
 		_require_step_condition(step)
@@ -509,10 +525,6 @@ def complete_project_stage(project_stage: str) -> dict[str, Any]:
 	gate = _gate(stage)
 	if gate.status not in {"Passed", "Overridden"}:
 		frappe.throw(_("Stage Gate не разрешает переход к следующей стадии."))
-	stage.status = "Completed"
-	stage.actual_end = now_datetime()
-	stage.exit_result = json.dumps({"gate": gate.name, "status": gate.status})
-	_with_flag(PROCESS_TRANSITION_FLAG, True, lambda: stage.save(ignore_permissions=True))
 	process = frappe.get_doc("Ferum Project Process", stage.project_process)
 	next_name = frappe.db.get_value(
 		"Ferum Project Stage",
@@ -520,6 +532,17 @@ def complete_project_stage(project_stage: str) -> dict[str, Any]:
 		"name",
 		order_by="sequence asc",
 	)
+	if not next_name and process.process_type == "Launch":
+		_require_role(_OVERRIDE_ROLES, "complete Launch Process")
+		project_status = frappe.db.get_value(
+			"Ferum Service Project", process.service_project, "execution_status"
+		)
+		if project_status != "Launching":
+			frappe.throw(_("Launch Process completion требует execution_status=Launching."))
+	stage.status = "Completed"
+	stage.actual_end = now_datetime()
+	stage.exit_result = json.dumps({"gate": gate.name, "status": gate.status})
+	_with_flag(PROCESS_TRANSITION_FLAG, True, lambda: stage.save(ignore_permissions=True))
 	if next_name:
 		next_stage = frappe.get_doc("Ferum Project Stage", next_name)
 		next_stage.status = "Active"
@@ -532,6 +555,16 @@ def complete_project_stage(project_stage: str) -> dict[str, Any]:
 		process.completed_on = now_datetime()
 		process.active_stage = None
 	_with_flag(PROCESS_TRANSITION_FLAG, True, lambda: process.save(ignore_permissions=True))
+	if not next_name and process.process_type == "Launch":
+		from contract_accounting.api.lifecycle import change_status
+
+		change_status(
+			process.service_project,
+			target_execution_status="Active",
+			reason="All blocking stages of the versioned Launch Process completed",
+			comment=f"Launch process {process.name}; final gate {gate.name}",
+			evidence=[gate.name],
+		)
 	_event(
 		event_type="Stage Completed",
 		source_doctype=stage.doctype,
@@ -618,7 +651,11 @@ def _generate_stage_steps(
 					"display_status": status,
 				}
 			)
-			_with_flag(PROCESS_WRITER_FLAG, True, lambda: step.insert(ignore_permissions=True))
+			_with_flag(
+				PROCESS_WRITER_FLAG,
+				True,
+				lambda step=step: step.insert(ignore_permissions=True),
+			)
 			_sync_todo(step)
 			count += 1
 	return count
@@ -771,7 +808,11 @@ def _activate_stage_steps(project_stage: str) -> None:
 			continue
 		step.status = "Ready"
 		step.display_status = "Ready"
-		_with_flag(PROCESS_TRANSITION_FLAG, True, lambda: step.save(ignore_permissions=True))
+		_with_flag(
+			PROCESS_TRANSITION_FLAG,
+			True,
+			lambda step=step: step.save(ignore_permissions=True),
+		)
 		_sync_todo(step)
 
 
