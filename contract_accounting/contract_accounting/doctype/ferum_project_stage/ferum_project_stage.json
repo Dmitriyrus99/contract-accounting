@@ -1,0 +1,47 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FPST-.YYYY.-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["service_project", "project_process", "stage_template", "stage_code", "title", "stage_snapshot", "sequence", "status", "planned_start", "planned_end", "actual_start", "actual_end", "owner_role", "owner_user", "entry_result", "exit_result", "exception_reason", "primary_exit_gate"],
+ "fields": [
+  {"fieldname": "service_project", "fieldtype": "Link", "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "read_only": 1, "reqd": 1},
+  {"fieldname": "project_process", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Project Process", "options": "Ferum Project Process", "reqd": 1},
+  {"fieldname": "stage_template", "fieldtype": "Link", "label": "Stage Template", "options": "Ferum Stage Template", "read_only": 1, "reqd": 1},
+  {"fieldname": "stage_code", "fieldtype": "Data", "in_list_view": 1, "label": "Stage Code Snapshot", "read_only": 1, "reqd": 1},
+  {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title Snapshot", "read_only": 1, "reqd": 1},
+  {"fieldname": "stage_snapshot", "fieldtype": "JSON", "label": "Stage Snapshot", "read_only": 1, "reqd": 1},
+  {"fieldname": "sequence", "fieldtype": "Int", "in_list_view": 1, "label": "Sequence", "read_only": 1, "reqd": 1},
+  {"default": "Planned", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Status", "options": "Planned\nActive\nBlocked\nCompleted\nCancelled", "read_only": 1, "reqd": 1},
+  {"fieldname": "planned_start", "fieldtype": "Datetime", "label": "Planned Start", "read_only": 1},
+  {"fieldname": "planned_end", "fieldtype": "Datetime", "label": "Planned End", "read_only": 1},
+  {"fieldname": "actual_start", "fieldtype": "Datetime", "label": "Actual Start", "read_only": 1},
+  {"fieldname": "actual_end", "fieldtype": "Datetime", "label": "Actual End", "read_only": 1},
+  {"fieldname": "owner_role", "fieldtype": "Link", "label": "Owner Role", "options": "Role", "read_only": 1},
+  {"fieldname": "owner_user", "fieldtype": "Link", "label": "Owner User", "options": "User", "read_only": 1},
+  {"fieldname": "entry_result", "fieldtype": "JSON", "label": "Entry Result", "read_only": 1},
+  {"fieldname": "exit_result", "fieldtype": "JSON", "label": "Exit Result", "read_only": 1},
+  {"fieldname": "exception_reason", "fieldtype": "Text", "label": "Exception Reason", "read_only": 1},
+  {"fieldname": "primary_exit_gate", "fieldtype": "Link", "label": "Primary Exit Gate", "options": "Ferum Stage Gate", "read_only": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {"group": "Process", "link_doctype": "Ferum Project Process Step", "link_fieldname": "project_stage"},
+  {"group": "Process", "link_doctype": "Ferum Stage Gate", "link_fieldname": "project_stage"}
+ ],
+ "module": "Contract Accounting",
+ "name": "Ferum Project Stage",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"read": 1, "report": 1, "role": "System Manager"},
+  {"read": 1, "report": 1, "role": "Владелец процесса"},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"},
+  {"read": 1, "role": "Инженер"}
+ ],
+ "sort_field": "sequence",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

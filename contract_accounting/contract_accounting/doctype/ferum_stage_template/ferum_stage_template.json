@@ -1,0 +1,37 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FPSTG-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["process_template", "stage_code", "title", "description", "sequence", "purpose", "entry_rule", "exit_rule", "default_owner_role", "gate_policy", "parallelism", "active"],
+ "fields": [
+  {"fieldname": "process_template", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Process Template", "options": "Ferum Process Template", "reqd": 1},
+  {"fieldname": "stage_code", "fieldtype": "Data", "in_list_view": 1, "label": "Stage Code", "reqd": 1},
+  {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title", "reqd": 1},
+  {"fieldname": "description", "fieldtype": "Text", "label": "Description"},
+  {"fieldname": "sequence", "fieldtype": "Int", "in_list_view": 1, "label": "Sequence", "reqd": 1},
+  {"fieldname": "purpose", "fieldtype": "Text", "label": "Purpose"},
+  {"default": "{}", "fieldname": "entry_rule", "fieldtype": "JSON", "label": "Entry Rule", "reqd": 1},
+  {"default": "{}", "fieldname": "exit_rule", "fieldtype": "JSON", "label": "Exit Rule", "reqd": 1},
+  {"fieldname": "default_owner_role", "fieldtype": "Link", "label": "Default Owner Role", "options": "Role"},
+  {"default": "{}", "fieldname": "gate_policy", "fieldtype": "JSON", "label": "Gate Policy", "reqd": 1},
+  {"default": "Sequential", "fieldname": "parallelism", "fieldtype": "Select", "label": "Parallelism", "options": "Sequential\nParallel", "reqd": 1},
+  {"default": "1", "fieldname": "active", "fieldtype": "Check", "label": "Active"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [{"group": "Template", "link_doctype": "Ferum Step Template", "link_fieldname": "stage_template"}],
+ "module": "Contract Accounting",
+ "name": "Ferum Stage Template",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "Владелец процесса", "write": 1},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"}
+ ],
+ "sort_field": "sequence",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

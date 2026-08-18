@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FPT-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["code", "title", "version", "process_type", "company", "scope_rule", "effective_from", "effective_to", "status", "change_note", "supersedes", "published_at", "published_by"],
+ "fields": [
+  {"fieldname": "code", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Code", "reqd": 1},
+  {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title", "reqd": 1},
+  {"default": "1", "fieldname": "version", "fieldtype": "Int", "in_list_view": 1, "label": "Version", "reqd": 1},
+  {"fieldname": "process_type", "fieldtype": "Select", "in_standard_filter": 1, "label": "Process Type", "options": "Launch\nInspection\nRecurring Maintenance\nPeriod Closing\nService Request\nFinding Resolution\nAdditional Work\nContractor Change\nContract Extension\nContract Completion\nOther", "reqd": 1},
+  {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company"},
+  {"default": "{}", "description": "Approved JSON Logic subset only; no eval.", "fieldname": "scope_rule", "fieldtype": "JSON", "label": "Scope Rule", "reqd": 1},
+  {"fieldname": "effective_from", "fieldtype": "Date", "label": "Effective From"},
+  {"fieldname": "effective_to", "fieldtype": "Date", "label": "Effective To"},
+  {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Status", "options": "Draft\nPublished\nRetired", "read_only": 1, "reqd": 1},
+  {"fieldname": "change_note", "fieldtype": "Text", "label": "Change Note", "reqd": 1},
+  {"fieldname": "supersedes", "fieldtype": "Link", "label": "Supersedes", "options": "Ferum Process Template"},
+  {"fieldname": "published_at", "fieldtype": "Datetime", "label": "Published At", "read_only": 1},
+  {"fieldname": "published_by", "fieldtype": "Link", "label": "Published By", "options": "User", "read_only": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {"group": "Template", "link_doctype": "Ferum Stage Template", "link_fieldname": "process_template"},
+  {"group": "Instances", "link_doctype": "Ferum Project Process", "link_fieldname": "process_template"}
+ ],
+ "module": "Contract Accounting",
+ "name": "Ferum Process Template",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "Владелец процесса", "write": 1},
+  {"read": 1, "report": 1, "role": "Руководитель проектов", "write": 1},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

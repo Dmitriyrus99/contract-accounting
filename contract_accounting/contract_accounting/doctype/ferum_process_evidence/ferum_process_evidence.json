@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FPE-.YYYY.-.######",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["process_step", "evidence_type", "validation_status", "source_doctype", "source_name", "evidence_file", "captured_at", "captured_by", "validated_at", "validated_by", "content_hash", "snapshot", "comment", "is_completion_evidence", "evidence_key"],
+ "fields": [
+  {"fieldname": "process_step", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Process Step", "options": "Ferum Project Process Step", "reqd": 1},
+  {"fieldname": "evidence_type", "fieldtype": "Select", "in_list_view": 1, "label": "Evidence Type", "options": "Document\nFile\nEmail\nOutgoing Letter\nIncoming Letter\nCall Record\nMeeting Record\nPhoto\nApproval\nERP Document\nPayment\nInspection\nManual Confirmation", "reqd": 1},
+  {"default": "Draft", "fieldname": "validation_status", "fieldtype": "Select", "in_list_view": 1, "label": "Validation Status", "options": "Draft\nValidated\nRejected", "read_only": 1, "reqd": 1},
+  {"fieldname": "source_doctype", "fieldtype": "Link", "label": "Source DocType", "options": "DocType"},
+  {"fieldname": "source_name", "fieldtype": "Dynamic Link", "label": "Source Name", "options": "source_doctype"},
+  {"fieldname": "evidence_file", "fieldtype": "Link", "label": "Evidence File", "options": "File"},
+  {"fieldname": "captured_at", "fieldtype": "Datetime", "label": "Captured At", "read_only": 1, "reqd": 1},
+  {"fieldname": "captured_by", "fieldtype": "Link", "label": "Captured By", "options": "User", "read_only": 1, "reqd": 1},
+  {"fieldname": "validated_at", "fieldtype": "Datetime", "label": "Validated At", "read_only": 1},
+  {"fieldname": "validated_by", "fieldtype": "Link", "label": "Validated By", "options": "User", "read_only": 1},
+  {"fieldname": "content_hash", "fieldtype": "Data", "label": "Content Hash", "read_only": 1, "reqd": 1},
+  {"fieldname": "snapshot", "fieldtype": "JSON", "label": "Snapshot", "read_only": 1, "reqd": 1},
+  {"fieldname": "comment", "fieldtype": "Text", "label": "Comment"},
+  {"default": "1", "fieldname": "is_completion_evidence", "fieldtype": "Check", "label": "Is Completion Evidence", "read_only": 1},
+  {"fieldname": "evidence_key", "fieldtype": "Data", "hidden": 1, "label": "Evidence Key", "read_only": 1, "unique": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Process Evidence",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"read": 1, "report": 1, "role": "System Manager"},
+  {"read": 1, "report": 1, "role": "Владелец процесса"},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"},
+  {"read": 1, "role": "Инженер"}
+ ],
+ "sort_field": "creation",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,40 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FSG-.YYYY.-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["service_project", "project_process", "project_stage", "gate_code", "title", "evaluation_mode", "status", "criteria", "evaluated_at", "evaluated_by", "failed_criteria", "override_reason", "override_authority", "override_evidence"],
+ "fields": [
+  {"fieldname": "service_project", "fieldtype": "Link", "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "read_only": 1, "reqd": 1},
+  {"fieldname": "project_process", "fieldtype": "Link", "in_standard_filter": 1, "label": "Project Process", "options": "Ferum Project Process", "read_only": 1, "reqd": 1},
+  {"fieldname": "project_stage", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Project Stage", "options": "Ferum Project Stage", "read_only": 1, "reqd": 1},
+  {"default": "EXIT", "fieldname": "gate_code", "fieldtype": "Data", "in_list_view": 1, "label": "Gate Code", "read_only": 1, "reqd": 1},
+  {"fieldname": "title", "fieldtype": "Data", "label": "Title", "read_only": 1, "reqd": 1},
+  {"default": "All Blocking Steps", "fieldname": "evaluation_mode", "fieldtype": "Select", "label": "Evaluation Mode", "options": "All Blocking Steps", "read_only": 1, "reqd": 1},
+  {"default": "Not Evaluated", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Not Evaluated\nPassed\nFailed\nOverridden", "read_only": 1, "reqd": 1},
+  {"fieldname": "criteria", "fieldtype": "JSON", "label": "Criteria Snapshot", "read_only": 1, "reqd": 1},
+  {"fieldname": "evaluated_at", "fieldtype": "Datetime", "label": "Evaluated At", "read_only": 1},
+  {"fieldname": "evaluated_by", "fieldtype": "Link", "label": "Evaluated By", "options": "User", "read_only": 1},
+  {"fieldname": "failed_criteria", "fieldtype": "JSON", "label": "Failed Criteria", "read_only": 1},
+  {"fieldname": "override_reason", "fieldtype": "Text", "label": "Override Reason", "read_only": 1},
+  {"fieldname": "override_authority", "fieldtype": "Link", "label": "Override Authority", "options": "User", "read_only": 1},
+  {"fieldname": "override_evidence", "fieldtype": "Link", "label": "Override Evidence", "options": "Ferum Process Evidence", "read_only": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Stage Gate",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"read": 1, "report": 1, "role": "System Manager"},
+  {"read": 1, "report": 1, "role": "Владелец процесса"},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"},
+  {"read": 1, "role": "Инженер"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

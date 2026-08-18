@@ -192,6 +192,24 @@ def _build_contract_360(
 		{"service_project": project.name},
 		["name", "execution_mode", "supplier", "employee", "project_object", "object_system", "work_type", "effective_from", "effective_to", "status", "credentials_readiness"],
 	)
+	processes = _rows(
+		"Ferum Project Process",
+		{"service_project": project.name},
+		["name", "process_type", "template_version", "status", "active_stage"],
+	)
+	process_steps = _rows(
+		"Ferum Project Process Step",
+		{"service_project": project.name},
+		[
+			"name", "project_process", "project_stage", "template_step_code", "title",
+			"responsible_user", "criticality", "blocking", "status", "due_at", "modified",
+		],
+	)
+	stage_gates = _rows(
+		"Ferum Stage Gate",
+		{"service_project": project.name},
+		["name", "project_process", "project_stage", "gate_code", "status", "evaluated_at"],
+	)
 	deadlines = get_deadline_timeline(
 		project.name,
 		as_of=as_of.isoformat() if as_of else None,
@@ -226,6 +244,14 @@ def _build_contract_360(
 		"documents": _widget(documents),
 		"billing": _widget(billing_outputs),
 		"contractors": _widget(assignments),
+		"processes": {
+			"count": len(processes),
+			"active_count": sum(row["status"] == "Active" for row in processes),
+			"blocked_step_count": sum(row["status"] == "Blocked" for row in process_steps),
+			"items": processes,
+			"steps": process_steps,
+			"gates": stage_gates,
+		},
 		"deadlines": deadlines,
 	}
 	items = _project_exceptions(project, widgets, finance, as_of)
@@ -316,6 +342,36 @@ def _project_exceptions(
 		if output["output_type"] in {"Act", "UPD"} and output["status"] == "Issued":
 			items.append(
 				_exception(project, "Unsigned Act", "Issued act/UPD is not signed", "High", "Ferum Billing Output", output["name"], "status", owner=owner, age_days=_age(output.get("document_date"), as_of))
+			)
+	for step in widgets["processes"]["steps"]:
+		if step["status"] == "Blocked":
+			items.append(
+				_exception(
+					project,
+					"Blocked Process Step",
+					"Process step cannot continue",
+					"Critical" if step["blocking"] else "High",
+					"Ferum Project Process Step",
+					step["name"],
+					"status",
+					owner=step.get("responsible_user") or owner,
+					age_days=_age(step.get("modified"), as_of),
+				)
+			)
+	for gate in widgets["processes"]["gates"]:
+		if gate["status"] == "Failed":
+			items.append(
+				_exception(
+					project,
+					"Failed Stage Gate",
+					"Stage transition is blocked by failed gate",
+					"Critical",
+					"Ferum Stage Gate",
+					gate["name"],
+					"status",
+					owner=owner,
+					age_days=_age(gate.get("evaluated_at"), as_of),
+				)
 			)
 
 	if as_of:
@@ -427,6 +483,7 @@ def _deadline_exception(kind: str) -> tuple[str | None, str, str]:
 		"Bank Guarantee Expiry": ("Expired Bank Guarantee", "Bank guarantee is expired", "Critical"),
 		"Invoice Payment Due": ("Overdue Invoice", "Invoice payment deadline is overdue", "High"),
 		"Document Original Expected": ("Original Document Overdue", "Expected original document is overdue", "High"),
+		"Process Step Due": ("Overdue Process Step", "Process step deadline is overdue", "High"),
 	}.get(kind, (None, "", "Low"))
 
 

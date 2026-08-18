@@ -113,6 +113,7 @@ class TestFrappeSchema(unittest.TestCase):
 				"Инженер",
 				"Офис-менеджер",
 				"Подрядчик",
+				"Владелец процесса",
 			},
 		)
 		document = schema("ferum_service_project")
