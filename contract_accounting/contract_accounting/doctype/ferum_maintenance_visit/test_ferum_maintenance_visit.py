@@ -104,6 +104,8 @@ class TestFerumMaintenanceExecution(FrappeTestCase):
 	def test_acceptance_requires_reviewed_checklist_and_file_evidence(self) -> None:
 		result = self._generate_one_period()
 		visit_name = result["items"][0]["visit"]
+		with self.assertRaises(frappe.ValidationError):
+			accept_visit(visit_name, "Rejected")
 		started_at = datetime.combine(date.today(), time(9, 0))
 		change_visit_status(visit_name, "In Progress", actual_start=str(started_at))
 		visit = frappe.get_doc("Ferum Maintenance Visit", visit_name)

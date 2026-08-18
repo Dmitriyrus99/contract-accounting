@@ -181,6 +181,9 @@ class FerumMaintenanceVisit(Document):
 		if new not in ACCEPTANCE_TRANSITIONS.get(old, frozenset()):
 			frappe.throw(_("Недопустимый acceptance transition: {0} → {1}.").format(old, new))
 		self._require_role(_ACCEPTANCE_ROLES, "Visit acceptance")
+		if new in {"Accepted", "Rejected"}:
+			if self.get("status") != "Completed" or self.get("review_status") != "Approved":
+				frappe.throw(_("Acceptance decision требует Completed Visit и Approved review."))
 		if new == "Accepted":
 			self.accepted_by = frappe.session.user
 			self.accepted_on = now_datetime()
