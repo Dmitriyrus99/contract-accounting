@@ -165,6 +165,8 @@ class TestContract360(FrappeTestCase):
 				"doctype": "Ferum Service Request",
 				"service_project": self.project.name,
 				"project_object": self.project_object.name,
+				"subject": "Contract 360 request fixture",
+				"description": "Visible request used by Contract 360 permission projections.",
 				"source_type": "Customer",
 				"request_type": "Repair",
 				"priority": "High",

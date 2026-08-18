@@ -323,6 +323,43 @@ class TestFrappeSchema(unittest.TestCase):
 		self.assertEqual(request["customer"]["read_only"], 1)
 		self.assertEqual(request["evidence"]["options"], "Ferum Execution Evidence")
 
+	def test_ca15_request_disposition_is_typed_and_service_owned(self) -> None:
+		request = fields(schema("ferum_service_request"))
+		for fieldname in ("subject", "description"):
+			self.assertEqual(request[fieldname]["reqd"], 1)
+		self.assertEqual(request["source_doctype"]["options"], "DocType")
+		self.assertEqual(request["source_name"]["fieldtype"], "Dynamic Link")
+		self.assertEqual(request["source_name"]["options"], "source_doctype")
+		self.assertEqual(request["source_reference"]["read_only"], 1)
+		for fieldname in ("source_request", "successor_kind", "exception_key"):
+			self.assertEqual(request[fieldname]["read_only"], 1)
+		self.assertEqual(request["exception_key"]["unique"], 1)
+		api = (ROOT / "contract_accounting" / "api" / "requests.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertEqual(api.count('@frappe.whitelist(methods=["POST"])'), 3)
+		self.assertEqual(api.count("@frappe.whitelist()"), 1)
+		self.assertIn("source_request", api)
+		self.assertIn("Ferum Project Document", api)
+
+	def test_ca15_request_backfill_is_versioned_and_fail_closed(self) -> None:
+		patches = (ROOT / "contract_accounting" / "patches.txt").read_text(
+			encoding="utf-8"
+		)
+		self.assertIn(
+			"contract_accounting.patches.v0_16_3.backfill_service_request_disposition",
+			patches,
+		)
+		patch = (
+			ROOT
+			/ "contract_accounting"
+			/ "patches"
+			/ "v0_16_3"
+			/ "backfill_service_request_disposition.py"
+		).read_text(encoding="utf-8")
+		self.assertIn("MIGRATION REVIEW REQUIRED", patch)
+		self.assertIn("typed source", patch)
+
 	def test_ca03_mutating_commands_are_post_only(self) -> None:
 		source = (ROOT / "contract_accounting" / "api" / "execution.py").read_text(
 			encoding="utf-8"

@@ -360,6 +360,8 @@ class TestFerumBillingOutput(FrappeTestCase):
 				"service_project": self.project.name,
 				"project_object": self.project_object.name,
 				"object_system": self.system.name,
+				"subject": "Billing output request fixture",
+				"description": "Resolved request used as an exact billing basis source.",
 				"source_type": "Customer",
 				"request_type": "Repair",
 				"requested_at": datetime.now(),

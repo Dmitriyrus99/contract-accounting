@@ -74,6 +74,17 @@ class IntegrationSchemaTests(unittest.TestCase):
 		self.assertIn('SCOPED_ROLES: Final[frozenset[str]] = frozenset({"Инженер", "Офис-менеджер"})', permissions)
 		self.assertIn("Ferum Project Document", permissions)
 		self.assertIn("Ferum Project Process Step", permissions)
+		integration = (ROOT / "contract_accounting" / "api" / "integration.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertIn(
+			'EdgeSpec("Ferum Service Request", "source_name", None, dynamic_type_field="source_doctype")',
+			integration,
+		)
+		self.assertIn(
+			'EdgeSpec("Ferum Service Request", "source_request", "Ferum Service Request")',
+			integration,
+		)
 
 	def test_director_projection_sources_are_read_only_for_director(self) -> None:
 		sources = (

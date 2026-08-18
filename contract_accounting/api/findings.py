@@ -8,7 +8,6 @@ import frappe
 from frappe import _
 from frappe.utils import get_datetime, now_datetime
 
-
 FINDING_DOCTYPE: Final[str] = "Ferum Finding"
 REQUEST_DOCTYPE: Final[str] = "Ferum Service Request"
 PHOTO_EVIDENCE_DOCTYPE: Final[str] = "Ferum Photo Evidence"
@@ -143,8 +142,11 @@ def create_service_request_from_finding(
 			"service_project": finding.service_project,
 			"project_object": finding.project_object,
 			"object_system": finding.object_system,
+			"subject": f"{finding.category}: {finding.name}",
+			"description": finding.description,
 			"source_type": "Finding",
-			"source_reference": finding.name,
+			"source_doctype": FINDING_DOCTYPE,
+			"source_name": finding.name,
 			"request_type": "Additional Work"
 			if finding.decision == "Additional Work"
 			else "Repair",

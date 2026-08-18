@@ -319,6 +319,8 @@ class TestFerumFinding(FrappeTestCase):
 				"service_project": service_project,
 				"project_object": project_object,
 				"object_system": object_system,
+				"subject": "Finding request fixture",
+				"description": "Independent request used to validate Finding provenance boundaries.",
 				"source_type": "Customer",
 				"request_type": "Repair",
 				"priority": "High",

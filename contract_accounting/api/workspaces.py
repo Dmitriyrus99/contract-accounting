@@ -353,7 +353,7 @@ def _source_action(
 	elif doctype == "Ferum Service Request":
 		if doc.status not in {"Open", "Assigned", "In Progress"}:
 			return None
-		title = f"{doc.request_type}: {doc.name}"
+		title = doc.subject
 		due_at = (
 			doc.resolution_due
 			if doc.actual_start or doc.status == "In Progress"

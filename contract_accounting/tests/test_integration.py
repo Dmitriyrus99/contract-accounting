@@ -57,6 +57,8 @@ class TestIntegration(FrappeTestCase):
 				"service_project": self.project.name,
 				"project_object": self.project_object.name,
 				"object_system": self.system.name,
+				"subject": "CA-15 integration request",
+				"description": "Request fixture for end-to-end trace and integrity checks.",
 				"source_type": "Customer",
 				"request_type": "Repair",
 				"priority": "High",

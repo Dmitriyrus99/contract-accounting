@@ -55,6 +55,8 @@ _EDGE_SPECS: Final[tuple[EdgeSpec, ...]] = (
 	EdgeSpec("Ferum Service Request", "project_object", "Ferum Project Object", required=True),
 	EdgeSpec("Ferum Service Request", "service_object", "Ferum Service Object"),
 	EdgeSpec("Ferum Service Request", "object_system", "Ferum Object System"),
+	EdgeSpec("Ferum Service Request", "source_name", None, dynamic_type_field="source_doctype"),
+	EdgeSpec("Ferum Service Request", "source_request", "Ferum Service Request"),
 	EdgeSpec("Ferum Finding", "service_project", "Ferum Service Project", required=True),
 	EdgeSpec("Ferum Finding", "project_object", "Ferum Project Object"),
 	EdgeSpec("Ferum Finding", "service_object", "Ferum Service Object"),
