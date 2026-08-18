@@ -31,6 +31,7 @@ class TestProjectProcess(FrappeTestCase):
 		self.project = _make_project()
 		self.project.project_manager = "Administrator"
 		self.project.save(ignore_permissions=True)
+		self._generation_keys: dict[str, str] = {}
 		self.template, self.stage_templates, self.step_templates = self._make_template(version=1)
 		publish_process_template(self.template.name)
 
@@ -150,10 +151,13 @@ class TestProjectProcess(FrappeTestCase):
 			).insert(ignore_permissions=True)
 
 	def _generate(self, suffix: str) -> dict[str, object]:
+		generation_key = self._generation_keys.setdefault(
+			suffix, f"CA11-{suffix}-{uuid4().hex[:8]}"
+		)
 		return generate_project_process(
 			self.project.name,
 			self.template.name,
-			f"CA11-{suffix}-{uuid4().hex[:8]}",
+			generation_key,
 			"CA-11 runtime acceptance",
 			"REQ-REV-1",
 			triggered_at="2026-08-17 10:00:00",
