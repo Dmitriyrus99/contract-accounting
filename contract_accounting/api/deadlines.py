@@ -37,7 +37,7 @@ def get_deadline_timeline(
 		value=project.effective_from,
 		status=project.execution_status,
 		owner=project.project_manager,
-		terminal=project.execution_status not in {"Not Started", "Stopped"},
+		terminal=project.execution_status != "Not Started",
 		date_only=True,
 		as_of=classification_at,
 	)

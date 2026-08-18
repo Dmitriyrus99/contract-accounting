@@ -91,6 +91,15 @@ class TestDeadlineTimeline(FrappeTestCase):
 		self.assertTrue(open_rows)
 		self.assertTrue(all(row["is_overdue"] is None for row in open_rows))
 
+	def test_project_read_permission_guards_projection(self) -> None:
+		project = _make_project()
+		frappe.set_user("Guest")
+		try:
+			with self.assertRaises(frappe.PermissionError):
+				get_deadline_timeline(project.name)
+		finally:
+			frappe.set_user("Administrator")
+
 
 def _make_project():
 	suffix = uuid4().hex[:12]
