@@ -640,6 +640,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - все 557 `req_id` имеют acceptance criterion и owner в [07_traceability.csv](07_traceability.csv), а оставшиеся вопросы и MG gates — в [08_open_questions.md](08_open_questions.md).
 
+**Результат реализации v0.16.0 — 2026-08-18:** `CA-15 PARTIAL / READ-ONLY E2E TRACE + PROJECT INTEGRITY + NAMED DESK PAGES BENCH VERIFIED`. Реализованы permission-safe девятисегментная цепочка why→margin, семь сквозных dimensions, stable source fingerprint/drill-down, restricted read-only project integrity dry-run для typed/Dynamic Link edges и standard Desk Pages «Контракт 360°»/«Операционная работа»/«Центр контроля директора». OQ-CA-022 получил field-level disposition без silent drop; OPEN implementation rows сохранены. Import Batch явно inactive pending MG-CA-023. Repeated migrate и app build PASS; standalone `135/135`, targeted CA-15 `2/2`, полный Frappe suite `69/69`. Portfolio/legacy reconciliation, browser/cross-role/export/report UAT, performance/load/race, scheduler/retry topology, migration dry-run/cutover/rollback, archive/legal sign-off и production deployment остаются OPEN. Evidence: [implementation/CA-15/README.md](implementation/CA-15/README.md), [runtime evidence](implementation/CA-15/runtime_evidence_v0_16_0_2026-08-18.md), [traceability](implementation/CA-15/traceability_v0_16_0.md), [OQ-CA-022 disposition](implementation/CA-15/field_disposition_v0_16_0.md).
+
 **Оценка:** XL.
 
 ## 6. Миграционная стратегия и обязательные patches

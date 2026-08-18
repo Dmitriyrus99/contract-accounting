@@ -282,6 +282,8 @@ Codex содержит `customer_approval_evidence`, successor/remaining и SLA 
 
 **Решение:** Codex-only fields остаются implementation divergence до field-level TARGET review. Для каждого требуется traceable `KEEP`, `REPLACE`, `DERIVE`, `MOVE TO GENERIC TARGET ENTITY/EVIDENCE` либо `DROP`; намеренное удаление допустимо только с decision/provenance evidence. Это engineering task, не owner blocker.
 
+**Engineering disposition v0.16.0 — 2026-08-18:** field-level review выполнен без silent drop; решения и незакрытые implementation rows зафиксированы в [implementation/CA-15/field_disposition_v0_16_0.md](implementation/CA-15/field_disposition_v0_16_0.md). Review не является migration/cutover evidence.
+
 ### OQ-CA-023. Запускается ли Import Batch в runtime?
 
 **Статус:** `APPROVED / RUNTIME NOT EVIDENCED` — capability inactive/not production-proven до MG-CA-023.

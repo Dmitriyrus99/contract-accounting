@@ -99,6 +99,11 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-14/projection_v0_15_0.md](implementation/CA-14/projection_v0_15_0.md) | SSOT/de-duplication/sorting/Launch flag projection contract |
 | [implementation/CA-14/runtime_evidence_v0_15_0_2026-08-18.md](implementation/CA-14/runtime_evidence_v0_15_0_2026-08-18.md) | exact v0.15.0 versions, repeated migrate, 67/67 runtime и defect trail |
 | [implementation/CA-14/traceability_v0_15_0.md](implementation/CA-14/traceability_v0_15_0.md) | CODE/runtime mapping 14 CA-14 req-id без blanket PASS |
+| [implementation/CA-15/README.md](implementation/CA-15/README.md) | read-only E2E/integrity contour, named Desk Pages и честные release gaps |
+| [implementation/CA-15/projection_v0_16_0.md](implementation/CA-15/projection_v0_16_0.md) | nine-segment trace, cross-cutting dimensions, permission и integrity contract |
+| [implementation/CA-15/field_disposition_v0_16_0.md](implementation/CA-15/field_disposition_v0_16_0.md) | OQ-CA-022 field-level KEEP/REPLACE/DERIVE/MOVE decisions и OPEN implementation rows |
+| [implementation/CA-15/runtime_evidence_v0_16_0_2026-08-18.md](implementation/CA-15/runtime_evidence_v0_16_0_2026-08-18.md) | exact v0.16.0 versions, migrate/build, 69/69 runtime и tooling defect trail |
+| [implementation/CA-15/traceability_v0_16_0.md](implementation/CA-15/traceability_v0_16_0.md) | grouped CODE/runtime mapping 51 CA-15 req-id без blanket PASS |
 
 ## Принятый baseline
 
