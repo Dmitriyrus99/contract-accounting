@@ -112,6 +112,7 @@ class TestFrappeSchema(unittest.TestCase):
 				"Бухгалтер",
 				"Инженер",
 				"Офис-менеджер",
+				"Подрядчик",
 			},
 		)
 		document = schema("ferum_service_project")
@@ -582,7 +583,12 @@ class TestFrappeSchema(unittest.TestCase):
 			settlement["status"]["options"].splitlines(),
 			["Draft", "Approved", "Settled", "Cancelled"],
 		)
-		self.assertNotIn("contractor_assignment", settlement)
+		self.assertEqual(
+			settlement["contractor_assignment"]["options"], "Ferum Contractor Assignment"
+		)
+		self.assertEqual(
+			settlement["commercial_terms"]["options"], "Ferum Contractor Commercial Terms"
+		)
 
 	def test_ca07_installs_purchase_invoice_adapter_and_hooks_standard_events(self) -> None:
 		setup = (ROOT / "contract_accounting" / "setup" / "custom_fields.py").read_text(
@@ -613,6 +619,92 @@ class TestFrappeSchema(unittest.TestCase):
 		self.assertEqual(summary["billing_cycle_dimension_json"]["fieldtype"], "JSON")
 		self.assertEqual(summary["obligation_dimension_json"]["read_only"], 1)
 		self.assertEqual(summary["billing_cycle_dimension_json"]["read_only"], 1)
+
+	def test_ca08_assignment_is_effective_dated_responsibility_without_pricing(self) -> None:
+		assignment = fields(schema("ferum_contractor_assignment"))
+		for fieldname, target in {
+			"service_project": "Ferum Service Project",
+			"supplier": "Supplier",
+			"employee": "Employee",
+			"contractor_worker": "Ferum Contractor Worker",
+			"project_object": "Ferum Project Object",
+			"object_system": "Ferum Object System",
+			"contract_obligation": "Ferum Contract Obligation",
+		}.items():
+			self.assertEqual(assignment[fieldname]["options"], target)
+		self.assertEqual(
+			assignment["execution_mode"]["options"].splitlines(), ["Internal", "Contractor"]
+		)
+		self.assertEqual(
+			assignment["status"]["options"].splitlines(),
+			["Draft", "Approved", "Suspended", "Completed", "Cancelled"],
+		)
+		self.assertEqual(assignment["overlap_guard_key"]["unique"], 1)
+		self.assertNotIn("client_price", assignment)
+		self.assertNotIn("contractor_cost", assignment)
+
+	def test_ca08_commercial_terms_own_price_and_margin(self) -> None:
+		terms = fields(schema("ferum_contractor_commercial_terms"))
+		self.assertEqual(terms["contractor_assignment"]["options"], "Ferum Contractor Assignment")
+		for fieldname in ("client_price", "contractor_cost", "margin_amount", "margin_percent"):
+			self.assertEqual(terms[fieldname]["read_only"], 1)
+		self.assertEqual(terms["assignment_claim_key"]["unique"], 1)
+		material = fields(schema("ferum_material_expense"))
+		self.assertEqual(material["contractor_assignment"]["options"], "Ferum Contractor Assignment")
+
+	def test_ca08_worker_and_credential_are_fail_closed_privacy_spikes(self) -> None:
+		worker = schema("ferum_contractor_worker")
+		credential = schema("ferum_personnel_credential")
+		self.assertNotIn("passport_data", fields(worker))
+		for document in (worker, credential):
+			for permission in document["permissions"]:  # type: ignore[index,union-attr]
+				self.assertNotIn("create", permission)
+				self.assertNotIn("write", permission)
+				self.assertNotIn("delete", permission)
+		worker_controller = (
+			DOCTYPE_ROOT / "ferum_contractor_worker" / "ferum_contractor_worker.py"
+		).read_text(encoding="utf-8")
+		credential_controller = (
+			DOCTYPE_ROOT / "ferum_personnel_credential" / "ferum_personnel_credential.py"
+		).read_text(encoding="utf-8")
+		self.assertIn("MG-CA-015", worker_controller)
+		self.assertIn("MG-CA-015", credential_controller)
+		self.assertIn('frozenset({"Employee", "Ferum Contractor Worker"})', credential_controller)
+
+	def test_ca08_readiness_is_disabled_until_privacy_gate(self) -> None:
+		assignment = fields(schema("ferum_contractor_assignment"))
+		self.assertEqual(
+			assignment["credentials_readiness"]["options"], "Disabled Pending MG-CA-015"
+		)
+		self.assertEqual(assignment["credentials_readiness"]["read_only"], 1)
+		self.assertEqual(fields(schema("ferum_personnel_credential"))["holder"]["fieldtype"], "Dynamic Link")
+
+	def test_ca08_api_is_typed_and_personnel_has_no_mutating_endpoint(self) -> None:
+		source = (ROOT / "contract_accounting" / "api" / "contractors.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 4)
+		self.assertEqual(source.count("@frappe.whitelist()"), 1)
+		self.assertNotIn("Contractor Worker", source)
+		self.assertNotIn("Personnel Credential", source)
+
+	def test_ca08_supplier_isolation_is_hooked_and_role_is_versioned(self) -> None:
+		hooks = (ROOT / "contract_accounting" / "hooks.py").read_text(encoding="utf-8")
+		permissions = (
+			ROOT / "contract_accounting" / "infrastructure" / "contractor_permissions.py"
+		).read_text(encoding="utf-8")
+		roles = json.loads(
+			(ROOT / "contract_accounting" / "fixtures" / "role.json").read_text(encoding="utf-8")
+		)
+		self.assertIn("permission_query_conditions", hooks)
+		self.assertIn("has_permission", hooks)
+		self.assertIn('CONTRACTOR_ROLE: Final[str] = "Подрядчик"', permissions)
+		self.assertIn("Подрядчик", {row["name"] for row in roles})
+
+	def test_ca08_does_not_create_second_contractor_payment(self) -> None:
+		self.assertFalse((DOCTYPE_ROOT / "ferum_contractor_payment").exists())
+		settlement = fields(schema("ferum_contractor_settlement"))
+		self.assertEqual(settlement["payment_entry"]["options"], "Payment Entry")
 
 
 if __name__ == "__main__":

@@ -62,6 +62,17 @@ class FerumMaterialExpense(Document):
 			name = self.get(fieldname)
 			if name and frappe.db.get_value(doctype, name, "service_project") != self.service_project:
 				frappe.throw(_("Material Expense related context относится к другому Service Project."))
+		if self.contractor_assignment:
+			assignment = frappe.db.get_value(
+				"Ferum Contractor Assignment", self.contractor_assignment,
+				("service_project", "supplier", "status"), as_dict=True,
+			)
+			if not assignment or assignment.service_project != self.service_project:
+				frappe.throw(_("Material Expense Assignment относится к другому Service Project."))
+			if assignment.status in {"Completed", "Cancelled"}:
+				frappe.throw(_("Material Expense требует действующий Contractor Assignment."))
+			if self.supplier and assignment.supplier != self.supplier:
+				frappe.throw(_("Material Expense Supplier не совпадает с Assignment."))
 
 	def _validate_amounts(self) -> None:
 		if flt(self.amount_with_vat) <= 0:

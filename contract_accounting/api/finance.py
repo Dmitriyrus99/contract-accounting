@@ -72,6 +72,7 @@ def create_material_expense(
 	amount_without_vat: float | None = None,
 	project_object: str | None = None,
 	contract_obligation: str | None = None,
+	contractor_assignment: str | None = None,
 	maintenance_visit: str | None = None,
 	service_request: str | None = None,
 	item: str | None = None,
@@ -93,6 +94,7 @@ def create_material_expense(
 			"amount_without_vat": amount_without_vat,
 			"project_object": project_object,
 			"contract_obligation": contract_obligation,
+			"contractor_assignment": contractor_assignment,
 			"maintenance_visit": maintenance_visit,
 			"service_request": service_request,
 			"item": item,
@@ -151,6 +153,8 @@ def create_contractor_settlement(
 	approved_amount: float = 0,
 	project_object: str | None = None,
 	contract_obligation: str | None = None,
+	contractor_assignment: str | None = None,
+	commercial_terms: str | None = None,
 	purchase_invoice: str | None = None,
 	payment_entry: str | None = None,
 ) -> dict[str, str]:
@@ -167,6 +171,8 @@ def create_contractor_settlement(
 			"approved_amount": approved_amount,
 			"project_object": project_object,
 			"contract_obligation": contract_obligation,
+			"contractor_assignment": contractor_assignment,
+			"commercial_terms": commercial_terms,
 			"purchase_invoice": purchase_invoice,
 			"payment_entry": payment_entry,
 		}

@@ -1,0 +1,36 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FCW-.YYYY.-.#####",
+ "description": "SCHEMA/PRIVACY SPIKE ONLY. Production records are blocked pending MG-CA-015.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["supplier", "worker_external_id", "display_name", "position", "contact", "status", "valid_from", "valid_to", "consent_document", "identity_document", "data_owner", "privacy_gate"],
+ "fields": [
+  {"fieldname": "supplier", "fieldtype": "Link", "label": "Supplier", "options": "Supplier", "permlevel": 1, "read_only": 1, "reqd": 1},
+  {"fieldname": "worker_external_id", "fieldtype": "Data", "label": "External Worker ID", "permlevel": 1, "read_only": 1, "reqd": 1},
+  {"fieldname": "display_name", "fieldtype": "Data", "label": "Display Name", "permlevel": 1, "read_only": 1, "reqd": 1},
+  {"fieldname": "position", "fieldtype": "Data", "label": "Position", "permlevel": 1, "read_only": 1},
+  {"fieldname": "contact", "fieldtype": "Link", "label": "Contact", "options": "Contact", "permlevel": 1, "read_only": 1},
+  {"default": "Inactive", "fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Inactive\nActive\nArchived", "permlevel": 1, "read_only": 1, "reqd": 1},
+  {"fieldname": "valid_from", "fieldtype": "Date", "label": "Valid From", "permlevel": 1, "read_only": 1},
+  {"fieldname": "valid_to", "fieldtype": "Date", "label": "Valid To", "permlevel": 1, "read_only": 1},
+  {"fieldname": "consent_document", "fieldtype": "Link", "label": "Consent Document", "options": "Ferum Project Document", "permlevel": 1, "read_only": 1},
+  {"fieldname": "identity_document", "fieldtype": "Link", "label": "Identity Document", "options": "Ferum Project Document", "permlevel": 1, "read_only": 1},
+  {"fieldname": "data_owner", "fieldtype": "Link", "label": "Data Owner", "options": "User", "permlevel": 1, "read_only": 1},
+  {"default": "Blocked Pending MG-CA-015", "fieldname": "privacy_gate", "fieldtype": "Data", "label": "Privacy Gate", "read_only": 1, "reqd": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Contractor Worker",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"read": 1, "report": 1, "role": "System Manager"},
+  {"permlevel": 1, "read": 1, "role": "System Manager"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

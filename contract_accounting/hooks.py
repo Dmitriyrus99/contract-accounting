@@ -27,6 +27,7 @@ fixtures = [
 					"Бухгалтер",
 					"Инженер",
 					"Офис-менеджер",
+					"Подрядчик",
 				],
 			]
 		],
@@ -53,4 +54,12 @@ doc_events = {
 		"on_submit": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
 		"on_cancel": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
 	},
+}
+
+permission_query_conditions = {
+	"Ferum Contractor Assignment": "contract_accounting.infrastructure.contractor_permissions.get_permission_query_conditions"
+}
+
+has_permission = {
+	"Ferum Contractor Assignment": "contract_accounting.infrastructure.contractor_permissions.has_permission"
 }

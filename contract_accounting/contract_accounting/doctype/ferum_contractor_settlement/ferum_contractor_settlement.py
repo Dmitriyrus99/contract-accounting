@@ -65,6 +65,28 @@ class FerumContractorSettlement(Document):
 			name = self.get(fieldname)
 			if name and frappe.db.get_value(doctype, name, "service_project") != self.service_project:
 				frappe.throw(_("Contractor Settlement context относится к другому Service Project."))
+		if self.contractor_assignment:
+			assignment = frappe.db.get_value(
+				"Ferum Contractor Assignment", self.contractor_assignment,
+				("service_project", "supplier", "status", "commercial_terms"), as_dict=True,
+			)
+			if not assignment or assignment.service_project != self.service_project:
+				frappe.throw(_("Settlement Assignment относится к другому Service Project."))
+			if assignment.supplier != self.supplier:
+				frappe.throw(_("Settlement Supplier не совпадает с Assignment."))
+			if assignment.status == "Cancelled":
+				frappe.throw(_("Settlement нельзя связать с Cancelled Assignment."))
+			if self.commercial_terms and assignment.commercial_terms != self.commercial_terms:
+				frappe.throw(_("Settlement Commercial Terms не совпадают с Assignment."))
+		if self.commercial_terms:
+			terms = frappe.db.get_value(
+				"Ferum Contractor Commercial Terms", self.commercial_terms,
+				("contractor_assignment", "status"), as_dict=True,
+			)
+			if not terms or terms.status != "Approved":
+				frappe.throw(_("Settlement требует Approved Commercial Terms."))
+			if self.contractor_assignment and terms.contractor_assignment != self.contractor_assignment:
+				frappe.throw(_("Settlement Commercial Terms относятся к другому Assignment."))
 
 	def _validate_period_amounts(self) -> None:
 		if getdate(self.period_end) < getdate(self.period_start):
