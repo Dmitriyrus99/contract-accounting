@@ -118,16 +118,7 @@ class TestFerumMaintenanceExecution(FrappeTestCase):
 		with self.assertRaises(frappe.ValidationError):
 			review_visit(visit_name, "Approved")
 
-		file_doc = save_file(
-			f"ca03-{uuid4().hex[:10]}.png",
-			b64decode(
-				"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
-				"+A8AAQUBAScY42YAAAAASUVORK5CYII="
-			),
-			"Ferum Maintenance Visit",
-			visit_name,
-			is_private=1,
-		)
+		file_doc = self._save_evidence_file("Ferum Maintenance Visit", visit_name)
 		visit = frappe.get_doc("Ferum Maintenance Visit", visit_name)
 		visit.append(
 			"checklist",
@@ -173,6 +164,24 @@ class TestFerumMaintenanceExecution(FrappeTestCase):
 		self.assertEqual(request.customer, self.project.customer)
 		self.assertEqual(request.service_object, self.service_object.name)
 		self.assertFalse(request.get("maintenance_schedule"))
+		request.status = "In Progress"
+		request.actual_start = datetime.now()
+		request.save(ignore_permissions=True)
+		request.append(
+			"evidence",
+			{
+				"evidence_type": "Report",
+				"file": self._save_evidence_file("Ferum Service Request", request.name).name,
+				"captured_at": datetime.now(),
+				"captured_by": "Administrator",
+			},
+		)
+		request.actual_end = request.actual_start + timedelta(hours=1)
+		request.work_result = "Completed"
+		request.resolution = "Emergency fault resolved"
+		request.status = "Resolved"
+		request.save(ignore_permissions=True)
+		self.assertEqual(request.status, "Resolved")
 
 		foreign_object = frappe.get_doc(
 			{
@@ -252,6 +261,19 @@ class TestFerumMaintenanceExecution(FrappeTestCase):
 		document.status = "Active"
 		document.save(ignore_permissions=True)
 		return document
+
+	@staticmethod
+	def _save_evidence_file(attached_doctype: str, attached_name: str):
+		return save_file(
+			f"ca03-{uuid4().hex[:10]}.png",
+			b64decode(
+				"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+				"+A8AAQUBAScY42YAAAAASUVORK5CYII="
+			),
+			attached_doctype,
+			attached_name,
+			is_private=1,
+		)
 
 	@staticmethod
 	def _make_system(service_object: str):
