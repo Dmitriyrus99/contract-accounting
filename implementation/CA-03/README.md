@@ -28,4 +28,4 @@ Implementation traceability: [traceability_v0_4_0.md](traceability_v0_4_0.md).
 
 ## Граница инкремента
 
-CA-03 не создаёт Act/UPD/Sales Invoice/Payment и не пишет в GL: эти связи остаются CA-06/07. Finding появится в CA-04, Project Document — CA-05, record-level contractor/portal scoping — CA-08, SLA/Holiday engine — CA-09. `billing_eligible` — только guarded execution projection, не бухгалтерский документ и не основание само по себе.
+CA-03 не создаёт Act/UPD/Sales Invoice/Payment и не пишет в GL: эти связи остаются CA-06/07. Finding и reverse provenance на Visit реализованы в CA-04; Project Document остаётся CA-05, record-level contractor/portal scoping — CA-08, SLA/Holiday engine — CA-09. `billing_eligible` — только guarded execution projection, не бухгалтерский документ и не основание само по себе.

@@ -318,6 +318,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - permissions исключают доступ подрядчика к чужим проектам.
 
+**Результат реализации v0.5.0 — 2026-08-18:** `CA-04 CORE CODE COMPLETE / BENCH VERIFIED`. Реализованы один physical `Ferum Finding` без Defect DocType, обязательная category, immutable Visit provenance/context snapshot, confirmation/resolution FSM, idempotent Service Request execution links, explicit request creation, derived exception report и `Ferum Photo Evidence` с review/hash стандартного File. Migrate и clean reinstall 21 DocType прошли; standalone suite `72/72`, полный Frappe suite до и после reinstall `24/24`. Inspection source остаётся fail-closed до CA-12; contractor role сейчас не получает доступа, а положительная own-assignment row-level модель остаётся CA-08; work-order adapter не разрешён. Legacy Service Request автоматически не преобразуются, candidate conversion не запускался из-за отсутствия legacy records на disposable site. Evidence: [implementation/CA-04/README.md](implementation/CA-04/README.md), [runtime evidence](implementation/CA-04/runtime_evidence_v0_5_0_2026-08-18.md), [traceability](implementation/CA-04/traceability_v0_5_0.md).
+
 **Оценка:** M.
 
 ### CA-05. Project Document и оригиналы

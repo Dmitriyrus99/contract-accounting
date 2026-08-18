@@ -10,7 +10,7 @@
 | `TCA-A-05-06…08` | Act/Invoice/Payment не создаются CA-03 | CA-06/07 OPEN |
 | `TCA-A-05-09` | reverse Obligation/Schedule/Visit + deviation query | PARTIAL PASS; billing reverse chain OPEN |
 | `TCA-A-06-01…08` | generated Visit, planned/actual, assignee, checklist, File evidence, comment | schema/runtime PASS |
-| `TCA-A-06-09` | Finding link отсутствует до отдельного Finding DocType | CA-04 OPEN |
+| `TCA-A-06-09` | CA-04 `Ferum Finding.source` даёт reverse provenance на Visit без изменения факта Visit | CA-04 CODE + runtime PASS |
 | `TCA-A-06-10…11` | recommendations/report + PM review FSM | schema/runtime PASS |
 | `TCA-A-06-12…16` | самостоятельный Service Request, project/object/system/customer guards | schema/runtime PASS |
 
