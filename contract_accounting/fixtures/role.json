@@ -1,0 +1,37 @@
+[
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Генеральный директор",
+  "role_name": "Генеральный директор"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Руководитель проектов",
+  "role_name": "Руководитель проектов"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Менеджер проектов",
+  "role_name": "Менеджер проектов"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Юрист",
+  "role_name": "Юрист"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Бухгалтер",
+  "role_name": "Бухгалтер"
+ }
+]

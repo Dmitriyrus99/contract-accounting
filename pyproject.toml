@@ -3,10 +3,8 @@ name = "contract-accounting"
 version = "0.1.0"
 description = "Target domain policy for the contract-accounting project"
 requires-python = ">=3.10"
+readme = "README.md"
 
 [build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-include = ["contract_accounting*"]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
