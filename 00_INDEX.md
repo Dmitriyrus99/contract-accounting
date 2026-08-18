@@ -59,6 +59,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-04/schema_v0_5_0.md](implementation/CA-04/schema_v0_5_0.md) | Finding/Execution Link/Photo Evidence physical schema и server invariants |
 | [implementation/CA-04/runtime_evidence_v0_5_0_2026-08-18.md](implementation/CA-04/runtime_evidence_v0_5_0_2026-08-18.md) | exact v0.5.0 versions, 24/24 runtime и rollback/reinstall 21 DocType |
 | [implementation/CA-04/traceability_v0_5_0.md](implementation/CA-04/traceability_v0_5_0.md) | CODE/runtime mapping CA-04 без подмены CA-08/12 gates |
+| [implementation/CA-05/README.md](implementation/CA-05/README.md) | реестр Project Document, независимые digital/original статусы и границы CA-06/11 |
+| [implementation/CA-05/schema_v0_6_0.md](implementation/CA-05/schema_v0_6_0.md) | физическая schema Project Document/Document Link/Event и server invariants |
+| [implementation/CA-05/runtime_evidence_v0_6_0_2026-08-18.md](implementation/CA-05/runtime_evidence_v0_6_0_2026-08-18.md) | exact v0.6.0 versions, 29/29 runtime и rollback/reinstall 24 DocType |
+| [implementation/CA-05/traceability_v0_6_0.md](implementation/CA-05/traceability_v0_6_0.md) | CODE/runtime mapping CA-05 с явными downstream integration gates |
 
 ## Принятый baseline
 

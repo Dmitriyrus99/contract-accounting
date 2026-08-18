@@ -13,6 +13,7 @@ Current delivery state:
 - CA-02 schema v0.3.0 adds Requirement/Obligation/typed recurrence, deterministic preview and effective/context guards; 15 runtime tests plus schema rollback/reinstall are verified at `b52f61b`;
 - CA-03 schema v0.4.0 adds idempotent Schedule/Visit generation, explicit cancellation replacement, reviewed File evidence, acceptance and standalone Service Request; 19 runtime tests plus schema rollback/reinstall are verified at `d85488b`;
 - CA-04 schema v0.5.0 adds one independent Finding with Defect category, immutable Visit provenance, confirmation/resolution gates, idempotent Service Request links and reviewed Photo Evidence over standard File; 24 runtime tests plus 21-DocType rollback/reinstall are verified at `5bc0bc9`;
+- CA-05 schema v0.6.0 adds the universal Project Document registry, independent digital-copy/original custody, immutable transition events and accepted-File deletion guards; 29 runtime tests plus 24-DocType rollback/reinstall are verified at `0c8546d`;
 - runtime W2 evidence was inspected on the available test stand;
 - full backup restore rehearsal remains open because `bench restore` required an interactive DB-root credential that was not read or exposed.
 
