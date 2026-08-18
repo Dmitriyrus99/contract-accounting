@@ -79,6 +79,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-09/projection_v0_10_0.md](implementation/CA-09/projection_v0_10_0.md) | normalized row/source adapters и fail-closed classification contract |
 | [implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md](implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md) | exact v0.10.0 versions, 50/50 runtime и 35-DocType inventory |
 | [implementation/CA-09/traceability_v0_10_0.md](implementation/CA-09/traceability_v0_10_0.md) | CODE/runtime mapping TCA-A-14 с явными signature/customer-response gaps |
+| [implementation/CA-10/README.md](implementation/CA-10/README.md) | permission-safe Contract 360/Director projections и открытые UI/performance/policy gates |
+| [implementation/CA-10/projection_v0_11_0.md](implementation/CA-10/projection_v0_11_0.md) | widgets, exception rules, source drilldowns и finance redaction contract |
+| [implementation/CA-10/runtime_evidence_v0_11_0_2026-08-18.md](implementation/CA-10/runtime_evidence_v0_11_0_2026-08-18.md) | exact v0.11.0 versions, migrate, 54/54 runtime и 35-DocType inventory |
+| [implementation/CA-10/traceability_v0_11_0.md](implementation/CA-10/traceability_v0_11_0.md) | CODE/runtime mapping TCA-A-15/16 без подмены OPEN gates |
 
 ## Принятый baseline
 

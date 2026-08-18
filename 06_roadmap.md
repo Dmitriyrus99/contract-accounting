@@ -480,6 +480,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - агрегаты проходят reconciliation с source reports.
 
+**Результат реализации v0.11.0 — 2026-08-18:** `CA-10 PARTIAL / CONTRACT 360 + EXCEPTION CORE BENCH VERIFIED`. Реализованы permission-aware read-only `get_contract_360` и Director Control Center без нового DocType/cache: widgets строятся из primary records CA-01…09 и имеют exact drill-down; finance читает сохранённый CA-07 Summary без самостоятельного расчёта; non-finance redaction и отсутствие monetary/margin leakage подтверждены runtime. Migrate сохранил 35 DocType; standalone suite `104/104`, targeted Frappe `4/4`, полный suite `54/54`. Отдельная required-photo policy отсутствует и не изобретается; BPM blocked/stage-gate sources ожидают CA-11; MG-CA-013, UI/export, representative-volume performance, UAT/sign-off и production deployment остаются OPEN. Evidence: [implementation/CA-10/README.md](implementation/CA-10/README.md), [runtime evidence](implementation/CA-10/runtime_evidence_v0_11_0_2026-08-18.md), [traceability](implementation/CA-10/traceability_v0_11_0.md).
+
 **Оценка:** L.
 
 ### CA-11. BPM Core
