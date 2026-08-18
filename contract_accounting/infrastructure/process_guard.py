@@ -27,6 +27,8 @@ def parse_rule(value: Any, fieldname: str) -> dict[str, Any]:
 		frappe.throw(_("{0} должен быть JSON object.").format(fieldname))
 	if not isinstance(parsed, dict):
 		frappe.throw(_("{0} должен быть JSON object.").format(fieldname))
+	if not parsed:
+		return {}
 	try:
 		validate_rule(parsed)
 	except JsonLogicRuleError as exc:
