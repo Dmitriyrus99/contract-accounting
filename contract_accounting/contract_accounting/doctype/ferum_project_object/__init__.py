@@ -1,0 +1,1 @@
+"""Ferum Project Object DocType."""

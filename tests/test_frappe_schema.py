@@ -109,6 +109,7 @@ class TestFrappeSchema(unittest.TestCase):
 				"Менеджер проектов",
 				"Юрист",
 				"Бухгалтер",
+				"Инженер",
 			},
 		)
 		document = schema("ferum_service_project")
@@ -162,6 +163,70 @@ class TestFrappeSchema(unittest.TestCase):
 					{"Ferum Contract", "Ferum Project Contract Link"},
 					f"legacy SSOT link in {path}: {field.get('fieldname')}",
 				)
+
+	def test_ca01_related_doctypes_link_directly_to_service_project(self) -> None:
+		required_links = {
+			"ferum_contract_amendment": "service_project",
+			"ferum_contract_execution_stage": "service_project",
+			"ferum_contract_security": "service_project",
+			"ferum_project_object": "service_project",
+		}
+		for doctype, fieldname in required_links.items():
+			with self.subTest(doctype=doctype):
+				by_name = fields(schema(doctype))
+				self.assertEqual(by_name[fieldname]["fieldtype"], "Link")
+				self.assertEqual(by_name[fieldname]["options"], "Ferum Service Project")
+				self.assertEqual(by_name[fieldname]["reqd"], 1)
+
+	def test_object_navigation_uses_membership_not_direct_project_link(self) -> None:
+		service_object = fields(schema("ferum_service_object"))
+		self.assertNotIn("service_project", service_object)
+		project_object = fields(schema("ferum_project_object"))
+		self.assertEqual(project_object["service_object"]["options"], "Ferum Service Object")
+		self.assertEqual(project_object["effective_from"]["reqd"], 1)
+		object_system = fields(schema("ferum_object_system"))
+		self.assertEqual(object_system["service_object"]["options"], "Ferum Service Object")
+		self.assertTrue(
+			{
+				"APS",
+				"SOUE",
+				"Smoke Control",
+				"Internal Fire Water",
+				"ACS",
+				"CCTV",
+			}.issubset(set(object_system["system_type"]["options"].splitlines()))
+		)
+
+	def test_financial_plan_is_child_table_of_service_project(self) -> None:
+		project = fields(schema("ferum_service_project"))
+		self.assertEqual(project["financial_plan"]["fieldtype"], "Table")
+		self.assertEqual(
+			project["financial_plan"]["options"],
+			"Ferum Contract Financial Plan Row",
+		)
+		row = schema("ferum_contract_financial_plan_row")
+		self.assertEqual(row["istable"], 1)
+		self.assertTrue(
+			{
+				"revenue_plan",
+				"cost_plan",
+				"cash_in_plan",
+				"cash_out_plan",
+				"tax_plan",
+				"source_stage",
+			}.issubset(fields(row))
+		)
+
+	def test_amendment_is_structured_append_only_contract_change(self) -> None:
+		amendment = fields(schema("ferum_contract_amendment"))
+		self.assertEqual(amendment["changes"]["options"], "Ferum Contract Amendment Change")
+		self.assertEqual(amendment["before_snapshot_json"]["read_only"], 1)
+		self.assertEqual(amendment["after_snapshot_json"]["read_only"], 1)
+		change = schema("ferum_contract_amendment_change")
+		self.assertEqual(change["istable"], 1)
+		self.assertTrue(
+			{"fieldname", "old_value_json", "new_value_json"}.issubset(fields(change))
+		)
 
 
 if __name__ == "__main__":

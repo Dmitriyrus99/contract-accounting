@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FCA-.YYYY.-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "service_project",
+  "amendment_number",
+  "amendment_date",
+  "effective_from",
+  "change_type",
+  "approval_status",
+  "source_document_reference",
+  "changes",
+  "before_snapshot_json",
+  "after_snapshot_json",
+  "applied_at",
+  "applied_by",
+  "comment"
+ ],
+ "fields": [
+  {"fieldname": "service_project", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "reqd": 1},
+  {"fieldname": "amendment_number", "fieldtype": "Data", "in_list_view": 1, "label": "Amendment Number", "reqd": 1},
+  {"fieldname": "amendment_date", "fieldtype": "Date", "label": "Amendment Date", "reqd": 1},
+  {"fieldname": "effective_from", "fieldtype": "Date", "label": "Effective From", "reqd": 1},
+  {"fieldname": "change_type", "fieldtype": "Select", "label": "Change Type", "options": "Amount\nTerm\nObjects\nScope\nSecurity\nMixed\nOther", "reqd": 1},
+  {"default": "Draft", "fieldname": "approval_status", "fieldtype": "Select", "in_list_view": 1, "label": "Approval Status", "options": "Draft\nUnder Review\nApproved\nApplied\nRejected", "reqd": 1},
+  {"fieldname": "source_document_reference", "fieldtype": "Data", "label": "Source Document Reference"},
+  {"fieldname": "changes", "fieldtype": "Table", "label": "Changes", "options": "Ferum Contract Amendment Change"},
+  {"fieldname": "before_snapshot_json", "fieldtype": "JSON", "label": "Before Snapshot JSON", "read_only": 1},
+  {"fieldname": "after_snapshot_json", "fieldtype": "JSON", "label": "After Snapshot JSON", "read_only": 1},
+  {"fieldname": "applied_at", "fieldtype": "Datetime", "label": "Applied At", "read_only": 1},
+  {"fieldname": "applied_by", "fieldtype": "Link", "label": "Applied By", "options": "User", "read_only": 1},
+  {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {"group": "Contract Accounting", "link_doctype": "Ferum Project Object", "link_fieldname": "added_by"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Project Object", "link_fieldname": "removed_by"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Execution Stage", "link_fieldname": "contract_amendment"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Security", "link_fieldname": "contract_amendment"}
+ ],
+ "module": "Contract Accounting",
+ "name": "Ferum Contract Amendment",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "read": 1, "report": 1, "role": "Юрист", "write": 1},
+  {"read": 1, "report": 1, "role": "Генеральный директор", "write": 1},
+  {"read": 1, "report": 1, "role": "Руководитель проектов"},
+  {"read": 1, "report": 1, "role": "Бухгалтер"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

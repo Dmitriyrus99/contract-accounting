@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "period_start",
+  "period_end",
+  "currency",
+  "revenue_plan",
+  "cost_plan",
+  "cash_in_plan",
+  "cash_out_plan",
+  "tax_plan",
+  "source_stage",
+  "contract_amendment",
+  "comment"
+ ],
+ "fields": [
+  {"fieldname": "period_start", "fieldtype": "Date", "in_list_view": 1, "label": "Period Start", "reqd": 1},
+  {"fieldname": "period_end", "fieldtype": "Date", "in_list_view": 1, "label": "Period End", "reqd": 1},
+  {"fieldname": "currency", "fieldtype": "Link", "label": "Currency", "options": "Currency", "reqd": 1},
+  {"fieldname": "revenue_plan", "fieldtype": "Currency", "in_list_view": 1, "label": "Revenue Plan", "options": "currency"},
+  {"fieldname": "cost_plan", "fieldtype": "Currency", "in_list_view": 1, "label": "Cost Plan", "options": "currency"},
+  {"fieldname": "cash_in_plan", "fieldtype": "Currency", "label": "Cash In Plan", "options": "currency"},
+  {"fieldname": "cash_out_plan", "fieldtype": "Currency", "label": "Cash Out Plan", "options": "currency"},
+  {"fieldname": "tax_plan", "fieldtype": "Currency", "label": "Tax Plan", "options": "currency"},
+  {"fieldname": "source_stage", "fieldtype": "Link", "label": "Source Stage", "options": "Ferum Contract Execution Stage"},
+  {"fieldname": "contract_amendment", "fieldtype": "Link", "label": "Contract Amendment", "options": "Ferum Contract Amendment"},
+  {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Contract Financial Plan Row",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,51 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FPO-.YYYY.-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "service_project",
+  "service_object",
+  "effective_from",
+  "effective_to",
+  "status",
+  "added_by",
+  "removed_by",
+  "responsible_engineer",
+  "contractor",
+  "customer_contact",
+  "maintenance_required",
+  "comment"
+ ],
+ "fields": [
+  {"fieldname": "service_project", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "reqd": 1},
+  {"fieldname": "service_object", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Service Object", "options": "Ferum Service Object", "reqd": 1},
+  {"fieldname": "effective_from", "fieldtype": "Date", "label": "Effective From", "reqd": 1},
+  {"fieldname": "effective_to", "fieldtype": "Date", "label": "Effective To"},
+  {"default": "Active", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Active\nClosed", "read_only": 1, "reqd": 1},
+  {"fieldname": "added_by", "fieldtype": "Link", "label": "Added By Amendment", "options": "Ferum Contract Amendment"},
+  {"fieldname": "removed_by", "fieldtype": "Link", "label": "Removed By Amendment", "options": "Ferum Contract Amendment"},
+  {"fieldname": "responsible_engineer", "fieldtype": "Link", "label": "Responsible Engineer", "options": "User"},
+  {"fieldname": "contractor", "fieldtype": "Link", "label": "Contractor", "options": "Supplier"},
+  {"fieldname": "customer_contact", "fieldtype": "Link", "label": "Customer Contact", "options": "Contact"},
+  {"default": "1", "fieldname": "maintenance_required", "fieldtype": "Check", "label": "Maintenance Required"},
+  {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Project Object",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "read": 1, "report": 1, "role": "Менеджер проектов", "write": 1},
+  {"read": 1, "report": 1, "role": "Руководитель проектов", "write": 1},
+  {"read": 1, "report": 1, "role": "Юрист"},
+  {"read": 1, "report": 1, "role": "Инженер"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

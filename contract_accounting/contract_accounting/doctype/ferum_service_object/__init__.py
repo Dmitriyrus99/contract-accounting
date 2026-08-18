@@ -1,0 +1,1 @@
+"""Ferum Service Object DocType."""

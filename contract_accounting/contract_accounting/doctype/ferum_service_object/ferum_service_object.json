@@ -1,0 +1,45 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FSO-.YYYY.-.#####",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "object_name",
+  "customer",
+  "address",
+  "region",
+  "access_conditions",
+  "main_contact",
+  "status",
+  "comment"
+ ],
+ "fields": [
+  {"fieldname": "object_name", "fieldtype": "Data", "in_list_view": 1, "label": "Object Name", "reqd": 1},
+  {"fieldname": "customer", "fieldtype": "Link", "in_standard_filter": 1, "label": "Customer", "options": "Customer", "reqd": 1},
+  {"fieldname": "address", "fieldtype": "Small Text", "label": "Address", "reqd": 1},
+  {"fieldname": "region", "fieldtype": "Data", "label": "Region"},
+  {"fieldname": "access_conditions", "fieldtype": "Small Text", "label": "Access Conditions"},
+  {"fieldname": "main_contact", "fieldtype": "Link", "label": "Main Contact", "options": "Contact"},
+  {"default": "Active", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Active\nDisabled", "reqd": 1},
+  {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {"group": "Contract Accounting", "link_doctype": "Ferum Project Object", "link_fieldname": "service_object"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Object System", "link_fieldname": "service_object"}
+ ],
+ "module": "Contract Accounting",
+ "name": "Ferum Service Object",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "read": 1, "report": 1, "role": "Менеджер проектов", "write": 1},
+  {"read": 1, "report": 1, "role": "Руководитель проектов", "write": 1},
+  {"read": 1, "report": 1, "role": "Инженер", "write": 1}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

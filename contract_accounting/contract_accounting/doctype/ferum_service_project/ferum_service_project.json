@@ -12,6 +12,7 @@
   "contract_number",
   "contract_date",
   "contract_subject",
+  "project_manager",
   "term_section",
   "effective_from",
   "effective_to",
@@ -23,6 +24,15 @@
   "vat_amount",
   "payment_terms",
   "payment_due_days",
+  "procurement_section",
+  "procurement_law",
+  "procurement_number",
+  "igk",
+  "source_advance",
+  "performance_security_percent",
+  "quality_guarantee_terms",
+  "financial_plan_section",
+  "financial_plan",
   "lifecycle_section",
   "legal_status",
   "execution_status",
@@ -91,6 +101,14 @@
    "reqd": 1
   },
   {
+   "fieldname": "project_manager",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Project Manager",
+   "options": "User",
+   "permlevel": 2
+  },
+  {
    "fieldname": "term_section",
    "fieldtype": "Section Break",
    "label": "Contract Term"
@@ -157,6 +175,60 @@
    "fieldname": "payment_due_days",
    "fieldtype": "Int",
    "label": "Payment Due Days",
+   "permlevel": 3
+  },
+  {
+   "fieldname": "procurement_section",
+   "fieldtype": "Section Break",
+   "label": "Procurement and Security"
+  },
+  {
+   "fieldname": "procurement_law",
+   "fieldtype": "Select",
+   "label": "Procurement Law",
+   "options": "\n44-ФЗ\n223-ФЗ\nCommercial",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "procurement_number",
+   "fieldtype": "Data",
+   "label": "Procurement Number",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "igk",
+   "fieldtype": "Data",
+   "label": "Contract Identifier (IGK)",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "source_advance",
+   "fieldtype": "Data",
+   "label": "Advance Terms",
+   "permlevel": 3
+  },
+  {
+   "fieldname": "performance_security_percent",
+   "fieldtype": "Percent",
+   "label": "Performance Security Percent",
+   "permlevel": 3
+  },
+  {
+   "fieldname": "quality_guarantee_terms",
+   "fieldtype": "Small Text",
+   "label": "Quality Guarantee Terms",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "financial_plan_section",
+   "fieldtype": "Section Break",
+   "label": "Financial Plan"
+  },
+  {
+   "fieldname": "financial_plan",
+   "fieldtype": "Table",
+   "label": "Financial Plan",
+   "options": "Ferum Contract Financial Plan Row",
    "permlevel": 3
   },
   {
@@ -229,7 +301,12 @@
   }
  ],
  "index_web_pages_for_search": 0,
- "links": [],
+ "links": [
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Amendment", "link_fieldname": "service_project"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Execution Stage", "link_fieldname": "service_project"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Security", "link_fieldname": "service_project"},
+  {"group": "Objects", "link_doctype": "Ferum Project Object", "link_fieldname": "service_project"}
+ ],
  "module": "Contract Accounting",
  "name": "Ferum Service Project",
  "naming_rule": "Expression (old style)",

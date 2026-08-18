@@ -7,7 +7,7 @@ installed. They are intentionally not imported by the standalone unit suite.
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import date, timedelta
 from unittest.mock import patch
 from uuid import uuid4
 
@@ -147,6 +147,122 @@ class TestFerumServiceProjectLifecycle(FrappeTestCase):
 		)
 		with self.assertRaises(frappe.UniqueValidationError):
 			duplicate.insert(ignore_permissions=True, ignore_links=True)
+
+	def test_object_navigation_and_effective_membership_integrity(self) -> None:
+		project = _make_project()
+		service_object = frappe.get_doc(
+			{
+				"doctype": "Ferum Service Object",
+				"object_name": "CA-01 Service Object",
+				"customer": project.customer,
+				"address": "Runtime test address",
+			}
+		).insert(ignore_permissions=True)
+		system = frappe.get_doc(
+			{
+				"doctype": "Ferum Object System",
+				"service_object": service_object.name,
+				"system_type": "APS",
+				"system_name": "Runtime APS",
+				"equipment_count": 1,
+			}
+		).insert(ignore_permissions=True)
+		membership = frappe.get_doc(
+			{
+				"doctype": "Ferum Project Object",
+				"service_project": project.name,
+				"service_object": service_object.name,
+				"effective_from": date.today(),
+			}
+		).insert(ignore_permissions=True)
+		self.assertEqual(system.service_object, service_object.name)
+		self.assertEqual(membership.status, "Active")
+
+		overlap = frappe.copy_doc(membership)
+		overlap.name = None
+		with self.assertRaises(frappe.ValidationError):
+			overlap.insert(ignore_permissions=True)
+		with self.assertRaises(frappe.PermissionError):
+			frappe.delete_doc("Ferum Project Object", membership.name, ignore_permissions=True)
+
+	def test_signed_terms_change_only_through_effective_amendment(self) -> None:
+		project = _make_project()
+		for legal_status in ("On Approval", "Approved", "Signing", "Signed"):
+			change_status(project.name, target_legal_status=legal_status)
+		project.reload()
+		project.payment_due_days = 30
+		with self.assertRaises(frappe.ValidationError):
+			project.save(ignore_permissions=True)
+		project.reload()
+
+		amendment = frappe.get_doc(
+			{
+				"doctype": "Ferum Contract Amendment",
+				"service_project": project.name,
+				"amendment_number": "CA-AMEND-001",
+				"amendment_date": date.today(),
+				"effective_from": date.today(),
+				"change_type": "Term",
+				"changes": [
+					{
+						"fieldname": "payment_due_days",
+						"old_value_json": json.dumps(project.payment_due_days),
+						"new_value_json": "30",
+					}
+				],
+			}
+		).insert(ignore_permissions=True)
+		for status in ("Under Review", "Approved", "Applied"):
+			amendment.approval_status = status
+			amendment.save(ignore_permissions=True)
+		amendment.reload()
+		project.reload()
+		self.assertEqual(project.payment_due_days, 30)
+		self.assertEqual(json.loads(amendment.before_snapshot_json), {"payment_due_days": 0})
+		self.assertEqual(json.loads(amendment.after_snapshot_json), {"payment_due_days": 30})
+		self.assertTrue(amendment.applied_at)
+		amendment.effective_from = date.today() + timedelta(days=1)
+		with self.assertRaises(frappe.ValidationError):
+			amendment.save(ignore_permissions=True)
+
+	def test_stage_security_and_financial_plan_keep_project_context(self) -> None:
+		project = _make_project()
+		stage = frappe.get_doc(
+			{
+				"doctype": "Ferum Contract Execution Stage",
+				"service_project": project.name,
+				"stage_number": 1,
+				"execution_start_date": date.today(),
+				"execution_end_date": date.today() + timedelta(days=30),
+				"currency": "RUB",
+			}
+		).insert(ignore_permissions=True)
+		security = frappe.get_doc(
+			{
+				"doctype": "Ferum Contract Security",
+				"service_project": project.name,
+				"security_type": "Performance Security",
+				"security_method": "Independent Guarantee",
+				"currency": "RUB",
+				"valid_from": date.today(),
+				"valid_until": date.today() + timedelta(days=30),
+				"return_due_date": date.today() + timedelta(days=31),
+			}
+		).insert(ignore_permissions=True)
+		project.append(
+			"financial_plan",
+			{
+				"period_start": date.today(),
+				"period_end": date.today() + timedelta(days=30),
+				"currency": "RUB",
+				"revenue_plan": 1000,
+				"cost_plan": 600,
+				"source_stage": stage.name,
+			},
+		)
+		project.save(ignore_permissions=True)
+		self.assertEqual(project.financial_plan[0].source_stage, stage.name)
+		self.assertEqual(security.service_project, project.name)
 
 
 def _make_project():

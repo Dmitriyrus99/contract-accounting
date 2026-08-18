@@ -1,0 +1,1 @@
+"""Ferum Contract Security DocType."""

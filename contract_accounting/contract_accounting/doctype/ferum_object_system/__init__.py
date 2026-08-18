@@ -1,0 +1,1 @@
+"""Ferum Object System DocType."""
