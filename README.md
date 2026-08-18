@@ -9,7 +9,7 @@ Current delivery state:
 - owner decisions OQ-CA-001…023 are approved;
 - CA-00 preflight, boundary ADR and live inventory are recorded;
 - a separate private GitHub repository and immutable discovery baseline tag are published;
-- CA-01 core dual-status policy, Frappe schema/adapter, separate-site install/migrate, 8 runtime tests and controlled app schema rollback/reinstall are verified at `fae6581`;
+- CA-01 schema v0.2.0, dual-status lifecycle, direct contract/object links, 11 runtime tests and expanded schema rollback/reinstall are verified at `23b0dff`;
 - runtime W2 evidence was inspected on the available test stand;
 - full backup restore rehearsal remains open because `bench restore` required an interactive DB-root credential that was not read or exposed.
 
