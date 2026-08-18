@@ -185,6 +185,25 @@ class TestFerumServiceProjectLifecycle(FrappeTestCase):
 		with self.assertRaises(frappe.PermissionError):
 			frappe.delete_doc("Ferum Project Object", membership.name, ignore_permissions=True)
 
+		other_customer = _make_customer(f"CA Other Customer {uuid4().hex[:12]}")
+		foreign_object = frappe.get_doc(
+			{
+				"doctype": "Ferum Service Object",
+				"object_name": "Foreign customer object",
+				"customer": other_customer,
+				"address": "Foreign address",
+			}
+		).insert(ignore_permissions=True)
+		with self.assertRaises(frappe.ValidationError):
+			frappe.get_doc(
+				{
+					"doctype": "Ferum Project Object",
+					"service_project": project.name,
+					"service_object": foreign_object.name,
+					"effective_from": date.today(),
+				}
+			).insert(ignore_permissions=True)
+
 	def test_signed_terms_change_only_through_effective_amendment(self) -> None:
 		project = _make_project()
 		for legal_status in ("On Approval", "Approved", "Signing", "Signed"):
@@ -263,6 +282,52 @@ class TestFerumServiceProjectLifecycle(FrappeTestCase):
 		project.save(ignore_permissions=True)
 		self.assertEqual(project.financial_plan[0].source_stage, stage.name)
 		self.assertEqual(security.service_project, project.name)
+
+		other_project = _make_project()
+		foreign_amendment = frappe.get_doc(
+			{
+				"doctype": "Ferum Contract Amendment",
+				"service_project": other_project.name,
+				"amendment_number": "FOREIGN-001",
+				"amendment_date": date.today(),
+				"effective_from": date.today(),
+				"change_type": "Other",
+			}
+		).insert(ignore_permissions=True)
+		with self.assertRaises(frappe.ValidationError):
+			frappe.get_doc(
+				{
+					"doctype": "Ferum Contract Execution Stage",
+					"service_project": project.name,
+					"stage_number": 2,
+					"execution_start_date": date.today(),
+					"execution_end_date": date.today(),
+					"currency": "RUB",
+					"contract_amendment": foreign_amendment.name,
+				}
+			).insert(ignore_permissions=True)
+
+		foreign_stage = frappe.get_doc(
+			{
+				"doctype": "Ferum Contract Execution Stage",
+				"service_project": other_project.name,
+				"stage_number": 1,
+				"execution_start_date": date.today(),
+				"execution_end_date": date.today(),
+				"currency": "RUB",
+			}
+		).insert(ignore_permissions=True)
+		project.append(
+			"financial_plan",
+			{
+				"period_start": date.today(),
+				"period_end": date.today(),
+				"currency": "RUB",
+				"source_stage": foreign_stage.name,
+			},
+		)
+		with self.assertRaises(frappe.ValidationError):
+			project.save(ignore_permissions=True)
 
 
 def _make_project():
