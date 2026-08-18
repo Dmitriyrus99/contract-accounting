@@ -5,6 +5,7 @@ import tomllib
 import unittest
 from pathlib import Path
 
+from contract_accounting import __version__
 from contract_accounting.domain.lifecycle import ExecutionStatus, LegalStatus
 
 
@@ -145,6 +146,7 @@ class TestFrappeSchema(unittest.TestCase):
 		with (ROOT / "pyproject.toml").open("rb") as pyproject_file:
 			pyproject = tomllib.load(pyproject_file)
 		self.assertEqual(pyproject["project"]["name"], "contract_accounting")
+		self.assertEqual(pyproject["project"]["version"], __version__)
 
 	def test_all_lifecycle_endpoints_are_post_only(self) -> None:
 		api_path = ROOT / "contract_accounting" / "api" / "lifecycle.py"
