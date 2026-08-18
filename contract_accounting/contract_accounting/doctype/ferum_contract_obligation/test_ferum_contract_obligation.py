@@ -16,11 +16,6 @@ from contract_accounting.contract_accounting.doctype.ferum_service_project.test_
 )
 
 
-# Dynamic Link selectors point to DocType, but these tests create their own scoped
-# records and must not recursively materialize Frappe's entire DocType fixture graph.
-test_ignore = ["DocType"]
-
-
 class TestFerumContractObligation(FrappeTestCase):
 	def setUp(self) -> None:
 		super().setUp()
