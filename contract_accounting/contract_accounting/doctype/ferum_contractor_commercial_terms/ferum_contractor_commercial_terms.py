@@ -58,6 +58,8 @@ class FerumContractorCommercialTerms(Document):
 		self.object_system = assignment.object_system
 		self.work_type = assignment.work_type
 		self.currency = frappe.db.get_value("Company", assignment.company, "default_currency")
+		if not self.effective_to:
+			self.effective_to = assignment.effective_to
 		if getdate(self.effective_from) < getdate(assignment.effective_from):
 			frappe.throw(_("Commercial Terms начинаются раньше Assignment."))
 		if assignment.effective_to and (
