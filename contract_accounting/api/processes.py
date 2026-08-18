@@ -649,10 +649,10 @@ def _step_deadline(
 	except DeadlineRuleError as exc:
 		frappe.throw(_("Relative deadline не рассчитан: {0}.").format(str(exc)))
 	return {
-		"triggered_at": result.triggered_at,
-		"due_at": result.due_at,
-		"warning_at": result.warning_at,
-		"escalation_at": result.escalation_at,
+		"triggered_at": result.triggered_at.replace(tzinfo=None),
+		"due_at": result.due_at.replace(tzinfo=None),
+		"warning_at": result.warning_at.replace(tzinfo=None),
+		"escalation_at": result.escalation_at.replace(tzinfo=None),
 		"calendar_snapshot_hash": result.snapshot_hash,
 	}
 
