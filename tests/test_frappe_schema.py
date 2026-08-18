@@ -539,6 +539,81 @@ class TestFrappeSchema(unittest.TestCase):
 		self.assertIn("before_migrate =", hooks)
 		self.assertIn("prevent_active_output_cancel", hooks)
 
+	def test_ca07_summary_is_read_only_rebuildable_projection(self) -> None:
+		document = schema("ferum_project_finance_summary")
+		by_name = fields(document)
+		for fieldname in (
+			"recognized_revenue_without_vat",
+			"invoiced_with_vat",
+			"paid_with_vat",
+			"outstanding_with_vat",
+			"material_cost_without_vat",
+			"contractor_cost_without_vat",
+			"other_cost_without_vat",
+			"profit_without_vat",
+			"profitability_percent",
+			"source_fingerprint",
+		):
+			self.assertEqual(by_name[fieldname]["read_only"], 1)
+		self.assertEqual(by_name["service_project"]["unique"], 1)
+		for permission in document["permissions"]:  # type: ignore[index,union-attr]
+			self.assertNotIn("create", permission)
+			self.assertNotIn("write", permission)
+			self.assertNotIn("delete", permission)
+
+	def test_ca07_material_expense_is_adjunct_not_stock_ledger(self) -> None:
+		material = fields(schema("ferum_material_expense"))
+		self.assertEqual(material["service_project"]["options"], "Ferum Service Project")
+		self.assertEqual(material["contract_obligation"]["options"], "Ferum Contract Obligation")
+		self.assertEqual(material["purchase_invoice"]["options"], "Purchase Invoice")
+		self.assertEqual(material["stock_entry"]["options"], "Stock Entry")
+		self.assertEqual(material["purchase_invoice_claim_key"]["unique"], 1)
+		self.assertEqual(
+			material["status"]["options"].splitlines(), ["Draft", "Approved", "Cancelled"]
+		)
+
+	def test_ca07_contractor_settlement_separates_management_and_accounting(self) -> None:
+		settlement = fields(schema("ferum_contractor_settlement"))
+		self.assertEqual(settlement["supplier"]["options"], "Supplier")
+		self.assertEqual(settlement["purchase_invoice"]["options"], "Purchase Invoice")
+		self.assertEqual(settlement["payment_entry"]["options"], "Payment Entry")
+		self.assertEqual(settlement["purchase_invoice_claim_key"]["unique"], 1)
+		self.assertEqual(
+			settlement["status"]["options"].splitlines(),
+			["Draft", "Approved", "Settled", "Cancelled"],
+		)
+		self.assertNotIn("contractor_assignment", settlement)
+
+	def test_ca07_installs_purchase_invoice_adapter_and_hooks_standard_events(self) -> None:
+		setup = (ROOT / "contract_accounting" / "setup" / "custom_fields.py").read_text(
+			encoding="utf-8"
+		)
+		hooks = (ROOT / "contract_accounting" / "hooks.py").read_text(encoding="utf-8")
+		self.assertIn('"Purchase Invoice": [', setup)
+		self.assertEqual(setup.count('"fieldname": "ferum_service_project"'), 2)
+		self.assertIn('"Purchase Invoice": {', hooks)
+		self.assertIn('"Payment Entry": {', hooks)
+		self.assertIn("enqueue_accounting_rebuild", hooks)
+		self.assertIn("prevent_recognized_cost_cancel", hooks)
+
+	def test_ca07_api_has_typed_mutations_and_read_only_projections(self) -> None:
+		source = (ROOT / "contract_accounting" / "api" / "finance.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 6)
+		self.assertEqual(source.count("@frappe.whitelist()"), 3)
+		self.assertIn("source_fingerprint", source)
+		self.assertIn("assert_purchase_invoice_available", source)
+		self.assertNotIn('frappe.new_doc("GL Entry")', source)
+		self.assertNotIn('frappe.get_doc({"doctype": "Payment Entry"', source)
+
+	def test_ca07_keeps_obligation_and_billing_dimensions_derived(self) -> None:
+		summary = fields(schema("ferum_project_finance_summary"))
+		self.assertEqual(summary["obligation_dimension_json"]["fieldtype"], "JSON")
+		self.assertEqual(summary["billing_cycle_dimension_json"]["fieldtype"], "JSON")
+		self.assertEqual(summary["obligation_dimension_json"]["read_only"], 1)
+		self.assertEqual(summary["billing_cycle_dimension_json"]["read_only"], 1)
+
 
 if __name__ == "__main__":
 	unittest.main()

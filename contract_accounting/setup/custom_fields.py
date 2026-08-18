@@ -17,7 +17,17 @@ CUSTOM_FIELDS: Final[dict[str, list[dict[str, object]]]] = {
 			"insert_after": "project",
 			"in_standard_filter": 1,
 		},
-	]
+	],
+	"Purchase Invoice": [
+		{
+			"fieldname": "ferum_service_project",
+			"label": "Ferum Service Project",
+			"fieldtype": "Link",
+			"options": "Ferum Service Project",
+			"insert_after": "project",
+			"in_standard_filter": 1,
+		},
+	],
 }
 
 

@@ -40,5 +40,17 @@ doc_events = {
 	"Sales Invoice": {
 		"validate": "contract_accounting.infrastructure.sales_invoice_guard.validate_project_context",
 		"before_cancel": "contract_accounting.infrastructure.sales_invoice_guard.prevent_active_output_cancel",
+		"on_submit": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
+		"on_cancel": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
+	},
+	"Purchase Invoice": {
+		"validate": "contract_accounting.infrastructure.purchase_invoice_guard.validate_project_context",
+		"before_cancel": "contract_accounting.infrastructure.purchase_invoice_guard.prevent_recognized_cost_cancel",
+		"on_submit": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
+		"on_cancel": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
+	},
+	"Payment Entry": {
+		"on_submit": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
+		"on_cancel": "contract_accounting.infrastructure.finance_hooks.enqueue_accounting_rebuild",
 	},
 }

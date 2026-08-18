@@ -1,0 +1,1 @@
+"""Ferum Contractor Settlement DocType."""
