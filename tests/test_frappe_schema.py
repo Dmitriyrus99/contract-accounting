@@ -327,6 +327,61 @@ class TestFrappeSchema(unittest.TestCase):
 		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 5)
 		self.assertEqual(source.count("@frappe.whitelist()"), 1)
 
+	def test_ca04_has_one_finding_doctype_and_no_defect_doctype(self) -> None:
+		self.assertTrue((DOCTYPE_ROOT / "ferum_finding").is_dir())
+		self.assertFalse((DOCTYPE_ROOT / "ferum_defect").exists())
+		finding = fields(schema("ferum_finding"))
+		self.assertEqual(
+			finding["category"]["options"].splitlines(),
+			["Observation", "Defect", "Nonconformity", "Risk"],
+		)
+		self.assertEqual(finding["category"]["reqd"], 1)
+
+	def test_ca04_finding_has_dynamic_source_and_derived_context(self) -> None:
+		finding = fields(schema("ferum_finding"))
+		self.assertEqual(finding["source_doctype"]["options"], "DocType")
+		self.assertEqual(finding["source_name"]["fieldtype"], "Dynamic Link")
+		self.assertEqual(finding["source_name"]["options"], "source_doctype")
+		for fieldname in (
+			"service_project",
+			"project_object",
+			"service_object",
+			"object_system",
+			"found_at",
+			"found_by",
+			"detected_context_snapshot",
+		):
+			self.assertEqual(finding[fieldname]["read_only"], 1)
+
+	def test_ca04_separates_confirmation_resolution_and_execution(self) -> None:
+		finding = fields(schema("ferum_finding"))
+		self.assertEqual(
+			finding["confirmation_status"]["options"].splitlines(),
+			["Pending", "Confirmed", "Rejected"],
+		)
+		self.assertEqual(
+			finding["status"]["options"].splitlines(),
+			["Open", "In Resolution", "Resolved", "Closed", "Rejected"],
+		)
+		self.assertEqual(finding["evidence"]["options"], "Ferum Execution Evidence")
+		self.assertEqual(
+			finding["execution_links"]["options"], "Ferum Finding Execution Link"
+		)
+		link = fields(schema("ferum_finding_execution_link"))
+		self.assertEqual(link["target_name"]["fieldtype"], "Dynamic Link")
+		self.assertEqual(link["target_name"]["options"], "target_doctype")
+		self.assertEqual(link["source_event_key"]["reqd"], 1)
+
+	def test_ca04_commands_are_post_only_and_report_is_read_only(self) -> None:
+		source = (ROOT / "contract_accounting" / "api" / "findings.py").read_text(
+			encoding="utf-8"
+		)
+		self.assertEqual(source.count('@frappe.whitelist(methods=["POST"])'), 4)
+		self.assertEqual(source.count("@frappe.whitelist()"), 1)
+		self.assertIn("ALLOWED_SOURCE_DOCTYPES", (
+			DOCTYPE_ROOT / "ferum_finding" / "ferum_finding.py"
+		).read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
 	unittest.main()
