@@ -1,0 +1,1 @@
+"""Ferum Contract Requirement DocType."""

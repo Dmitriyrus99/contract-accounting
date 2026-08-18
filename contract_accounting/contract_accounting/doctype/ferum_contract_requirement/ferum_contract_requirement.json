@@ -1,0 +1,49 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FCR-.YYYY.-.######",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "service_project", "requirement_type", "requirement_source",
+  "source_document_reference", "source_clause", "description",
+  "value_data", "value_date", "value_number", "value_check",
+  "applicability", "routing_decision", "assessment_status",
+  "assessed_by", "assessed_on", "comment"
+ ],
+ "fields": [
+  {"fieldname": "service_project", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Service Project", "options": "Ferum Service Project", "reqd": 1},
+  {"fieldname": "requirement_type", "fieldtype": "Select", "in_list_view": 1, "label": "Requirement Type", "options": "Work\nDocument\nPayment\nDeadline\nSecurity\nOther", "reqd": 1},
+  {"fieldname": "requirement_source", "fieldtype": "Select", "label": "Requirement Source", "options": "Contract\nAmendment\nAppendix\nProcurement\nRegulation\nInternal Rule\nOther", "reqd": 1},
+  {"description": "CA-02 interim stable reference. Replaced by Link to Ferum Project Document in CA-05.", "fieldname": "source_document_reference", "fieldtype": "Data", "label": "Source Document Reference", "reqd": 1},
+  {"fieldname": "source_clause", "fieldtype": "Data", "label": "Source Clause", "reqd": 1},
+  {"fieldname": "description", "fieldtype": "Text", "label": "Description", "reqd": 1},
+  {"fieldname": "value_data", "fieldtype": "Data", "label": "Typed Value (Data)"},
+  {"fieldname": "value_date", "fieldtype": "Date", "label": "Typed Value (Date)"},
+  {"fieldname": "value_number", "fieldtype": "Float", "label": "Typed Value (Number)"},
+  {"default": "0", "fieldname": "value_check", "fieldtype": "Check", "label": "Typed Value (Check)"},
+  {"default": "Requires Review", "fieldname": "applicability", "fieldtype": "Select", "in_standard_filter": 1, "label": "Applicability", "options": "Applicable\nNot Applicable\nRequires Review", "reqd": 1},
+  {"fieldname": "routing_decision", "fieldtype": "Select", "in_standard_filter": 1, "label": "Routing Decision", "options": "\nRecurring Obligation\nOne-time Process Step\nInformational\nNot Applicable"},
+  {"default": "Draft", "fieldname": "assessment_status", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Assessment Status", "options": "Draft\nAssessed\nApproved\nRejected", "reqd": 1},
+  {"fieldname": "assessed_by", "fieldtype": "Link", "label": "Assessed By", "options": "User", "read_only": 1},
+  {"fieldname": "assessed_on", "fieldtype": "Datetime", "label": "Assessed On", "read_only": 1},
+  {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Obligation", "link_fieldname": "requirement"}
+ ],
+ "module": "Contract Accounting",
+ "name": "Ferum Contract Requirement",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "delete": 1, "read": 1, "report": 1, "role": "Юрист", "write": 1},
+  {"read": 1, "report": 1, "role": "Руководитель проектов", "write": 1},
+  {"read": 1, "report": 1, "role": "Менеджер проектов"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

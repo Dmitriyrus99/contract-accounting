@@ -1,0 +1,30 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "frequency", "interval", "period_anchor", "window_before_days",
+  "window_after_days", "due_offset_days", "calendar_type",
+  "generation_horizon_days"
+ ],
+ "fields": [
+  {"fieldname": "frequency", "fieldtype": "Select", "in_list_view": 1, "label": "Frequency", "options": "Daily\nWeekly\nMonthly\nQuarterly\nSemiannual\nAnnual", "reqd": 1},
+  {"default": "1", "fieldname": "interval", "fieldtype": "Int", "in_list_view": 1, "label": "Interval", "reqd": 1},
+  {"default": "Contract Start", "fieldname": "period_anchor", "fieldtype": "Select", "label": "Period Anchor", "options": "Contract Start", "reqd": 1},
+  {"default": "0", "fieldname": "window_before_days", "fieldtype": "Int", "label": "Window Before (Days)"},
+  {"default": "0", "fieldname": "window_after_days", "fieldtype": "Int", "label": "Window After (Days)"},
+  {"default": "0", "fieldname": "due_offset_days", "fieldtype": "Int", "label": "Due Offset (Days)"},
+  {"default": "Calendar Days", "fieldname": "calendar_type", "fieldtype": "Select", "label": "Calendar Type", "options": "Calendar Days", "reqd": 1},
+  {"default": "365", "fieldname": "generation_horizon_days", "fieldtype": "Int", "label": "Generation Horizon (Days)", "reqd": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Obligation Recurrence Rule",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

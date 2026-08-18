@@ -33,7 +33,9 @@
   {"fieldname": "comment", "fieldtype": "Small Text", "label": "Comment"}
  ],
  "index_web_pages_for_search": 0,
- "links": [],
+ "links": [
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Obligation", "link_fieldname": "project_object"}
+ ],
  "module": "Contract Accounting",
  "name": "Ferum Project Object",
  "naming_rule": "Expression (old style)",

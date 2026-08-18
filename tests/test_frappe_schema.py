@@ -230,6 +230,54 @@ class TestFrappeSchema(unittest.TestCase):
 			{"fieldname", "old_value_json", "new_value_json"}.issubset(fields(change))
 		)
 
+	def test_ca02_requirement_and_obligation_link_to_service_project(self) -> None:
+		for doctype in ("ferum_contract_requirement", "ferum_contract_obligation"):
+			with self.subTest(doctype=doctype):
+				by_name = fields(schema(doctype))
+				self.assertEqual(by_name["service_project"]["fieldtype"], "Link")
+				self.assertEqual(
+					by_name["service_project"]["options"], "Ferum Service Project"
+				)
+				self.assertEqual(by_name["service_project"]["reqd"], 1)
+
+	def test_ca02_source_boundary_and_exact_routing_choices(self) -> None:
+		requirement = fields(schema("ferum_contract_requirement"))
+		self.assertEqual(requirement["source_document_reference"]["fieldtype"], "Data")
+		self.assertNotEqual(
+			requirement["source_document_reference"].get("options"),
+			"Ferum Project Document",
+		)
+		self.assertEqual(
+			requirement["routing_decision"]["options"].splitlines(),
+			[
+				"",
+				"Recurring Obligation",
+				"One-time Process Step",
+				"Informational",
+				"Not Applicable",
+			],
+		)
+
+	def test_ca02_obligation_has_typed_context_and_child_recurrence(self) -> None:
+		obligation = fields(schema("ferum_contract_obligation"))
+		links = {
+			"requirement": "Ferum Contract Requirement",
+			"project_object": "Ferum Project Object",
+			"object_system": "Ferum Object System",
+		}
+		for fieldname, target in links.items():
+			with self.subTest(fieldname=fieldname):
+				self.assertEqual(obligation[fieldname]["fieldtype"], "Link")
+				self.assertEqual(obligation[fieldname]["options"], target)
+				self.assertEqual(obligation[fieldname]["reqd"], 1)
+		self.assertEqual(obligation["recurrence"]["fieldtype"], "Table")
+		self.assertEqual(
+			obligation["recurrence"]["options"], "Ferum Obligation Recurrence Rule"
+		)
+		self.assertEqual(schema("ferum_obligation_recurrence_rule")["istable"], 1)
+		for fieldname in ("deadline_rule", "acceptance_rule", "evidence_rule"):
+			self.assertEqual(obligation[fieldname]["fieldtype"], "JSON")
+
 
 if __name__ == "__main__":
 	unittest.main()

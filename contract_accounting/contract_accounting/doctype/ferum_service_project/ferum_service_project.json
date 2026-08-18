@@ -305,6 +305,8 @@
   {"group": "Contract Accounting", "link_doctype": "Ferum Contract Amendment", "link_fieldname": "service_project"},
   {"group": "Contract Accounting", "link_doctype": "Ferum Contract Execution Stage", "link_fieldname": "service_project"},
   {"group": "Contract Accounting", "link_doctype": "Ferum Contract Security", "link_fieldname": "service_project"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Requirement", "link_fieldname": "service_project"},
+  {"group": "Contract Accounting", "link_doctype": "Ferum Contract Obligation", "link_fieldname": "service_project"},
   {"group": "Objects", "link_doctype": "Ferum Project Object", "link_fieldname": "service_project"}
  ],
  "module": "Contract Accounting",
