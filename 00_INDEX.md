@@ -83,6 +83,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-10/projection_v0_11_0.md](implementation/CA-10/projection_v0_11_0.md) | widgets, exception rules, source drilldowns и finance redaction contract |
 | [implementation/CA-10/runtime_evidence_v0_11_0_2026-08-18.md](implementation/CA-10/runtime_evidence_v0_11_0_2026-08-18.md) | exact v0.11.0 versions, migrate, 54/54 runtime и 35-DocType inventory |
 | [implementation/CA-10/traceability_v0_11_0.md](implementation/CA-10/traceability_v0_11_0.md) | CODE/runtime mapping TCA-A-15/16 без подмены OPEN gates |
+| [implementation/CA-11/README.md](implementation/CA-11/README.md) | versioned BPM core, parent topology и честная граница 169 req-id |
+| [implementation/CA-11/schema_v0_12_0.md](implementation/CA-11/schema_v0_12_0.md) | physical Template/Instance/Evidence/Gate/Event schema и typed commands |
+| [implementation/CA-11/runtime_evidence_v0_12_0_2026-08-18.md](implementation/CA-11/runtime_evidence_v0_12_0_2026-08-18.md) | exact v0.12.0 versions, migrate, 59/59 runtime и 44-DocType inventory |
+| [implementation/CA-11/traceability_v0_12_0.md](implementation/CA-11/traceability_v0_12_0.md) | grouped CODE/runtime mapping 169 CA-11 req-id без blanket PASS |
 
 ## Принятый baseline
 

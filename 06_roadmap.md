@@ -530,6 +530,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - permission/audit/negative transition tests покрывают все статусы.
 
+**Результат реализации v0.12.0 — 2026-08-18:** `CA-11 PARTIAL / VERSIONED BPM CORE BENCH VERIFIED`. Реализованы девять утверждённых parent DocType Template/Stage/Step, Project Process/Stage/Step, Stage Gate, Process Evidence и append-only Process Event; Published graph immutable, generation idempotent по exact key, safe JSON Logic использует allowlist/no eval, relative deadline требует explicit immutable calendar snapshot, Process Step остаётся SSOT при standard ToDo projection, completion требует Validated evidence, Failed Gate блокирует следующую stage, а Overdue вычисляется поверх base status. BPM сроки и blocked/failed exceptions подключены к CA-09/10 read-model. Migrate расширил схему с 35 до 44 DocType; standalone suite `117/117`, targeted CA-11 `5/5`, полный Frappe suite `59/59`. Все 169 req-id не объявляются закрытыми: configured launch/Inspection/Billing Cycle processes, automatic external events/scheduler/notifications/escalation delivery, role resolver, ad-hoc steps, MG-CA-013, performance, UAT/sign-off и production deployment остаются OPEN. Evidence: [implementation/CA-11/README.md](implementation/CA-11/README.md), [runtime evidence](implementation/CA-11/runtime_evidence_v0_12_0_2026-08-18.md), [traceability](implementation/CA-11/traceability_v0_12_0.md).
+
 **Оценка:** XL.
 
 ### CA-12. Семистадийный запуск и Inspection
