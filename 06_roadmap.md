@@ -426,6 +426,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - portal permission tests доказывают Supplier isolation.
 
+**Результат реализации v0.9.0 — 2026-08-18:** `CA-08 PARTIAL / ASSIGNMENT-COMMERCIAL CORE BENCH VERIFIED`. Реализованы effective-dated Assignment, Internal/Contractor XOR schema, object/system/work-type scope, overlap guard, отдельные Commercial Terms с derived margin, связи Settlement/Material и Supplier-isolated contractor read. Worker/Credential установлены только как fail-closed schema/privacy spike: records/API/readiness заблокированы, паспортных полей нет, `PERSONNEL READY` не включён. Migrate и clean reinstall 35 DocType прошли; standalone suite `96/96`, полный Frappe suite до и после reinstall `47/47`. Employee positive runtime, cross-entity portal access, legacy migration, load/race, HR/privacy/legal UAT/sign-off и production deployment остаются OPEN; MG-CA-015 не закрыт. Evidence: [implementation/CA-08/README.md](implementation/CA-08/README.md), [runtime evidence](implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md), [traceability](implementation/CA-08/traceability_v0_9_0.md).
+
 **Оценка:** L.
 
 ### CA-09. Derived deadline timeline

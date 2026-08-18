@@ -71,6 +71,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-07/schema_v0_8_0.md](implementation/CA-07/schema_v0_8_0.md) | физическая schema Finance Summary/Material Expense/Contractor Settlement и PI adapter |
 | [implementation/CA-07/runtime_evidence_v0_8_0_2026-08-18.md](implementation/CA-07/runtime_evidence_v0_8_0_2026-08-18.md) | exact v0.8.0 versions, 41/41 runtime и clean reinstall 31 DocType |
 | [implementation/CA-07/traceability_v0_8_0.md](implementation/CA-07/traceability_v0_8_0.md) | CODE/runtime mapping CA-07 с явными VAT/tool-rent/UAT OPEN |
+| [implementation/CA-08/README.md](implementation/CA-08/README.md) | Assignment/commercial separation, Supplier isolation и hard-blocked personnel boundary |
+| [implementation/CA-08/schema_v0_9_0.md](implementation/CA-08/schema_v0_9_0.md) | физическая Assignment/Terms schema и fail-closed Worker/Credential privacy spike |
+| [implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md](implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md) | exact v0.9.0 versions, 47/47 runtime и clean reinstall 35 DocType |
+| [implementation/CA-08/traceability_v0_9_0.md](implementation/CA-08/traceability_v0_9_0.md) | CODE/runtime mapping CA-08 с явным MG-CA-015/PERSONNEL READY OPEN |
 
 ## Принятый baseline
 
