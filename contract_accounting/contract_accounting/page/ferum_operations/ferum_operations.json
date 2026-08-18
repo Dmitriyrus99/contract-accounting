@@ -5,8 +5,12 @@
  "page_name": "ferum-operations",
  "roles": [
   {"role": "System Manager"},
+  {"role": "Владелец процесса"},
   {"role": "Руководитель проектов"},
-  {"role": "Менеджер проектов"}
+  {"role": "Менеджер проектов"},
+  {"role": "Инженер"},
+  {"role": "Бухгалтер"},
+  {"role": "Офис-менеджер"}
  ],
  "standard": "Yes",
  "system_page": 0,

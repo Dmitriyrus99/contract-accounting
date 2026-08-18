@@ -58,9 +58,11 @@ doc_events = {
 }
 
 permission_query_conditions = {
-	"Ferum Contractor Assignment": "contract_accounting.infrastructure.contractor_permissions.get_permission_query_conditions"
+	"Ferum Contractor Assignment": "contract_accounting.infrastructure.contractor_permissions.get_permission_query_conditions",
+	"Ferum Service Project": "contract_accounting.infrastructure.operations_permissions.get_permission_query_conditions",
 }
 
 has_permission = {
-	"Ferum Contractor Assignment": "contract_accounting.infrastructure.contractor_permissions.has_permission"
+	"Ferum Contractor Assignment": "contract_accounting.infrastructure.contractor_permissions.has_permission",
+	"Ferum Service Project": "contract_accounting.infrastructure.operations_permissions.has_permission",
 }

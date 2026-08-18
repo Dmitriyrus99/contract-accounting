@@ -53,6 +53,19 @@ _DIRECT_SOURCES: Final[tuple[tuple[str, str, tuple[str, ...]], ...]] = (
 
 
 @frappe.whitelist()
+def get_operations_capabilities() -> dict[str, Any]:
+	"""Return server-authoritative visibility for the shared Operations Page."""
+
+	if frappe.session.user == "Guest":
+		frappe.throw(_("Authentication required."), frappe.PermissionError)
+	return {
+		"my_actions": True,
+		"launch_control": _has_launch_role(),
+		"contractor_workspace": "BLOCKED_PENDING_PORTAL_UAT_AND_MG-CA-015",
+	}
+
+
+@frappe.whitelist()
 def get_my_actions(
 	as_of: str | None = None,
 	time_bucket: str | None = None,
@@ -689,10 +702,14 @@ def _can_read(doctype: str, name: str) -> bool:
 
 
 def _require_launch_role() -> None:
-	if frappe.session.user == "Administrator":
-		return
-	if not set(frappe.get_roles(frappe.session.user)).intersection(_LAUNCH_ROLES):
+	if not _has_launch_role():
 		frappe.throw(_("Role does not allow Project Launches."), frappe.PermissionError)
+
+
+def _has_launch_role() -> bool:
+	return frappe.session.user == "Administrator" or bool(
+		set(frappe.get_roles(frappe.session.user)).intersection(_LAUNCH_ROLES)
+	)
 
 
 def _as_of(value: str | None) -> datetime:

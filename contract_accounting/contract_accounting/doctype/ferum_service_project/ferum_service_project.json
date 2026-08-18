@@ -381,6 +381,16 @@
    "role": "Бухгалтер"
   },
   {
+   "read": 1,
+   "report": 1,
+   "role": "Инженер"
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "role": "Офис-менеджер"
+  },
+  {
    "permlevel": 1,
    "read": 1,
    "role": "System Manager",

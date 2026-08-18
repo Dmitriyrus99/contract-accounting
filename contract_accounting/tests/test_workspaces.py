@@ -21,6 +21,7 @@ from contract_accounting.api.processes import (
 from contract_accounting.api.workspaces import (
 	get_launch_projects,
 	get_my_actions,
+	get_operations_capabilities,
 	get_project_launch_view,
 )
 from contract_accounting.contract_accounting.doctype.ferum_service_project.test_ferum_service_project import (
@@ -69,6 +70,7 @@ class TestWorkspaces(FrappeTestCase):
 		super().tearDown()
 
 	def test_my_actions_deduplicates_process_step_and_todo_delivery(self) -> None:
+		self.assertTrue(get_operations_capabilities()["launch_control"])
 		payload = get_my_actions(as_of="2026-08-18 12:00:00")
 		process_rows = [
 			row
@@ -94,12 +96,32 @@ class TestWorkspaces(FrappeTestCase):
 		self.assertEqual(overdue["due_at"], "2026-08-17T12:00:00")
 		self.assertEqual(classified["actions"][0]["canonical_key"], overdue["canonical_key"])
 
+		foreign = _make_project()
 		user = self._engineer_user()
+		assigned_step = frappe.db.get_value(
+			"Ferum Project Process Step",
+			{"project_process": self.generated["project_process"]},
+			"name",
+			order_by="creation asc",
+		)
+		frappe.db.set_value(
+			"Ferum Project Process Step", assigned_step, "responsible_user", user.name
+		)
 		frappe.set_user(user.name)
+		capabilities = get_operations_capabilities()
+		self.assertTrue(capabilities["my_actions"])
+		self.assertFalse(capabilities["launch_control"])
+		self.assertEqual(
+			capabilities["contractor_workspace"],
+			"BLOCKED_PENDING_PORTAL_UAT_AND_MG-CA-015",
+		)
 		isolated = get_my_actions(as_of="2026-08-18 12:00:00")
-		self.assertFalse(
+		self.assertTrue(
 			any(row["service_project"] == self.project.name for row in isolated["actions"])
 		)
+		self.assertTrue(frappe.has_permission("Ferum Service Project", "read", doc=self.project.name))
+		self.assertFalse(frappe.has_permission("Ferum Service Project", "write", doc=self.project.name))
+		self.assertFalse(frappe.has_permission("Ferum Service Project", "read", doc=foreign.name))
 		with self.assertRaises(frappe.PermissionError):
 			get_launch_projects(as_of="2026-08-18 12:00:00")
 
