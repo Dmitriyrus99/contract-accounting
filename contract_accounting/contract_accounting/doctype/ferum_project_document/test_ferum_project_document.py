@@ -49,7 +49,7 @@ class TestFerumProjectDocument(FrappeTestCase):
 
 	def test_copy_axes_transition_independently_with_immutable_events(self) -> None:
 		document = self._make_document()
-		file_doc = self._save_file(document.name, "contract.pdf")
+		file_doc = self._save_file(document.name, "contract.txt")
 		change_digital_copy_status(
 			document.name,
 			"Uploaded",
@@ -121,7 +121,7 @@ class TestFerumProjectDocument(FrappeTestCase):
 		document = self._make_document(document_number=f"ACT-{uuid4().hex[:8]}")
 		with self.assertRaises(frappe.ValidationError):
 			change_project_document_status(document.name, "Active", "Premature activation")
-		file_doc = self._save_file(document.name, "accepted.pdf")
+		file_doc = self._save_file(document.name, "accepted.txt")
 		change_digital_copy_status(
 			document.name,
 			"Uploaded",
@@ -149,7 +149,7 @@ class TestFerumProjectDocument(FrappeTestCase):
 
 	def test_accepted_binary_and_audit_evidence_cannot_be_deleted(self) -> None:
 		document = self._make_document(document_number=f"LOCK-{uuid4().hex[:8]}")
-		file_doc = self._save_file(document.name, "locked.pdf")
+		file_doc = self._save_file(document.name, "locked.txt")
 		change_digital_copy_status(
 			document.name,
 			"Uploaded",
