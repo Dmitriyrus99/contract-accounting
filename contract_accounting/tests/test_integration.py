@@ -99,6 +99,33 @@ class TestIntegration(FrappeTestCase):
 		finally:
 			frappe.set_user("Administrator")
 
+		director = self._make_user("Генеральный директор")
+		frappe.set_user(director.name)
+		try:
+			director_trace = get_end_to_end_trace(self.project.name)
+			director_where = next(
+				row for row in director_trace["segments"] if row["key"] == "where"
+			)
+			director_result = next(
+				row for row in director_trace["segments"] if row["key"] == "result"
+			)
+			self.assertIn(
+				self.system.name,
+				{row["source_name"] for row in director_where["items"]},
+			)
+			self.assertIn(
+				self.request.name,
+				{row["source_name"] for row in director_result["items"]},
+			)
+			self.assertEqual(
+				next(
+					row for row in director_trace["segments"] if row["key"] == "margin"
+				)["access"],
+				"granted",
+			)
+		finally:
+			frappe.set_user("Administrator")
+
 	def test_integrity_scan_is_read_only_and_reports_stable_orphan(self) -> None:
 		before = {
 			"projects": frappe.db.count("Ferum Service Project"),

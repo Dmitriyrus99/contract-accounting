@@ -40,6 +40,42 @@ class IntegrationSchemaTests(unittest.TestCase):
 		)["roles"]
 		self.assertNotIn("Менеджер проектов", {row["role"] for row in roles})
 
+	def test_director_projection_sources_are_read_only_for_director(self) -> None:
+		sources = (
+			"ferum_contract_requirement",
+			"ferum_contract_obligation",
+			"ferum_contract_execution_stage",
+			"ferum_service_object",
+			"ferum_project_object",
+			"ferum_object_system",
+			"ferum_maintenance_schedule",
+			"ferum_maintenance_visit",
+			"ferum_service_request",
+			"ferum_finding",
+			"ferum_project_document",
+			"ferum_contractor_assignment",
+			"ferum_project_process",
+			"ferum_project_stage",
+			"ferum_project_process_step",
+			"ferum_stage_gate",
+			"ferum_photo_evidence",
+			"ferum_process_event",
+		)
+		for source in sources:
+			payload = json.loads(
+				(ROOT / "contract_accounting" / "contract_accounting" / "doctype" / source / f"{source}.json").read_text(encoding="utf-8")
+			)
+			director = next(
+				row for row in payload["permissions"]
+				if row["role"] == "Генеральный директор"
+			)
+			self.assertEqual(director.get("read"), 1, payload["name"])
+			self.assertEqual(director.get("report"), 1, payload["name"])
+			self.assertFalse(
+				{"create", "write", "delete"} & {key for key, value in director.items() if value == 1},
+				payload["name"],
+			)
+
 	def test_integration_api_is_read_only_and_keeps_import_batch_inactive(self) -> None:
 		source = (ROOT / "contract_accounting" / "api" / "integration.py").read_text(encoding="utf-8")
 		self.assertIn("READ_ONLY_DRY_RUN", source)

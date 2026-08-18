@@ -138,6 +138,13 @@ class TestContract360(FrappeTestCase):
 		director = self._make_user("Генеральный директор")
 		frappe.set_user(director.name)
 		try:
+			card = get_contract_360(self.project.name, as_of=str(date.today()))
+			self.assertEqual(card["widgets"]["objects"]["count"], 1)
+			self.assertEqual(card["widgets"]["requests"]["count"], 1)
+			self.assertIn(
+				"Object Without System Inventory",
+				{item["rule"] for item in card["exceptions"]},
+			)
 			center = get_director_control_center(
 				company=self.project.company,
 				as_of=str(date.today()),

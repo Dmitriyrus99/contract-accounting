@@ -36,7 +36,8 @@
   {"create": 1, "read": 1, "report": 1, "role": "System Manager", "write": 1},
   {"create": 1, "read": 1, "report": 1, "role": "Руководитель проектов", "write": 1},
   {"read": 1, "report": 1, "role": "Менеджер проектов"},
-  {"read": 1, "report": 1, "role": "Инженер"}
+  {"read": 1, "report": 1, "role": "Инженер"},
+  {"read": 1, "report": 1, "role": "Генеральный директор"}
  ],
  "sort_field": "planned_date",
  "sort_order": "DESC",

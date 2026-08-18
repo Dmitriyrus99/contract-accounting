@@ -104,6 +104,8 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-15/field_disposition_v0_16_0.md](implementation/CA-15/field_disposition_v0_16_0.md) | OQ-CA-022 field-level KEEP/REPLACE/DERIVE/MOVE decisions и OPEN implementation rows |
 | [implementation/CA-15/runtime_evidence_v0_16_0_2026-08-18.md](implementation/CA-15/runtime_evidence_v0_16_0_2026-08-18.md) | exact v0.16.0 versions, migrate/build, 69/69 runtime и tooling defect trail |
 | [implementation/CA-15/traceability_v0_16_0.md](implementation/CA-15/traceability_v0_16_0.md) | grouped CODE/runtime mapping 51 CA-15 req-id без blanket PASS |
+| [implementation/CA-15/browser_uat_v0_16_1_2026-08-18.md](implementation/CA-15/browser_uat_v0_16_1_2026-08-18.md) | manager/director browser role slice, director DocPerm defect fix и честная performance/open-gate граница |
+| [implementation/CA-15/traceability_v0_16_1.md](implementation/CA-15/traceability_v0_16_1.md) | v0.16.1 manager/director browser и read-only source permission addendum |
 
 ## Принятый baseline
 

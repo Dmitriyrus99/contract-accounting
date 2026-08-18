@@ -57,7 +57,8 @@
   {"read": 1, "report": 1, "role": "Владелец процесса"},
   {"read": 1, "report": 1, "role": "Руководитель проектов"},
   {"read": 1, "report": 1, "role": "Менеджер проектов"},
-  {"read": 1, "role": "Инженер"}
+  {"read": 1, "role": "Инженер"},
+  {"read": 1, "report": 1, "role": "Генеральный директор"}
  ],
  "sort_field": "modified",
  "sort_order": "DESC",

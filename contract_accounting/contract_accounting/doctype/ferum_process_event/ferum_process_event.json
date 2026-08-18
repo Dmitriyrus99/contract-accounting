@@ -27,7 +27,8 @@
   {"read": 1, "report": 1, "role": "System Manager"},
   {"read": 1, "report": 1, "role": "Владелец процесса"},
   {"read": 1, "report": 1, "role": "Руководитель проектов"},
-  {"read": 1, "report": 1, "role": "Менеджер проектов"}
+  {"read": 1, "report": 1, "role": "Менеджер проектов"},
+  {"read": 1, "report": 1, "role": "Генеральный директор"}
  ],
  "sort_field": "occurred_at",
  "sort_order": "DESC",

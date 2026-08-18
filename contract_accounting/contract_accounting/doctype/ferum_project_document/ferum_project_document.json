@@ -61,7 +61,8 @@
   {"create": 1, "read": 1, "report": 1, "role": "Менеджер проектов", "write": 1},
   {"create": 1, "read": 1, "report": 1, "role": "Юрист", "write": 1},
   {"read": 1, "report": 1, "role": "Бухгалтер", "write": 1},
-  {"read": 1, "report": 1, "role": "Офис-менеджер", "write": 1}
+  {"read": 1, "report": 1, "role": "Офис-менеджер", "write": 1},
+  {"read": 1, "report": 1, "role": "Генеральный директор"}
  ],
  "sort_field": "document_date",
  "sort_order": "DESC",
