@@ -177,8 +177,8 @@ def _make_customer(customer_name: str) -> str:
 			"doctype": "Customer",
 			"customer_name": customer_name,
 			"customer_type": "Company",
-			"customer_group": "All Customer Groups",
-			"territory": "All Territories",
+			"customer_group": "Commercial",
+			"territory": "Russia",
 		}
 	)
 	doc.insert(ignore_permissions=True)
