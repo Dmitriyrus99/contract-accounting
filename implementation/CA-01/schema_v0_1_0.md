@@ -11,7 +11,7 @@
 - app: `contract_accounting`;
 - module: `Contract Accounting`;
 - required app: `erpnext`;
-- packaging: PEP 517 / `flit_core`, Python 3.10+;
+- packaging: PEP 517 / `flit_core`, Python 3.10+; distribution/app import name `contract_accounting`;
 - patches: отсутствуют; `patches.txt` содержит пустые pre/post model sync секции;
 - business-record backfill и mapping старой status model отсутствуют по утверждённому reset/recreate решению.
 

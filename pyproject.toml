@@ -1,5 +1,5 @@
 [project]
-name = "contract-accounting"
+name = "contract_accounting"
 version = "0.1.0"
 description = "Target domain policy for the contract-accounting project"
 requires-python = ">=3.10"

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import tomllib
 import unittest
 from pathlib import Path
 
@@ -132,6 +133,9 @@ class TestFrappeSchema(unittest.TestCase):
 		modules = (ROOT / "contract_accounting" / "modules.txt").read_text(encoding="utf-8")
 		self.assertIn('required_apps = ["erpnext"]', hooks)
 		self.assertEqual(modules.strip(), "Contract Accounting")
+		with (ROOT / "pyproject.toml").open("rb") as pyproject_file:
+			pyproject = tomllib.load(pyproject_file)
+		self.assertEqual(pyproject["project"]["name"], "contract_accounting")
 
 	def test_all_lifecycle_endpoints_are_post_only(self) -> None:
 		api_path = ROOT / "contract_accounting" / "api" / "lifecycle.py"
