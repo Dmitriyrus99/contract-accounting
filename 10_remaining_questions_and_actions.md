@@ -96,7 +96,7 @@ Execution/sign-off protocol: [legacy_data_disposition_2026-08-19.md](implementat
 
 **Gate:** один clean CI run на текущей post-baseline ветке; skipped gates перечислены явно.
 
-**Результат 2026-08-19:** [Quality/CI Profile v1](14_quality_profile_v1.md) и hosted [static-quality workflow](.github/workflows/static-quality.yml) созданы. Current local profile для working tree `0.19.0`: standalone `161/161`, Ruff/mypy/schema/package checks и checksum-синхронизированный disposable Bench migrate/build/full `89/89 OK`. Wrapper дополнительно защищён тремя standalone tests от Frappe `FAILED` при ложном exit code 0. Шаг остаётся PARTIAL до terminal hosted CI PASS на зафиксированном commit и выбора защищённого Bench status; UAT/release gates не проверялись.
+**Результат 2026-08-19:** [Quality/CI Profile v1](14_quality_profile_v1.md) и hosted [static-quality workflow](.github/workflows/static-quality.yml) созданы. Local profile: standalone `161/161`, Ruff/mypy/schema/package checks и checksum-синхронизированный disposable Bench migrate/build/full `89/89 OK`. Опубликованы feature commit `6a93a63` и workflow-trigger head `9f2cce9`; hosted [run 32261790230](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) завершился terminal `success`. Шаг остаётся PARTIAL только до выбора protected/self-hosted Bench status и повторения static+Bench на одном RC; UAT/release gates не проверялись.
 
 ### Промежуточный пакет FR-02. Закрыть ERPNext master-data boundary
 

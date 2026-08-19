@@ -140,7 +140,7 @@ Claude CODE был dirty до начала анализа. Поэтому [03_as
 | Package build | PASS: sdist + wheel `0.16.3` | не deployment |
 | Disposable Bench migrate/build | PASS / PASS | `ca01.localhost`, не Staging/Production |
 | Full Frappe app suite | PASS: 71/71 in 382.003s | exact `--skip-test-records` protocol |
-| Hosted GitHub CI | CONFIGURED / NOT RUN | YAML presence не является remote PASS |
+| Hosted GitHub CI | PASS: run `32261790230`, head `9f2cce9`, 18s | [terminal evidence](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md); не Bench/UAT/deploy |
 
 Общий статус остаётся `NOT READY FOR PRODUCTION`: clean Staging, RBAC/browser/export, load/race/performance, UAT, restore/rollback/cutover, approvals и deployment не выполнялись.
 

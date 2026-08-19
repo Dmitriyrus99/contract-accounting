@@ -18,7 +18,7 @@ TARGET разложен на 557 атомарных требований во в
 
 Ключевой discovery-конфликт «Service Project или отдельный Contract» закрыт: `Ferum Service Project` — единый юридический/execution SSOT, а [ADR-CA-0002](implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md) запрещает shared runtime/schema с `ferum_custom`. Legacy N:M data не мигрируются; `MG-CA-001=N/A` подтверждается zero-record inventory и backup.
 
-**Текущий первый исполнимый шаг:** completion tag/manifest, technical legacy inventory/backup, Release Scope v1, local static+Bench quality profile и engineering boundary `FR-02/03/04` выполнены. Решения `FR-05` заполнены, ответственные назначены, Product Owner подписал пакет; следующий зависимый gate — отдельные подписи Legal, Privacy/DPO, Security и Data Owner/HR, затем реализация FR-06. Параллельно выполняется hosted CI; ручные gates `FR-02/03/04` остаются открыты. Release qualification остаётся partial/open.
+**Текущий первый исполнимый шаг:** completion tag/manifest, technical legacy inventory/backup, Release Scope v1, local static+Bench и terminal hosted static quality выполнены. Engineering boundary `FR-02/03/04` локально подтверждён. Решения `FR-05` заполнены, ответственные назначены, Product Owner подписал пакет; следующий зависимый gate — отдельные подписи Legal, Privacy/DPO, Security и Data Owner/HR, затем реализация FR-06. Ручные gates `FR-02/03/04` остаются открыты. Release qualification остаётся partial/open.
 
 Заказчик утвердил 23 discovery owner questions и 17 release decisions. Архитектура/scope больше не требуют опроса владельца; остаются CODE/configuration/legal/RBAC/performance/UAT/restore/deployment gates. Migration legacy business data и Import Batch не блокируют first release, но требуют N/A/negative evidence.
 
@@ -48,6 +48,7 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-00/baseline_schema_snapshot_v0_16_2.csv](implementation/CA-00/baseline_schema_snapshot_v0_16_2.csv) | 48 DocType + 5 Page с проверенными baseline Git blob IDs |
 | [implementation/CA-00/legacy_data_disposition_2026-08-19.md](implementation/CA-00/legacy_data_disposition_2026-08-19.md) | fail-closed protocol для signed zero-record inventory, backup и `MG-CA-001=N/A` |
 | [implementation/CA-00/quality_evidence_v0_16_3_2026-08-19.md](implementation/CA-00/quality_evidence_v0_16_3_2026-08-19.md) | local static PASS и disposable Bench `71/71 OK`; remote CI/UAT/release open |
+| [implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) | terminal GitHub Actions `static-quality` PASS на head `9f2cce9` |
 | [implementation/CA-00/master_data_boundary_v0_17_0.md](implementation/CA-00/master_data_boundary_v0_17_0.md) | standard ERPNext master reuse, Party Identity и Project/Task/Issue/Asset semantic boundary |
 | [implementation/CA-00/traceability_v0_17_0_master_data.md](implementation/CA-00/traceability_v0_17_0_master_data.md) | current overrides для шести закрытых `TCA-A-17-*` требований |
 | [implementation/CA-00/runtime_evidence_v0_17_0_2026-08-19.md](implementation/CA-00/runtime_evidence_v0_17_0_2026-08-19.md) | v0.17.0 static `147/147`, migrate/build и final Bench `79/79 OK`; manual/release gates open |

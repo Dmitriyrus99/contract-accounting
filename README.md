@@ -11,7 +11,7 @@ Current delivery state:
 - release decisions DP-01…17 are approved; `contract_accounting` is the standalone replacement, legacy business migration and Import Batch are out of first-release scope, and evidence gates remain open;
 - completion baseline is `7145d87` / `0.16.2`; local and remote annotated tag, manifest, verified schema snapshot and clean `136/136` standalone run are recorded, while live-site inventory/restore remain open; HEAD `5249e00` / `0.16.3` remains the traceable post-baseline commit and the evaluated, not-yet-committed working tree is `0.19.0`;
 - Release Scope v1 preserves all 557 requirement IDs: 280 mandatory Implemented, 274 mandatory Partial, 0 mandatory Absent, 2 N/A and 1 Out-of-Release Deferred; the ordered closure backlog is `FR-01…18`;
-- Quality/CI Profile v1 is configured: current standalone suite is `161/161`; checksum-synced disposable Bench `0.19.0` is PASS for migrate, app build and `89/89` Frappe tests; hosted CI has not run and release/UAT gates remain open;
+- Quality/CI Profile v1 is configured: standalone `161/161`, checksum-synced disposable Bench migrate/build/`89/89`, and hosted GitHub `static-quality` run `32261790230` PASS on head `9f2cce9`; protected Bench/RC, release and UAT gates remain open;
 - FR-02 master-data core is implemented: Party Identity is a guarded reconciliation layer over standard Customer/Supplier/Company, Service Object reuses Address/Contact, Material Expense reuses Warehouse, and Project/Task/Issue/Asset semantic non-application is recorded; owner/browser/race/load and Workflow/Communication gates remain open;
 - CA-00 preflight, boundary ADR and live inventory are recorded;
 - a separate private GitHub repository and immutable discovery baseline tag are published;

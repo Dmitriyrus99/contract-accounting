@@ -21,8 +21,8 @@
 7. Idempotent повтор не создаёт delivery duplicates; due/channel identities разделены.
 8. `MINUS_3` batching, `MINUS_1`, due-08, overdue, `OVERDUE_PLUS_1`, daily 09:00 digest, short `50/80/breach`, closed-source exclusion, retry→Dead Letter и typed manual retry проверены.
 9. После acceptance teardown и отдельной typed deactivation `Ferum Notification Settings.enabled=0`; scheduler не оставлен активным.
-10. Final static gate: release-scope `557/554/Absent=0`, Ruff, format ratchet `99/121`, 66 JSON, 8 JS, secret scan 413 files, 455 local Markdown links, standalone `161/161`, mypy 15 modules, package build; `STATIC_QUALITY_GATE=PASS`.
-11. Final wheel: `contract_accounting-0.19.0-py3-none-any.whl`, 375689 bytes, SHA-256 `203ef8497055ffac59456b73e5d38840e88897c6fad7f7bf5c2269efc008c478`.
+10. Final static gate: release-scope `557/554/Absent=0`, Ruff, format ratchet `99/121`, 66 JSON, 8 JS, secret scan 414 files, 460 local Markdown links, standalone `161/161`, mypy 15 modules, package build; `STATIC_QUALITY_GATE=PASS`.
+11. Final wheel: `contract_accounting-0.19.0-py3-none-any.whl`, 375696 bytes, SHA-256 `9ac4f726912536ff25deeb809b4e4a66aca73aec064d5dd47c68374a94091205`.
 12. После проверок одноразовые MariaDB/Redis services остановлены штатным script; ports `3317/11000/13000` и соответствующие processes подтверждены как stopped.
 
 ## Диагностические отказы
