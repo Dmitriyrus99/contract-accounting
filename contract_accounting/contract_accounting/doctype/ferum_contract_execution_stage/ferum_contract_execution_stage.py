@@ -7,7 +7,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import getdate
 
-
 DOCTYPE: Final[str] = "Ferum Contract Execution Stage"
 
 

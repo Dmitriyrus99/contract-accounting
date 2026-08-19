@@ -7,6 +7,7 @@
  "field_order": [
   "service_project", "project_object", "service_object", "document_type", "document_number", "document_date", "version", "status", "valid_from", "valid_until",
   "source_doctype", "source_name", "issuer_doctype", "issuer", "recipient_doctype", "recipient", "file", "content_hash", "version_key",
+  "signature_triggered_at", "signature_due_at", "signature_warning_at", "signature_escalation_at", "signature_deadline_calculation",
   "digital_copy_status", "digital_not_required_basis", "original_status", "original_not_required_basis", "original_requested_at", "original_expected_at", "original_shipment_date", "original_tracking_number", "original_received_at", "original_received_by", "original_archived_at", "original_archived_by", "original_storage_location",
   "owner_user", "confidentiality", "billing_reference_doctype", "billing_reference_name", "related_entities", "comment"
  ],
@@ -30,6 +31,11 @@
   {"fieldname": "file", "fieldtype": "Link", "in_standard_filter": 1, "label": "File", "options": "File"},
   {"fieldname": "content_hash", "fieldtype": "Data", "label": "Content Hash", "read_only": 1},
   {"fieldname": "version_key", "fieldtype": "Data", "hidden": 1, "label": "Version Key", "read_only": 1, "reqd": 1, "unique": 1},
+  {"fieldname": "signature_triggered_at", "fieldtype": "Datetime", "label": "Signature Triggered At", "read_only": 1},
+  {"fieldname": "signature_due_at", "fieldtype": "Datetime", "in_standard_filter": 1, "label": "Signature Due At", "read_only": 1},
+  {"fieldname": "signature_warning_at", "fieldtype": "Datetime", "label": "Signature Warning At", "read_only": 1},
+  {"fieldname": "signature_escalation_at", "fieldtype": "Datetime", "label": "Signature Escalation At", "read_only": 1},
+  {"fieldname": "signature_deadline_calculation", "fieldtype": "Link", "label": "Signature Deadline Calculation", "options": "Ferum Deadline Calculation", "read_only": 1},
   {"default": "Missing", "fieldname": "digital_copy_status", "fieldtype": "Select", "in_standard_filter": 1, "label": "Digital Copy Status", "options": "Missing\nUploaded\nVerified\nSigned\nRejected\nSuperseded\nNot Required", "read_only": 1, "reqd": 1},
   {"fieldname": "digital_not_required_basis", "fieldtype": "Small Text", "label": "Digital Not Required Basis", "read_only": 1},
   {"default": "Not Requested", "fieldname": "original_status", "fieldtype": "Select", "in_standard_filter": 1, "label": "Original Status", "options": "Not Requested\nRequested\nIn Transit\nReceived\nArchived\nNot Required", "read_only": 1, "reqd": 1},

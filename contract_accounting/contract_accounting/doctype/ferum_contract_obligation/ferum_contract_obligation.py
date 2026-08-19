@@ -17,7 +17,6 @@ from contract_accounting.domain.obligation import (
 	preview_occurrences,
 )
 
-
 DOCTYPE: Final[str] = "Ferum Contract Obligation"
 ACTIVE_STATES: Final[frozenset[str]] = frozenset({"Active", "Suspended"})
 TERMINAL_STATES: Final[frozenset[str]] = frozenset({"Closed", "Cancelled"})

@@ -47,7 +47,7 @@ def validate_rule(rule: object, *, depth: int = 0) -> None:
 	validate_rule(arguments, depth=depth + 1)
 
 
-def evaluate_rule(rule: object, context: Mapping[str, object]) -> object:
+def evaluate_rule(rule: object, context: Mapping[str, object]) -> Any:
 	"""Evaluate only the validated allowlist; no eval/exec or attribute access."""
 
 	validate_rule(rule)
@@ -57,6 +57,8 @@ def evaluate_rule(rule: object, context: Mapping[str, object]) -> object:
 		return rule
 	if isinstance(rule, list):
 		return [evaluate_rule(item, context) for item in rule]
+	if not isinstance(rule, Mapping):
+		raise JsonLogicRuleError("validated rule is not a JSON object")
 	operator, raw_arguments = next(iter(rule.items()))
 	if operator == "var":
 		return _resolve(str(raw_arguments), context)

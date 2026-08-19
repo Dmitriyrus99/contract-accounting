@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import json
+import tomllib
 import unittest
 from pathlib import Path
-
-import tomllib
 
 from contract_accounting import __version__
 from contract_accounting.domain.lifecycle import ExecutionStatus, LegalStatus

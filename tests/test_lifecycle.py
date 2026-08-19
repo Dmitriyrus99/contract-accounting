@@ -19,7 +19,6 @@ from contract_accounting.domain.lifecycle import (
 	transition,
 )
 
-
 NOW = datetime(2026, 8, 18, 6, 0, tzinfo=timezone.utc)
 
 

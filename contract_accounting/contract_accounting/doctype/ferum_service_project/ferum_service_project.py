@@ -15,7 +15,6 @@ from contract_accounting.domain.lifecycle import (
 )
 from contract_accounting.infrastructure.frappe_lifecycle import LIFECYCLE_WRITE_FLAG
 
-
 DOCTYPE: Final[str] = "Ferum Service Project"
 _LIFECYCLE_FIELDS: Final[tuple[str, ...]] = (
 	"legal_status",

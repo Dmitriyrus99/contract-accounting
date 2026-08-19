@@ -1,0 +1,1 @@
+"""Ferum External Dependency DocType."""

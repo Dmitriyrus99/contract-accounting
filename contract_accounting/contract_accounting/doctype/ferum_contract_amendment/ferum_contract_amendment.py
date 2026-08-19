@@ -10,7 +10,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_datetime, getdate, now_datetime
 
-
 DOCTYPE: Final[str] = "Ferum Contract Amendment"
 PROJECT_DOCTYPE: Final[str] = "Ferum Service Project"
 CONTRACT_AMENDMENT_APPLY_FLAG: Final[str] = "contract_accounting_amendment_apply"

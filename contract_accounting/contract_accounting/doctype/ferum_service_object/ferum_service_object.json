@@ -17,7 +17,7 @@
  "fields": [
   {"fieldname": "object_name", "fieldtype": "Data", "in_list_view": 1, "label": "Object Name", "reqd": 1},
   {"fieldname": "customer", "fieldtype": "Link", "in_standard_filter": 1, "label": "Customer", "options": "Customer", "reqd": 1},
-  {"fieldname": "address", "fieldtype": "Small Text", "label": "Address", "reqd": 1},
+  {"fieldname": "address", "fieldtype": "Link", "label": "Address", "options": "Address", "reqd": 1},
   {"fieldname": "region", "fieldtype": "Data", "label": "Region"},
   {"fieldname": "access_conditions", "fieldtype": "Small Text", "label": "Access Conditions"},
   {"fieldname": "main_contact", "fieldtype": "Link", "label": "Main Contact", "options": "Contact"},

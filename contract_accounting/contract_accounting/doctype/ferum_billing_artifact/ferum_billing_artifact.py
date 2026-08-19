@@ -9,7 +9,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import cint, now_datetime
 
-
 DOCTYPE: Final[str] = "Ferum Billing Artifact"
 ARTIFACT_WRITER_FLAG: Final[str] = "contract_accounting_billing_artifact_writer"
 ARTIFACT_UPDATE_FLAG: Final[str] = "contract_accounting_billing_artifact_update"

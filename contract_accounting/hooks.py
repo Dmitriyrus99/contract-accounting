@@ -22,6 +22,7 @@ fixtures = [
 				"in",
 				[
 					"Генеральный директор",
+					"Владелец процесса",
 					"Руководитель проектов",
 					"Менеджер проектов",
 					"Юрист",
@@ -34,6 +35,15 @@ fixtures = [
 		],
 	}
 ]
+
+scheduler_events = {
+	"cron": {
+		"*/15 * * * *": [
+			"contract_accounting.scheduler.notifications.process_deadline_notifications",
+			"contract_accounting.scheduler.notifications.process_deadline_digest",
+		],
+	}
+}
 
 doc_events = {
 	"File": {

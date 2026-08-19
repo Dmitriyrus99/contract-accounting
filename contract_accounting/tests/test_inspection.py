@@ -33,6 +33,7 @@ from contract_accounting.api.processes import (
     validate_process_evidence,
 )
 from contract_accounting.contract_accounting.doctype.ferum_service_project.test_ferum_service_project import (
+    _make_address,
     _make_project,
 )
 from contract_accounting.setup.launch_template import ensure_reference_launch_template
@@ -53,7 +54,7 @@ class TestFerumInspection(FrappeTestCase):
                 "doctype": "Ferum Service Object",
                 "object_name": f"CA-12 Object {uuid4().hex[:10]}",
                 "customer": self.project.customer,
-                "address": "CA-12 runtime address",
+                "address": _make_address(self.project.customer, "CA-12 runtime address"),
             }
         ).insert(ignore_permissions=True)
         self.system = frappe.get_doc(
@@ -87,9 +88,7 @@ class TestFerumInspection(FrappeTestCase):
         first = ensure_reference_launch_template()
         second = ensure_reference_launch_template()
         self.assertEqual(first, second)
-        self.assertEqual(
-            frappe.db.count("Ferum Stage Template", {"process_template": first}), 7
-        )
+        self.assertEqual(frappe.db.count("Ferum Stage Template", {"process_template": first}), 7)
         self.assertEqual(
             frappe.db.count(
                 "Ferum Step Template",
@@ -113,9 +112,7 @@ class TestFerumInspection(FrappeTestCase):
             "NO_AUTOMATIC_COMPLETED_OR_NOT_APPLICABLE_BACKFILL",
         )
         self.assertEqual(
-            frappe.db.count(
-                "Ferum Project Process", {"service_project": self.project.name}
-            ),
+            frappe.db.count("Ferum Project Process", {"service_project": self.project.name}),
             before_processes,
         )
 
@@ -228,9 +225,7 @@ class TestFerumInspection(FrappeTestCase):
         self.assertIn(
             "APS-PANEL",
             trace["findings"][0]["name"]
-            and frappe.db.get_value(
-                "Ferum Finding", trace["findings"][0]["name"], "description"
-            ),
+            and frappe.db.get_value("Ferum Finding", trace["findings"][0]["name"], "description"),
         )
 
         evidence = add_process_evidence(
@@ -244,9 +239,7 @@ class TestFerumInspection(FrappeTestCase):
         )
         transition_process_step(step.name, "In Progress")
         transition_process_step(step.name, "Completed")
-        self.assertEqual(
-            frappe.db.get_value(step.doctype, step.name, "status"), "Completed"
-        )
+        self.assertEqual(frappe.db.get_value(step.doctype, step.name, "status"), "Completed")
 
     def test_final_launch_gate_activates_project_through_lifecycle_api(self) -> None:
         for legal_status in ("Signing", "Signed", "In Force"):
@@ -272,9 +265,7 @@ class TestFerumInspection(FrappeTestCase):
         completion = complete_project_stage(step.project_stage)
         self.assertEqual(completion["process_status"], "Completed")
         self.assertEqual(
-            frappe.db.get_value(
-                "Ferum Service Project", self.project.name, "execution_status"
-            ),
+            frappe.db.get_value("Ferum Service Project", self.project.name, "execution_status"),
             "Active",
         )
         self.assertTrue(

@@ -5,7 +5,6 @@ from typing import Final
 import frappe
 from frappe.model.document import Document
 
-
 DOCTYPE: Final[str] = "Ferum Object System"
 
 

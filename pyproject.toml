@@ -1,6 +1,6 @@
 [project]
 name = "contract_accounting"
-version = "0.16.3"
+version = "0.19.0"
 description = "Target domain policy for the contract-accounting project"
 requires-python = ">=3.10"
 readme = "README.md"
@@ -9,3 +9,20 @@ dependencies = ["tzdata>=2025.2; platform_system == 'Windows'"]
 [build-system]
 requires = ["flit_core >=3.4,<4"]
 build-backend = "flit_core.buildapi"
+
+[tool.mypy]
+python_version = "3.11"
+files = [
+    "contract_accounting/domain",
+    "contract_accounting/application",
+    "scripts/bench_quality_gate.py",
+    "scripts/build_release_scope_matrix.py",
+    "scripts/quality_gate.py",
+]
+check_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true

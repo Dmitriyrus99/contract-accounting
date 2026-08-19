@@ -1,12 +1,12 @@
-# 08. Реестр утверждённых решений и открытых вопросов
+# 08. Реестр discovery-решений и evidence gates
 
-**Цель документа:** зафиксировать owner decisions, оставшиеся UNKNOWN/BLOCKING и manual evidence gates без молчаливого проектного решения.
+**Цель документа:** сохранить историю 23 discovery owner decisions и синхронизировать их evidence gates с утверждённым первым production-выпуском.
 
-**Дата анализа:** 2026-08-17. **Дата owner approval:** 2026-08-18.
+**Дата анализа:** 2026-08-17. **Дата owner approval:** 2026-08-18. **Release package supersession:** 2026-08-19.
 
-**Источник истины:** выявленные противоречия TARGET/SPEC/CODE, расхождения Claude/Codex и последовательные owner decisions заказчика от 2026-08-18, включая отдельные утверждения OQ-CA-003 и OQ-CA-016…023.
+**Источник истины:** для истории discovery — настоящий реестр; для release topology, scope, exact baseline, calendar, PII, RBAC, NFR, UAT и deployment — [Release Decisions v1](11_release_decisions_v1.md). При расхождении release package имеет приоритет.
 
-**Как проверить:** все 23 OQ должны иметь утверждённое решение; отсутствие runtime/manual evidence отражается не возвратом OQ в UNKNOWN, а отдельным применимым `MG-CA-*` gate. Утверждение архитектуры не подменяет runtime, legal/privacy, migration или configuration evidence. Сверить решения с [05_target_model.md](05_target_model.md), [06_roadmap.md](06_roadmap.md) и [07_traceability.csv](07_traceability.csv).
+**Как проверить:** все 23 OQ должны иметь утверждённое решение; отсутствие runtime/manual evidence отражается не возвратом OQ в UNKNOWN, а отдельным применимым `MG-CA-*` gate. `MG-CA-001` и `MG-CA-023` сняты с functional scope первого выпуска, но требуют N/A/negative evidence. Сверить с [Release Decisions v1](11_release_decisions_v1.md), [06_roadmap.md](06_roadmap.md) и [последовательным планом](10_remaining_questions_and_actions.md).
 
 ## Сводка статусов
 
@@ -16,7 +16,7 @@
 | `OPEN / BLOCKING` | 0 | — |
 | `OPEN / UNKNOWN` | 0 | — |
 
-Утверждение не меняет `SPEC/CODE` coverage и не означает реализацию. Оно снимает архитектурную неопределённость только в пределах текста каждой рекомендации.
+Утверждение не меняет `SPEC/CODE` coverage и не означает реализацию. Release package дополнительно закрыл topology/scope/NFR вопросы; остаток — implementation, configuration, legal/privacy, UAT и release evidence.
 
 ## Архитектура договора
 
@@ -174,7 +174,7 @@ TARGET перечисляет Overdue как status (`Structure of the contract 
 
 ### OQ-CA-013. Какие календарь и часовой пояс нормативны?
 
-**Статус:** `APPROVED` — архитектура Company timezone + Project/Contract Holiday List override и immutable calculation snapshot; точные production values остаются MG-CA-013.
+**Статус:** `APPROVED / CONFIGURATION TEST REQUIRED` — `Europe/Moscow`, Company calendar РФ, `08:00–19:00`, Contract→Company priority и immutable calculation snapshot.
 
 **Блокирует:** deadline/offset/SLA/escalation.
 
@@ -182,9 +182,7 @@ TARGET различает Calendar/Business Days и относительные �
 
 **Варианты:** Company Holiday List/timezone; project override; contract-specific immutable calendar snapshot.
 
-**Рекомендация:** Company timezone + Project/Contract Holiday List override, с snapshot правила и calendar revision на момент расчёта; ручной пересчёт только с audit reason.
-
-Архитектурный приоритет утверждён. Конкретные Company timezone, Holiday List, переносы и cut-off time должны быть зафиксированы configuration evidence MG-CA-013 до запуска deadline engine.
+**Решение release package:** применяются правила `DP-05`: before/after-hours cut-off, next-working-day перенос, versioned contract override и audit manual recalculation. `MG-CA-013` configuration/code evidence закрыт в working tree `0.18.0`: официальный fixture 2026, hash, exact `247/118/4`, targeted `4/4+3/3`, full Bench `83/83`. Site-specific assignment, Operations/browser/performance UAT остаются gates, а не новым owner choice.
 
 ## Подрядчики и персонал
 
@@ -200,7 +198,7 @@ Owner decision отделяет assignment от pricing (`Вспомогател
 
 ### OQ-CA-015. Где хранится worker identity и credentials подрядчика?
 
-**Статус:** `APPROVED` — Employee для staff, protected Contractor Worker для внешних исполнителей; production PII остаётся закрыт до MG-CA-015.
+**Статус:** `APPROVED — MINIMAL PII SCOPE / LEGAL EVIDENCE REQUIRED` — Employee для staff, protected Contractor Worker для внешних исполнителей.
 
 **Блокирует:** production-схему `Ferum Contractor Worker`/`Ferum Personnel Credential`, загрузку персональных данных и включение PERSONNEL READY gate. До решения допустим только schema/privacy spike без production data.
 
@@ -208,23 +206,21 @@ TARGET требует Required Qualification → Worker Credential и gate го�
 
 **Варианты:** Employee для всех; Contact/Party worker для подрядчиков; отдельный protected Worker master.
 
-**Рекомендация:** standard Employee только для staff; отдельный минимальный protected Contractor Worker, связанный с Supplier/Contact, для внешних исполнителей; `holder_type + holder` разрешает ровно Employee **или** Contractor Worker; credentials и Project Document доступны по least privilege/retention policy. Паспортные реквизиты включаются только после явного подтверждения правового основания, consent, retention и permission/export policy.
+**Решение release package:** standard Employee только для staff; отдельный минимальный protected Contractor Worker для внешних исполнителей. Разрешены только рабочая идентификация/контакты и qualification/credential data из `DP-07`. Паспорт, scan паспорта, адрес, birth data, СНИЛС, личный ИНН, банковские, медицинские и биометрические данные в первом выпуске запрещены.
 
-Identity topology утверждена. Правовое основание, consent, retention/access/export policy и перечень допустимых паспортных полей должны быть зафиксированы evidence MG-CA-015 до production data.
+До production data обязательны legal-basis/retention/access/export/delete matrices и письменное approval `MG-CA-015`. До этого используются только synthetic data, а positive PERSONNEL READY остаётся fail-closed.
 
-## Текущий W2 snapshot
+## Baseline history
 
 ### OQ-CA-016. Какой CODE snapshot официально считать AS-IS baseline?
 
-**Статус:** `APPROVED` — процедура freeze утверждена; фактический commit/diff/schema evidence остаётся MG-CA-016.
+**Статус:** `APPROVED / BASELINE EVIDENCE REQUIRED`.
 
-**Блокирует:** воспроизводимость discovery и roadmap patches.
+**Блокирует:** воспроизводимость completion work и release evidence.
 
-Claude `w2-objects-core` имеет pre-existing dirty changes; Codex clean, но старше. W2-V02 для generated key остаётся человеческим gate (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/patches/v0_2/add_unique_key_generated_visit.py:L20-L24`; `Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/plan/09_task_breakdown.md:L480-L515`).
+W2/`ferum_custom` snapshots остаются provenance discovery и не являются completion baseline самостоятельного приложения.
 
-**Рекомендация:** сохранить commit + patch/diff hash и повторить inventory/matrix после W2 merge.
-
-**Уточнение owner decision:** официальный CODE AS-IS baseline — первый clean post-W2 commit со всеми принятыми W2-изменениями до TARGET implementation. Claude dirty tree и более старый Codex snapshot baseline не являются. MG-CA-016 должен доказать SHA, clean tree, diff hash, versions, patches, schema/DocType, Custom Field, Workflow, roles/permissions, Scheduled Job Type и применимые DB/manual gates, включая W2-V02.
+**Решение release package:** официальный completion baseline — repository `contract-accounting`, branch `main`, commit `7145d87`, version `0.16.2`, date 2026-08-18; требуемый tag — `completion-baseline-v0.16.2`. Текущий `5249e00` / `0.16.3` — post-baseline delta. `MG-CA-016` закрывается tag/remote SHA, clean-tree proof, exact versions, installed apps, patches, sanitized config, schema/DocType, Custom Field, Workflow, roles/permissions, Scheduled Job Type, fixtures и hashes.
 
 ## Master data, governance, runtime
 
@@ -286,28 +282,29 @@ Codex содержит `customer_approval_evidence`, successor/remaining и SLA 
 
 ### OQ-CA-023. Запускается ли Import Batch в runtime?
 
-**Статус:** `APPROVED / RUNTIME NOT EVIDENCED` — capability inactive/not production-proven до MG-CA-023.
+**Статус:** `APPROVED — NOT IN FIRST RELEASE / MG-CA-023 N/A FOR RELEASE`.
 
 Model/FSM есть, orchestrator/API не найден (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/ferum_custom/doctype/ferum_import_batch/ferum_import_batch.py:L87-L206`).
 
-**Решение:** model/FSM не является runtime evidence. Требуется поддерживаемый entrypoint/orchestrator/API/job и успешный E2E; до этого Import Batch не учитывается как реализованная capability или release evidence. При отсутствии entrypoint это incomplete/dead implementation, дальнейшая реализация или удаление требует отдельного target/owner решения.
+**Решение release package:** Import Batch скрывается из Workspace/menu, не получает user permissions и active API/entrypoint/job, остаётся disabled и не заявляется capability первого выпуска. Negative access evidence закрывает release gate; включение в будущем требует нового решения и повторного открытия MG-CA-023.
 
 ## Manual evidence и configuration gates после approval
 
 | Gate | Требуемое доказательство | Блокирует |
 | --- | --- | --- |
-| `MG-CA-001` | disposition каждой legacy N:M/ambiguous Contract↔Service Project строки и подписанный exception report | cutover/retirement legacy Contract |
-| `MG-CA-013` | Company timezone, Holiday List priority/override, cut-off, переносы и versioned calendar snapshot fixture | deadline/SLA/escalation engine |
-| `MG-CA-015` | legal/privacy approval: основание ПДн, consent, retention, roles/permlevel, export/delete policy и перечень protected fields | production Worker/Credential data и PERSONNEL READY |
-| `MG-CA-016` | commit, dirty diff hash, schema snapshot, inventory и повторная matrix verification после W2 merge | официальный AS-IS baseline и migration rehearsal |
-| `MG-CA-023` | поддерживаемый runtime entrypoint и E2E `create→start→process→success/failure→retry/rollback/audit` | production/runtime claim для Ferum Import Batch |
+| `MG-CA-001` | signed inventory: real business records `0`; полный контрольный backup; N/A act | retirement legacy environment; business migration не входит |
+| `MG-CA-013` | `CODE/CONFIG PASS`; site assignment и Operations UAT OPEN — [calendar evidence](implementation/CA-09/runtime_evidence_v0_18_0_2026-08-19.md), [delivery evidence](implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md) | production activation scheduler/SLA delivery и FR-08 |
+| `MG-CA-015` | [решения FR-05](implementation/CA-08/legal_privacy_package_fr05_v1.md) заполнены и Product Owner подписал; отдельные Legal, Privacy/DPO, Security, Data Owner/HR signatures и FR-06 CODE/UAT OPEN | production Worker/Credential data и PERSONNEL READY |
+| `MG-CA-016` | tag/remote SHA `7145d87`, exact versions, installed apps, schema/config/permissions/fixture manifest и hashes | официальный completion baseline и release reproducibility |
+| `MG-CA-023` | disabled feature/menu/permission/API/job и negative access test | N/A for first release; future enablement reopens gate |
 
 Эти gates не являются новыми архитектурными вопросами и не отменяют утверждённые решения. Их нельзя помечать PASS на основании настоящего approval.
 
 ## Остаточный порядок закрытия
 
-1. MG-CA-016 — выполнить фактический baseline freeze до разработки и миграционных patches.
-2. MG-CA-001 — разобрать N:M exceptions до cutover, если legacy records всё же сохраняются вопреки owner decision о reset/recreate; иначе документированно снять gate как неприменимый.
-3. MG-CA-013 и MG-CA-015 — закрыть configuration/legal/privacy evidence перед соответствующими production features.
-4. MG-CA-023 — доказать production Import Batch flow либо оставить capability inactive/not production-proven.
-5. Выполнить field-level TARGET reconciliation Codex-only fields по OQ-CA-022; это engineering task, не новый owner blocker.
+1. MG-CA-016 — tag/manifest утверждённого baseline `7145d87`.
+2. MG-CA-001 — signed zero-record inventory, backup и N/A act.
+3. MG-CA-013 — site assignment и Operations/browser/performance qualification поверх versioned calendar PASS.
+4. MG-CA-015 — legal/privacy evidence до production Worker/Credential/Personnel Ready.
+5. MG-CA-023 — disabled/negative evidence для first release.
+6. Выполнить оставшуюся CODE/UAT/release последовательность из [10_remaining_questions_and_actions.md](10_remaining_questions_and_actions.md).

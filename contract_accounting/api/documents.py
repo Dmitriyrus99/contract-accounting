@@ -14,13 +14,12 @@ from contract_accounting.contract_accounting.doctype.ferum_project_document.feru
 	DIGITAL_TRANSITIONS,
 	DOCUMENT_EVENT_DOCTYPE,
 	DOCUMENT_EVENT_WRITER_FLAG,
-	DOCUMENT_TRANSITIONS,
 	DOCUMENT_TRANSITION_CONTEXT_FLAG,
+	DOCUMENT_TRANSITIONS,
 	DOCUMENT_WRITE_FLAG,
 	ORIGINAL_TRANSITIONS,
 	PROJECT_DOCUMENT_DOCTYPE,
 )
-
 
 _DOCUMENT_ROLES: Final[frozenset[str]] = frozenset(
 	{"Юрист", "Бухгалтер", "Менеджер проектов", "Руководитель проектов", "System Manager"}

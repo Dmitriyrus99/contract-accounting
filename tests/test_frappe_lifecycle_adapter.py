@@ -20,7 +20,6 @@ from contract_accounting.infrastructure.frappe_lifecycle import (
 	FrappeLifecycleUnitOfWork,
 )
 
-
 PROJECT = "FSP-2026-00001"
 NOW = datetime(2026, 8, 18, 8, 0, tzinfo=timezone.utc)
 

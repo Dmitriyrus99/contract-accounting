@@ -105,3 +105,96 @@ CSV-хэши относятся к поставленной версии. Люб
 Mermaid прошёл статическую проверку, но не был отрендерен внешним CLI. Перед публикацией диаграмм нужен `mmdc` render в CI или эквивалентном воспроизводимом окружении.
 
 Claude CODE был dirty до начала анализа. Поэтому [03_asis_model.md](03_asis_model.md) описывает наблюдавшийся working tree, а не утверждённый release baseline. `CA-00` обязан зафиксировать commit/diff/schema snapshot и закрыть W2/DB/manual evidence до разработки.
+
+## 8. Проверка синхронизации Release Decisions v1 — 2026-08-19
+
+| Проверка | Результат | Граница |
+| --- | --- | --- |
+| Decision register | PASS: 17 register rows и 17 detailed `DP-01…17` headings | структура документа, не implementation |
+| Sequential closure plan | PASS: 22 numbered steps | порядок/exit criteria, не оценка сроков |
+| Local Markdown links | PASS: missing `0` | проверены обновлённые README/INDEX/roadmap/decision/plan/ADR/evidence files |
+| Trailing whitespace | PASS: `0` | обновлённые Markdown files |
+| Fenced blocks | PASS: unbalanced `0` | статическая проверка delimiter count |
+| `git diff --check` | PASS | tracked diff; untracked docs проверены отдельным whitespace/link audit |
+| Baseline commit | PASS: `7145d872d45442117d5c114ce4c04c0c8f61d77b` существует | exact immutable Git object |
+| Current implementation | OBSERVED: `5249e00849c96cb25fd0f13c5017fbf844db5f3d`, `0.16.3` | post-baseline delta |
+| Completion tag | PASS: local+remote annotated tag → `7145d87` | remote tag object `ccb4b73823618b325be60fdf6cbfad163115681d`; peeled target проверен через `ls-remote` |
+
+Дополнение 2026-08-19: [baseline manifest](implementation/CA-00/baseline_manifest_2026-08-18.md) и 53-row schema snapshot созданы; clean detached baseline worktree дал `136/136 OK`; annotated tag опубликован и remote target совпал с baseline. Владелец подтвердил `ferum.localhost` → internal `dev.localhost`. На существующем `ferum-vstand` выполнены `list-apps`, count-only inventory и local full backup database/public/private/config; exit `0`, hashes несекретных backup-артефактов зафиксированы в [legacy disposition](implementation/CA-00/legacy_data_disposition_2026-08-19.md).
+
+В этой синхронизации не запускались runtime/Frappe tests, bench migrate/build, restore, legal/privacy review, RBAC/UAT, performance, Staging или Production deployment. Backup creation PASS не считается restore PASS. Сохранённые implementation evidence не переобъявлены новым blanket PASS.
+
+## 9. Release Scope и Quality/CI Profile v1 — 2026-08-19
+
+После исходной аналитической проверки отдельно выполнен completion quality slice. Его source of truth — [Quality/CI Profile v1](14_quality_profile_v1.md) и [runtime evidence](implementation/CA-00/quality_evidence_v0_16_3_2026-08-19.md).
+
+| Проверка | Результат | Граница |
+| --- | --- | --- |
+| Release Scope regeneration | PASS: 557/557 unique IDs; exact distribution | planning/evidence, не product completion |
+| Ruff correctness/import | PASS | `E4/E7/E9/F/I`; не blanket full-rule lint |
+| Format ratchet | PASS: new debt 0; baseline 121 files | historical formatting debt остаётся |
+| Standalone/schema tests | PASS: 138/138 | без Frappe DB/runtime |
+| mypy | PASS: 14 modules | pure domain/application + quality scripts |
+| JSON / JS / Markdown links | PASS: 55 / 8 / 402 | syntax/link existence, не browser UX |
+| Secret scan | PASS: 354 Git-visible text files | ignored local config/private/backups не читались |
+| Package build | PASS: sdist + wheel `0.16.3` | не deployment |
+| Disposable Bench migrate/build | PASS / PASS | `ca01.localhost`, не Staging/Production |
+| Full Frappe app suite | PASS: 71/71 in 382.003s | exact `--skip-test-records` protocol |
+| Hosted GitHub CI | CONFIGURED / NOT RUN | YAML presence не является remote PASS |
+
+Общий статус остаётся `NOT READY FOR PRODUCTION`: clean Staging, RBAC/browser/export, load/race/performance, UAT, restore/rollback/cutover, approvals и deployment не выполнялись.
+
+## 10. FR-02 ERPNext master-data boundary — v0.17.0
+
+Источник истины этого среза — [boundary decision](implementation/CA-00/master_data_boundary_v0_17_0.md), [traceability addendum](implementation/CA-00/traceability_v0_17_0_master_data.md) и [runtime evidence](implementation/CA-00/runtime_evidence_v0_17_0_2026-08-19.md).
+
+| Проверка | Результат | Граница |
+|---|---|---|
+| Party Identity typed linkage | PASS: 7/7 targeted Bench | owner/data-quality UAT и race/load open |
+| Standard Address/Contact | PASS: schema + positive/negative Bench | browser/role UAT open |
+| Standard Warehouse | PASS: same-Company/non-group Bench | warehouse business process UAT open |
+| Project/Task/Issue/Asset semantic review | PASS: documented negative acceptance + no second SSOT schema check | future use requires explicit semantic mapping |
+| Current release matrix | PASS: 557 rows; 278 Implemented / 274 Partial / 2 Absent | planning/evidence, not product completion |
+| Current static suite | PASS: 147/147 | no Frappe DB in this count |
+| Final full Frappe suite | PASS: 79/79 in 380.526s | disposable `ca01.localhost`, exact `--skip-test-records` protocol |
+| Workflow / Communication | PARTIAL / OPEN | separate positive acceptance required |
+| Hosted CI / UAT / deploy | NOT RUN | no commit/push/deploy claimed |
+
+Диагностический первый прогон с 7 errors и ложным нулевым Bench exit code не принят как evidence. После исправления Frappe user-default handling и transcript-aware wrapper получены отдельные terminal `7/7 OK` и `79/79 OK`.
+
+## 11. FR-03 production calendar and deadline sources — v0.18.0
+
+Источник истины этого среза — [calendar design](implementation/CA-09/production_calendar_v0_18_0.md), [traceability addendum](implementation/CA-09/traceability_v0_18_0_calendar.md) и [runtime evidence](implementation/CA-09/runtime_evidence_v0_18_0_2026-08-19.md).
+
+| Проверка | Результат | Граница |
+|---|---|---|
+| Release matrix regeneration | PASS: 557 rows; 280 Implemented / 274 Partial / 0 Absent / 2 N/A / 1 Deferred | planning/evidence, not product completion |
+| Official calendar fixture | PASS: `247/118/4`, hash verified | site assignment и annual Operations procedure open |
+| Calendar/domain schema | PASS: standalone `154/154`; targeted Bench `4/4` | browser/performance/race open |
+| Existing deadline projection regression | PASS: targeted Bench `3/3` | notification delivery is FR-04 |
+| Final full Frappe suite | PASS: `83/83` in `395.740s` | disposable `ca01.localhost`, exact `--skip-test-records` protocol |
+| Signature/customer-response sources | PASS: stored immutable calculation sources | full External Dependency lifecycle remains FR-08 |
+| Hosted CI / UAT / deploy | NOT RUN | no commit/push/deploy claimed |
+
+Три диагностических migrate были отклонены до принятия fixture и не считаются evidence. После исправления importer окончательный и повторный migrate, app build и полный suite завершились terminal PASS. Engineering/configuration часть `MG-CA-013` закрыта, но это не закрывает site assignment, Operations/browser/RBAC UAT, performance/race, restore, sign-off или deployment.
+
+## 12. FR-04 notification delivery — v0.19.0
+
+Источник истины этого среза — [delivery design](implementation/CA-09/notification_delivery_v0_19_0.md), [traceability addendum](implementation/CA-09/traceability_v0_19_0_notifications.md) и [runtime evidence](implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md).
+
+| Проверка | Результат | Граница |
+|---|---|---|
+| DP-06 threshold policy | PASS: `−3/−1/due/overdue/+1`, short `50/80/breach` | exact configured calendar required |
+| Activation and idempotency | PASS: fail-closed watermark + deterministic correlation/delivery keys | production activation not executed |
+| In-app and email transport | PASS: real local Notification Log + delayed Email Queue | no external SMTP receipt/bounce |
+| Digest | PASS: batched membership + calendar-timezone 09:00 | scheduler worker heartbeat/monitoring open |
+| Retry/dead-letter | PASS: bounded retry, Dead Letter, typed manual retry | provider-level failure UAT open |
+| Closed source | PASS: terminal source creates no delivery | Operations lifecycle UAT open |
+| Targeted / full Frappe | PASS: `6/6`; full `89/89` | disposable `ca01.localhost` only |
+| Runtime safety | PASS: 58 schemas/runtime DocType; settings left `enabled=0` | Staging/Production not touched |
+
+Первый schema migrate без child controller module и первые timezone/global-count diagnostics не приняты как evidence. После исправлений повторный migrate/build, targeted и full suites завершились terminal `OK`. FR-04 остаётся PARTIAL до approved-site activation, actual SMTP delivery/receipt, scheduler heartbeat, RBAC/browser/load UAT, sign-off и deployment.
+
+## 13. FR-05 legal/privacy package preparation
+
+[FR-05 package v1](implementation/CA-08/legal_privacy_package_fr05_v1.md) содержит заполненный field registry, purpose/basis/source/consent/retention, RBAC/export/private-file/break-glass, назначенных ответственных и FR-06 change-set. Полученный файл зафиксирован по SHA-256; Product Owner подписал свою строку 2026-08-19. Это не blanket legal approval: Legal, Privacy/DPO, Security и Data Owner/HR остаются `PENDING SIGNATURE`, а FR-06 ещё не реализован. Поэтому `MG-CA-015`, production PII и positive `PERSONNEL_READY` остаются заблокированы.

@@ -9,7 +9,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_datetime, now_datetime
 
-
 DOCTYPE: Final[str] = "Ferum Finding"
 ALLOWED_SOURCE_DOCTYPES: Final[frozenset[str]] = frozenset(
 	{"Ferum Maintenance Visit", "Ferum Inspection"}

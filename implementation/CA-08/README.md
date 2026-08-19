@@ -8,6 +8,8 @@ Supplier-level Assignment доступен подрядчику только п�
 
 `Ferum Contractor Worker` и `Ferum Personnel Credential` установлены только как schema/privacy spike. Их controllers безусловно отклоняют insert/update/delete до MG-CA-015; mutating API отсутствует, паспортных полей нет, `credentials_readiness` всегда `Disabled Pending MG-CA-015`, gate `PERSONNEL READY` не реализован.
 
+FR-05 owners, field registry, purpose/retention/RBAC/private-file/break-glass decisions и FR-06 change-set заполнены в [legal/privacy package v1](legal_privacy_package_fr05_v1.md). Product Owner подписал свою строку 2026-08-19; Legal, Privacy/DPO, Security и Data Owner/HR signatures, FR-06 CODE/UAT и production-data permission остаются OPEN.
+
 Typed API: [contractors.py](../../contract_accounting/api/contractors.py).
 
 Supplier isolation: [contractor_permissions.py](../../contract_accounting/infrastructure/contractor_permissions.py).

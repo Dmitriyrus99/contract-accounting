@@ -13,7 +13,6 @@ from contract_accounting.contract_accounting.doctype.ferum_contract_obligation.f
 )
 from contract_accounting.domain.obligation import preview_occurrences
 
-
 OBLIGATION_DOCTYPE: Final[str] = "Ferum Contract Obligation"
 SCHEDULE_DOCTYPE: Final[str] = "Ferum Maintenance Schedule"
 VISIT_DOCTYPE: Final[str] = "Ferum Maintenance Visit"

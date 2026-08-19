@@ -9,7 +9,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_datetime, now_datetime
 
-
 DOCTYPE: Final[str] = "Ferum Maintenance Visit"
 STATUS_TRANSITIONS: Final[dict[str, frozenset[str]]] = {
 	"Planned": frozenset({"In Progress", "Cancelled"}),

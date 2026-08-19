@@ -19,7 +19,6 @@ from contract_accounting.domain.lifecycle import (
 	LifecycleState,
 )
 
-
 SERVICE_PROJECT_DOCTYPE = "Ferum Service Project"
 LIFECYCLE_AUDIT_DOCTYPE = "Ferum Lifecycle Audit Event"
 LIFECYCLE_WRITE_FLAG = "contract_accounting_lifecycle_write"
