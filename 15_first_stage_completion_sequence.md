@@ -1,12 +1,12 @@
 # Последовательность завершения первого этапа
 
-**Состояние на 2026-08-21:** engineering foundation `v0.20.0` — dirty/current,
-не RC. Current accepted local technical evidence: static `205/205 PASS`,
-targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
-synthetic demo installer/reset/verifier, and final dirty-tree full disposable
-Bench `179/179 OK` on isolated `ca01.localhost` (`3767.802s`). This is not an
-immutable RC qualification until commit/push and hosted CI are completed on the
-same source.
+**Состояние на 2026-08-20:** engineering foundation `v0.20.0` — committed
+review candidate, не RC. Current accepted technical evidence: static `205/205
+PASS`, targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
+synthetic demo installer/reset/verifier, exact-source Bench gate `179/179 OK`
+on isolated `ca01.localhost` (`3714.584s`), hosted `static-quality` PASS on
+draft PR head `2865400`, verified `main` protection, and active tag ruleset
+blocking `refs/tags/v*`. This is still not an immutable RC qualification.
 Authenticated synthetic browser slice подтвердил symmetric own/foreign
 Engineer Form ACL, own-only List и foreign direct `403`; это automated result,
 не human UAT. Workspace visibility остаётся `OPEN BLOCKER` до review с
@@ -32,7 +32,7 @@ approval, production activation или deployment.
 | 4 — TEST ADAPTER PASS / INTEGRATION OPEN | Подключить scanner test adapter и проверить quarantine, Clean/Rejected, streamed download и audit | Security + Backend | synthetic Clean/Rejected, PDF/JPEG/PNG ≤10 MB, private stream PASS; public/direct read, forbidden type/size and protected delete FAIL; actual scanner integration ещё требуется | attachment gate |
 | 5 — ЗАБЛОКИРОВАН УТВЕРЖДЕНИЕМ 3A И 3C | Провести HR/DPO/Security UAT: Worker/Credential FSM, dual verification, readiness, expiry/revoke, retention dry-run, legal hold и break-glass | Андриянова Елизавета + Доможакова Алена + Хижняк Алексей | UAT протокол, Sev1/Sev2=0, подписанные результаты | FR-06 UAT PASS |
 | 6 | Записать предоставленные номера/оригиналы внутренних актов, если компания использует их в документообороте | Legal + Product Owner | ссылки/номера без изменения уже утверждённой policy | полнота audit package; не подменяет UAT |
-| 7 | Закрыть protected Bench/RC gate: immutable commit/tag/manifest, fresh-site install, build, migration rehearsal | Release Manager + QA | immutable RC evidence | Staging deploy |
+| 7 | Закрыть RC-specific protected Bench gate: повторить immutable commit/tag/manifest, fresh-site install, build, migration rehearsal на отдельном RC SHA | Release Manager + QA | immutable RC evidence | Staging deploy |
 | 8 | Завершить FR-02/03/04 manual gates: owner/browser/race review, scheduler heartbeat, SMTP receipt/bounce, Operations sign-off | Operations + QA + Product | отдельные PASS-протоколы | end-to-end operational readiness |
 | 9 | Реализовать и проверить FR-07 Evidence Policy, затем FR-08 external dependencies и FR-09 management projections | Product + Backend | acceptance по backlog и traceability | полный функциональный контур этапа |
 | 10 | Выполнить FR-10…FR-13: legacy rehearsal, Staging dataset, cross-role UAT, performance/race, backup/restore/rollback, monitoring | Release + Operations + QA | 100% critical PASS, restore/rollback PASS, observability active | production decision |
