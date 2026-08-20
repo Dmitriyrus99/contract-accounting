@@ -100,6 +100,24 @@ class TestFerumBillingCycle(FrappeTestCase):
         frappe.set_user(self._previous_user)
         super().tearDown()
 
+    def test_reference_cycle_rejects_non_key_field_drift(self) -> None:
+        template = ensure_reference_billing_cycle_template()
+        stage = frappe.db.get_value(
+            "Ferum Stage Template", {"process_template": template}, "name"
+        )
+        step = frappe.db.get_value(
+            "Ferum Step Template", {"stage_template": stage}, "name"
+        )
+        original = frappe.db.get_value("Ferum Step Template", step, "timeout_action")
+        frappe.db.set_value(
+            "Ferum Step Template", step, "timeout_action", "Synthetic drift"
+        )
+        try:
+            with self.assertRaisesRegex(frappe.ValidationError, "timeout_action"):
+                ensure_reference_billing_cycle_template()
+        finally:
+            frappe.db.set_value("Ferum Step Template", step, "timeout_action", original)
+
     def test_reference_cycle_projection_and_correction_keep_exact_trace(self) -> None:
         first_template = ensure_reference_billing_cycle_template()
         self.assertEqual(first_template, ensure_reference_billing_cycle_template())

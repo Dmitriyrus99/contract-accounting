@@ -21,7 +21,7 @@
 | 5 | Единый CI и release evidence profile | `PARTIAL — LOCAL STATIC+BENCH PASS / HOSTED RUN OPEN` | Tech Lead |
 | 6 | Production calendar policy реализована и проверена | `PARTIAL — ENGINEERING PASS / OPERATIONS GATES OPEN` | Backend + Operations |
 | 7 | Scheduler, reminders, escalation и digest завершены | `PARTIAL — LOCAL E2E PASS / PRODUCTION DELIVERY GATES OPEN` | Backend + Operations |
-| 8 | Legal/privacy пакет для Contractor Worker подписан | `DECISIONS FILLED / PRODUCT OWNER SIGNED / 4 SIGNATURES OPEN` | Legal/Privacy |
+| 8 | Legal/privacy пакет для Contractor Worker подписан | `DECISIONS FILLED / ALL NAMED SIGN-OFFS CONFIRMED VIA PRODUCT OWNER ATTESTATION` | Legal/Privacy |
 | 9 | Contractor Worker/Credential/readiness завершены | `WAITING STEP 8` | Backend + Security |
 | 10 | Evidence Policy и mandatory-photo gates завершены | `OPEN` | Process Owner + Backend |
 | 11 | External Dependency flow завершён | `OPEN` | Backend + Project Operations |
@@ -140,9 +140,9 @@ Execution/sign-off protocol: [legacy_data_disposition_2026-08-19.md](implementat
 4. Утвердить break-glass procedure и audit.
 5. Получить письменное заключение Legal/Privacy/Security.
 
-**Gate:** `MG-CA-015 PASS`. До него production PII и positive Personnel Ready запрещены.
+**Gate:** `MG-CA-015 PASS`. До него production PII и production positive Personnel Ready запрещены; synthetic runtime допускается только на изолированном контуре.
 
-**Результат 2026-08-19:** [FR-05 legal/privacy package v1](implementation/CA-08/legal_privacy_package_fr05_v1.md) заполнен: назначены владельцы, утверждены field dispositions, purpose/basis/source/consent/retention, role/export/private-file/break-glass и точный FR-06 change-set. Product Owner подписал свою строку; Legal, Privacy/DPO, Security и Data Owner/HR остаются `PENDING SIGNATURE`. До их отдельных подписей, реализации FR-06 и positive/negative tests `MG-CA-015` не получает PASS и production PII запрещены.
+**Результат 2026-08-19:** [FR-05 legal/privacy package v1](implementation/CA-08/legal_privacy_package_fr05_v1.md) заполнен; Product Owner подписал пакет и аттестовал все названные подтверждения, без предоставленных номеров актов. FR-06 v0.20.0 реализован в [зафиксированной архитектуре](implementation/CA-08/privacy_controls_v0_20_0.md), прошёл [static + disposable Bench gate](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) и [authenticated synthetic browser role matrix](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md). Browser UAT подтвердил двенадцать ролей и после исправлений — Office full-context, PM/Verifier mask, Engineer no-number и foreign isolation. Текущий зависимый gate: совместно утвердить Workspace, list columns/filters, form grouping/labels/options и timezone, затем повторить synthetic browser review. До actual scanner integration, human HR/DPO/Security UAT и отдельного production-PII permission `MG-CA-015` остаётся PARTIAL и production PII запрещены.
 
 ### Шаг 9. Завершить contractor personnel и readiness
 
@@ -293,4 +293,4 @@ Execution/sign-off protocol: [legacy_data_disposition_2026-08-19.md](implementat
 
 Статус `READY FOR PRODUCTION` появляется после шага 20. Статус `PRODUCTION LIVE` — после шага 21. Статус первого выпуска `COMPLETE` — только после шага 22.
 
-Текущая работа опубликовала completion tag и выполнила разрешённые legacy `list-apps`, aggregate inventory и local control backup. Runtime/Frappe tests, migrate/build, restore, legal review, RBAC/UAT, performance, Staging и Production deployment не выполнялись и не повышаются до PASS.
+Текущая работа опубликовала completion tag и выполнила разрешённые legacy `list-apps`, aggregate inventory и local control backup. Для v0.20.0 отдельно выполнены repeated migrate/build, server RBAC/private-file acceptance и synthetic Frappe `94/94 OK` только на disposable `ca01.localhost`; это не подтверждает authenticated browser/scanner UAT, restore, performance, Staging или Production deployment и не повышает release до PASS.

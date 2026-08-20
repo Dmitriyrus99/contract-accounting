@@ -29,14 +29,15 @@
 
 | Package | Current status | Remaining exit condition |
 |---|---|---|
-| `FR-01` | `PARTIAL`: local standalone `161/161`, disposable Bench `89/89` и hosted `static-quality` PASS | protected/self-hosted Bench status и повтор static+Bench на одном immutable RC; не release PASS |
+| `FR-01` | `PARTIAL`: current final-tree static `205/205 PASS`; dirty-tree disposable Bench `179/179 OK`; historical disposable Bench `89/89` and hosted `static-quality` PASS retained | commit/push current change-set, protected hosted status on the same immutable source, then RC-specific gates; не RC/release PASS |
 | `FR-02` | `PARTIAL`: core CODE/schema/runtime PASS | Architect/Product Owner review, browser/role and race/load acceptance; Workflow/Communication stay open |
 | `FR-03` | `PARTIAL`: engineering/schema/runtime boundary PASS | site-specific Operations/browser UAT, annual revision operations and performance/race; не release PASS |
 | `FR-04` | `PARTIAL`: scheduler/delivery engineering and local E2E PASS | production activation, outgoing transport/receipt, worker heartbeat, Operations/RBAC/load UAT; не release PASS |
-| `FR-05` | `DECISIONS FILLED / PRODUCT OWNER SIGNED` | получить отдельные Legal, Privacy/DPO, Security, Data Owner/HR signatures; реализовать и проверить FR-06 до `MG-CA-015 PASS` |
+| `FR-05` | `DECISIONS FILLED / ALL NAMED SIGN-OFFS CONFIRMED` | human sign-off закрыт через аттестацию Product Owner; реализовать и проверить FR-06, затем получить отдельное production-PII permission до `MG-CA-015 PASS` |
+| `FR-06` | `v0.20.0 CODE / FINAL-TREE STATIC 205/205 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / UAT PENDING` | Workspace/full-stack browser review, actual scanner integration, HR/DPO/Security UAT, immutable hosted CI and production-PII permission |
 
 ## Immediate execution slice
 
-`FR-01` local/hosted static и local Bench, а также engineering boundary `FR-02/03/04` проверены в заявленной границе. [FR-05 package](implementation/CA-08/legal_privacy_package_fr05_v1.md) заполнен и подписан Product Owner, но `FR-06` не получает positive readiness до четырёх оставшихся signatures и реализации policy. Независимый `FR-07` может проектироваться параллельно, но `FR-10…13` нельзя откладывать до конца: они определяют форму UAT и dataset для Staging.
+`FR-01` имеет current final-tree static `205/205 PASS`; targeted Inspection на isolated `ca01.localhost` завершён `5/5 PASS`; final dirty-tree disposable Bench завершён `179/179 OK` за `3767.802s`. Это всё ещё не RC qualification: change-set dirty/not committed, hosted CI на текущем immutable head не выполнен, а browser/human/restore/performance/Staging gates открыты. FR-05 human sign-off закрыт через аттестацию Product Owner. FR-06 v0.20.0 имеет CODE, scoped server/privacy automation, full disposable Bench evidence и узкий authenticated synthetic Engineer ACL slice, но не blanket browser/UAT PASS. Positive readiness ещё требует Workspace/full-stack browser review, actual scanner integration и HR/DPO/Security UAT; production PII — отдельного разрешения. Независимый `FR-07` может проектироваться параллельно, но `FR-10…13` нельзя откладывать до конца: они определяют форму UAT и dataset для Staging.
 
-Следующий зависимый шаг: получить отдельные подписи Доможаковой Алены (Legal и Privacy/DPO), Хижняка Алексея (Security) и Андрияновой Елизаветы (Data Owner/HR), затем выполнить FR-06. Protected Bench/RC и ручные gates `FR-02/03/04` закрываются параллельно.
+Следующий зависимый шаг: зафиксировать current change-set в рабочей ветке, выполнить push и получить hosted `static-quality` на том же immutable source. После этого выполнить Workspace/full-stack authenticated browser review и actual scanner integration UAT, затем HR/DPO/Security UAT и отдельное разрешение на production PII. Protected hosted status и ручные gates `FR-02/03/04` закрываются параллельно; RC не повышается до закрытия всех отдельных gates.

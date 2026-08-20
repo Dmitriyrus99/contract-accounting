@@ -208,7 +208,7 @@ TARGET требует Required Qualification → Worker Credential и gate го�
 
 **Решение release package:** standard Employee только для staff; отдельный минимальный protected Contractor Worker для внешних исполнителей. Разрешены только рабочая идентификация/контакты и qualification/credential data из `DP-07`. Паспорт, scan паспорта, адрес, birth data, СНИЛС, личный ИНН, банковские, медицинские и биометрические данные в первом выпуске запрещены.
 
-До production data обязательны legal-basis/retention/access/export/delete matrices и письменное approval `MG-CA-015`. До этого используются только synthetic data, а positive PERSONNEL READY остаётся fail-closed.
+До production data обязательны legal-basis/retention/access/export/delete matrices и письменное approval `MG-CA-015`. До этого используются только synthetic data; synthetic positive PERSONNEL READY проверен на disposable site, а production activation остаётся fail-closed.
 
 ## Baseline history
 
@@ -294,7 +294,7 @@ Model/FSM есть, orchestrator/API не найден (`Вспомогател�
 | --- | --- | --- |
 | `MG-CA-001` | signed inventory: real business records `0`; полный контрольный backup; N/A act | retirement legacy environment; business migration не входит |
 | `MG-CA-013` | `CODE/CONFIG PASS`; site assignment и Operations UAT OPEN — [calendar evidence](implementation/CA-09/runtime_evidence_v0_18_0_2026-08-19.md), [delivery evidence](implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md) | production activation scheduler/SLA delivery и FR-08 |
-| `MG-CA-015` | [решения FR-05](implementation/CA-08/legal_privacy_package_fr05_v1.md) заполнены и Product Owner подписал; отдельные Legal, Privacy/DPO, Security, Data Owner/HR signatures и FR-06 CODE/UAT OPEN | production Worker/Credential data и PERSONNEL READY |
+| `MG-CA-015` | FR-05 human sign-off подтверждён; FR-06 v0.20.0 CODE/STATIC/BENCH PASS (`92/92 OK`); browser/RBAC/private-file/scanner/HR-DPO-Security UAT и отдельное production-PII permission OPEN | production Worker/Credential data и release-qualified PERSONNEL READY |
 | `MG-CA-016` | tag/remote SHA `7145d87`, exact versions, installed apps, schema/config/permissions/fixture manifest и hashes | официальный completion baseline и release reproducibility |
 | `MG-CA-023` | disabled feature/menu/permission/API/job и negative access test | N/A for first release; future enablement reopens gate |
 

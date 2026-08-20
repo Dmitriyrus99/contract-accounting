@@ -1,0 +1,1709 @@
+{
+  "schema": "contract-accounting/demo-uat-manifest/v1",
+  "manifest_version": 1,
+  "dataset_id": "contract-accounting-demo-uat-v1",
+  "released_at": "2026-08-19",
+  "qualification_status": "FULL_SYNTHETIC_GRAPH_MANUAL_UAT_REQUIRED",
+  "timezone": "Europe/Moscow",
+  "site_policy": {
+    "allowed_suffix": ".localhost",
+    "source": "frappe.local.site",
+    "read_site_config": false
+  },
+  "confirmation_tokens": {
+    "install": "INSTALL_CONTRACT_ACCOUNTING_DEMO_UAT_V1",
+    "verify": "VERIFY_CONTRACT_ACCOUNTING_DEMO_UAT_V1",
+    "reset": "RESET_CONTRACT_ACCOUNTING_DEMO_UAT_V1"
+  },
+  "integrity": {
+    "algorithm": "SHA-256",
+    "canonicalization": "RFC8785-compatible sorted UTF-8 JSON",
+    "scope": "manifest excluding integrity.canonical_sha256",
+    "canonical_sha256": "0743e9032b08f7080854271bfd08871542e2622935efd6b7f854e199655cdbab"
+  },
+  "required_bindings": {
+    "company": {
+      "doctype": "Company",
+      "required_roles": [],
+      "customer_binding": null
+    },
+    "customer": {
+      "doctype": "Customer",
+      "required_roles": [],
+      "customer_binding": null
+    },
+    "currency": {
+      "doctype": "Currency",
+      "required_roles": [],
+      "customer_binding": null
+    },
+    "own_address": {
+      "doctype": "Address",
+      "required_roles": [],
+      "customer_binding": "customer"
+    },
+    "foreign_address": {
+      "doctype": "Address",
+      "required_roles": [],
+      "customer_binding": "customer"
+    },
+    "own_engineer_user": {
+      "doctype": "User",
+      "required_roles": ["Инженер"],
+      "customer_binding": null
+    },
+    "foreign_engineer_user": {
+      "doctype": "User",
+      "required_roles": ["Инженер"],
+      "customer_binding": null
+    },
+    "own_supplier": {
+      "doctype": "Supplier",
+      "required_roles": [],
+      "customer_binding": null
+    },
+    "foreign_supplier": {
+      "doctype": "Supplier",
+      "required_roles": [],
+      "customer_binding": null
+    },
+    "process_template": {
+      "doctype": "Ferum Process Template",
+      "required_roles": [],
+      "customer_binding": null
+    },
+    "stage_template": {
+      "doctype": "Ferum Stage Template",
+      "required_roles": [],
+      "customer_binding": null
+    },
+    "step_template": {
+      "doctype": "Ferum Step Template",
+      "required_roles": [],
+      "customer_binding": null
+    }
+  },
+  "projects": [
+    {
+      "key": "own",
+      "kind": "assigned",
+      "root_external_id": "ca.demo.v1.own.service_project",
+      "engineer_binding": "own_engineer_user",
+      "description": "Synthetic project assigned to the own engineer UAT actor."
+    },
+    {
+      "key": "foreign",
+      "kind": "not_assigned",
+      "root_external_id": "ca.demo.v1.foreign.service_project",
+      "engineer_binding": "foreign_engineer_user",
+      "description": "Synthetic isolated project assigned to the foreign engineer UAT actor."
+    }
+  ],
+  "role_scenarios": [
+    {
+      "id": "engineer-own-isolation",
+      "role": "Инженер",
+      "user_binding": "own_engineer_user",
+      "can_see": ["own"],
+      "must_not_see": ["foreign"],
+      "manual_gate": true
+    },
+    {
+      "id": "engineer-foreign-isolation",
+      "role": "Инженер",
+      "user_binding": "foreign_engineer_user",
+      "can_see": ["foreign"],
+      "must_not_see": ["own"],
+      "manual_gate": true
+    },
+    {
+      "id": "project-manager-broad-read",
+      "role": "Руководитель проектов",
+      "user_binding": null,
+      "can_see": ["own", "foreign"],
+      "must_not_see": [],
+      "manual_gate": true
+    }
+  ],
+  "ui_prerequisites": {
+    "roles": [
+      "System Manager",
+      "Руководитель проектов",
+      "Менеджер проектов",
+      "Инженер",
+      "Офис-менеджер",
+      "Юрист",
+      "Бухгалтер"
+    ],
+    "pages": [
+      "ferum-operations",
+      "ferum-contract-360",
+      "ferum-my-actions",
+      "ferum-director-control",
+      "ferum-project-launches"
+    ],
+    "manual_checks": [
+      "Open both project roots in Contract 360 as a broad-read role.",
+      "Confirm each engineer sees the assigned project and receives a permission denial for the other project.",
+      "Confirm list, report, link-search, direct-form, and API visibility agree.",
+      "Confirm all 20 declared ACL surfaces obey own/foreign isolation for both engineer actors.",
+      "Verify each private photo File attachment and content SHA-256 before accepting Process Evidence.",
+      "Exercise worker activation, credential verification, assignment approval, credential revocation, readiness recomputation, and fail-closed suspension only through typed commands.",
+      "Review the open Billing Cycle and draft Act/UPD documents without submitting an invoice, writing a ledger entry, or recording payment.",
+      "Record screenshots and UAT actor/time outside the demo dataset."
+    ]
+  },
+  "business_graph": {
+    "lanes": [
+      "contract root",
+      "customer service location",
+      "project membership",
+      "engineering system",
+      "contract requirement",
+      "recurring obligation",
+      "maintenance plan",
+      "maintenance visit",
+      "inspection",
+      "finding",
+      "typed service request",
+      "project document provenance",
+      "period-closing process and evidence",
+      "documentary billing without accounting posting",
+      "contractor assignment and material expense",
+      "credential readiness and revocation",
+      "private binary evidence fixture"
+    ],
+    "project_isolation": "Every entity reference is same-project; shared ERPNext masters are read-only bindings.",
+    "cross_project_links": "forbidden",
+    "expected_root_count": 2,
+    "acl_surface_source": "contract_accounting.infrastructure.project_graph_permissions",
+    "acl_surfaces": [
+      "Ferum Contract Obligation",
+      "Ferum Contractor Assignment",
+      "Ferum Finding",
+      "Ferum Inspection",
+      "Ferum Maintenance Schedule",
+      "Ferum Maintenance Visit",
+      "Ferum Material Expense",
+      "Ferum Object System",
+      "Ferum Photo Evidence",
+      "Ferum Process Evidence",
+      "Ferum Project Document",
+      "Ferum Project Document Event",
+      "Ferum Project Object",
+      "Ferum Project Process",
+      "Ferum Project Process Step",
+      "Ferum Project Stage",
+      "Ferum Service Object",
+      "Ferum Service Project",
+      "Ferum Service Request",
+      "Ferum Stage Gate"
+    ],
+    "documentary_billing": {
+      "mode": "synthetic period-closing documents only",
+      "entities": [
+        "ca.demo.v1.own.billing_cycle",
+        "ca.demo.v1.own.billing_document",
+        "ca.demo.v1.foreign.billing_cycle",
+        "ca.demo.v1.foreign.billing_document"
+      ],
+      "accounting_posting": "not performed and not qualified",
+      "forbidden_claims": ["Sales Invoice submitted", "GL Entry posted", "payment reconciled"]
+    },
+    "binary_fixtures": [
+      {
+        "fixture_id": "ca.demo.v1.own.evidence_file",
+        "project_key": "own",
+        "record_name": "CA-DEMO-V1-OWN-EVIDENCE-FILE",
+        "file_name": "ca-demo-v1-own-evidence.txt",
+        "attached_to_external_id": "ca.demo.v1.own.inspection",
+        "is_private": 1,
+        "content_encoding": "UTF-8 without BOM",
+        "content_literal": "contract-accounting-demo-uat-v1 own synthetic evidence\n",
+        "content_sha256": "3782a8e7eebf3dde0cb6c590e10abf472115b49871c94b48bcfaa22f63b03347",
+        "frappe_content_hash_md5": "484b096263e621d81900f4388f286999",
+        "materialization": "bootstrap-owned prerequisite"
+      },
+      {
+        "fixture_id": "ca.demo.v1.foreign.evidence_file",
+        "project_key": "foreign",
+        "record_name": "CA-DEMO-V1-FOREIGN-EVIDENCE-FILE",
+        "file_name": "ca-demo-v1-foreign-evidence.txt",
+        "attached_to_external_id": "ca.demo.v1.foreign.inspection",
+        "is_private": 1,
+        "content_encoding": "UTF-8 without BOM",
+        "content_literal": "contract-accounting-demo-uat-v1 foreign synthetic evidence\n",
+        "content_sha256": "da08a901738bb98353a0ee622261d98639017003c8d200ca7e91df32939fdff0",
+        "frappe_content_hash_md5": "c381bc7d36fcdb25fbc25a9baaa69a96",
+        "materialization": "bootstrap-owned prerequisite"
+      }
+    ],
+    "typed_lifecycle_scenarios": [
+      {
+        "id": "own-assignment-credential-revocation",
+        "project_key": "own",
+        "steps": [
+          "activate contractor worker through privacy command",
+          "verify credential through privacy command",
+          "approve contractor assignment through assignment command",
+          "revoke credential through privacy command",
+          "recompute readiness and suspend assignment fail-closed"
+        ],
+        "expected_terminal_state": "assignment suspended and credential revoked",
+        "manual_gate": true
+      },
+      {
+        "id": "foreign-assignment-credential-revocation",
+        "project_key": "foreign",
+        "steps": [
+          "activate contractor worker through privacy command",
+          "verify credential through privacy command",
+          "approve contractor assignment through assignment command",
+          "revoke credential through privacy command",
+          "recompute readiness and suspend assignment fail-closed"
+        ],
+        "expected_terminal_state": "assignment suspended and credential revoked",
+        "manual_gate": true
+      }
+    ]
+  },
+  "entities": [
+    {
+      "external_id": "ca.demo.v1.own.service_project",
+      "record_name": "CA-DEMO-V1-OWN-PROJECT",
+      "project_key": "own",
+      "doctype": "Ferum Service Project",
+      "seed_support": "supported",
+      "values": {
+        "project_name": "Demo UAT Own Project",
+        "company": {"$binding": "company"},
+        "customer": {"$binding": "customer"},
+        "contract_number": "DEMO-UAT-V1-OWN",
+        "contract_date": "2029-12-15",
+        "contract_subject": "Synthetic maintenance and inspection scenario",
+        "effective_from": "2030-01-01",
+        "effective_to": "2030-12-31",
+        "currency": {"$binding": "currency"},
+        "legal_status": "Draft",
+        "execution_status": "Not Started",
+        "requires_contractor": 0
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.service_object",
+      "record_name": "CA-DEMO-V1-OWN-OBJECT",
+      "project_key": "own",
+      "doctype": "Ferum Service Object",
+      "seed_support": "supported",
+      "values": {
+        "object_name": "Demo UAT Own Service Location",
+        "customer": {"$binding": "customer"},
+        "address": {"$binding": "own_address"},
+        "region": "DEMO-REGION-A",
+        "access_conditions": "Synthetic UAT access only",
+        "status": "Active"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.project_object",
+      "record_name": "CA-DEMO-V1-OWN-MEMBERSHIP",
+      "project_key": "own",
+      "doctype": "Ferum Project Object",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "service_object": {"$ref": "ca.demo.v1.own.service_object"},
+        "effective_from": "2030-01-01",
+        "status": "Active",
+        "responsible_engineer": {"$binding": "own_engineer_user"},
+        "maintenance_required": 1,
+        "comment": "DEMO-UAT-V1-OWN"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.object_system",
+      "record_name": "CA-DEMO-V1-OWN-SYSTEM",
+      "project_key": "own",
+      "doctype": "Ferum Object System",
+      "seed_support": "supported",
+      "values": {
+        "service_object": {"$ref": "ca.demo.v1.own.service_object"},
+        "system_type": "APS",
+        "system_name": "Demo UAT Own APS",
+        "condition": "Synthetic baseline",
+        "criticality": "High",
+        "equipment_count": 3,
+        "status": "Active"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.requirement",
+      "record_name": "CA-DEMO-V1-OWN-REQUIREMENT",
+      "project_key": "own",
+      "doctype": "Ferum Contract Requirement",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "requirement_type": "Work",
+        "requirement_source": "Contract",
+        "source_document_reference": "DEMO-UAT-V1-OWN",
+        "source_clause": "DEMO-1.1",
+        "description": "Synthetic monthly maintenance requirement",
+        "applicability": "Applicable",
+        "routing_decision": "Recurring Obligation",
+        "assessment_status": "Draft"
+      },
+      "transitions": [
+        {"assessment_status": "Assessed"},
+        {"assessment_status": "Approved"}
+      ]
+    },
+    {
+      "external_id": "ca.demo.v1.own.obligation",
+      "record_name": "CA-DEMO-V1-OWN-OBLIGATION",
+      "project_key": "own",
+      "doctype": "Ferum Contract Obligation",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "requirement": {"$ref": "ca.demo.v1.own.requirement"},
+        "project_object": {"$ref": "ca.demo.v1.own.project_object"},
+        "object_system": {"$ref": "ca.demo.v1.own.object_system"},
+        "work_type": "Synthetic Monthly Maintenance",
+        "obligation_type": "Maintenance",
+        "deadline_rule": "{\"basis\":\"planned_date\",\"timezone\":\"Europe/Moscow\"}",
+        "acceptance_rule": "{}",
+        "evidence_rule": "{}",
+        "quantity": 1,
+        "currency": {"$binding": "currency"},
+        "criticality": "High",
+        "effective_from": "2030-01-01",
+        "effective_to": "2030-12-31",
+        "status": "Draft",
+        "recurrence": [
+          {
+            "frequency": "Monthly",
+            "interval": 1,
+            "period_anchor": "Contract Start",
+            "window_before_days": 5,
+            "window_after_days": 5,
+            "due_offset_days": 5,
+            "calendar_type": "Calendar Days",
+            "generation_horizon_days": 365
+          }
+        ]
+      },
+      "transitions": [
+        {"status": "Active"}
+      ]
+    },
+    {
+      "external_id": "ca.demo.v1.own.schedule",
+      "record_name": "CA-DEMO-V1-OWN-SCHEDULE",
+      "project_key": "own",
+      "doctype": "Ferum Maintenance Schedule",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "contract_obligation": {"$ref": "ca.demo.v1.own.obligation"},
+        "project_object": {"$ref": "ca.demo.v1.own.project_object"},
+        "object_system": {"$ref": "ca.demo.v1.own.object_system"},
+        "work_type": "Synthetic Monthly Maintenance",
+        "period_key": "2030-01-15",
+        "planned_date": "2030-01-15",
+        "window_start": "2030-01-10",
+        "window_end": "2030-01-20",
+        "due_date": "2030-01-20",
+        "status": "Planned",
+        "generation_source": "Contract Obligation"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.visit",
+      "record_name": "CA-DEMO-V1-OWN-VISIT",
+      "project_key": "own",
+      "doctype": "Ferum Maintenance Visit",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "contract_obligation": {"$ref": "ca.demo.v1.own.obligation"},
+        "maintenance_schedule": {"$ref": "ca.demo.v1.own.schedule"},
+        "project_object": {"$ref": "ca.demo.v1.own.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.own.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.own.object_system"},
+        "period_key": "2030-01-15",
+        "planned_date": "2030-01-15",
+        "window_start": "2030-01-10",
+        "window_end": "2030-01-20",
+        "assigned_engineer": {"$binding": "own_engineer_user"},
+        "status": "Planned",
+        "review_status": "Pending",
+        "acceptance_status": "Pending",
+        "generation_key": "CA-DEMO-V1-OWN-OBLIGATION:2030-01-15"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.inspection",
+      "record_name": "CA-DEMO-V1-OWN-INSPECTION",
+      "project_key": "own",
+      "doctype": "Ferum Inspection",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.own.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.own.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.own.object_system"},
+        "inspection_type": "Technical",
+        "status": "Planned",
+        "planned_date": "2030-01-15",
+        "lead_inspector": {"$binding": "own_engineer_user"},
+        "template_version_snapshot": "{\"demo_template\":\"v1\"}",
+        "system_inventory_snapshot": "{\"system_count\":1}",
+        "report_snapshot": "{}",
+        "customer_approval": "Pending",
+        "idempotency_key": "CA-DEMO-V1-OWN-INSPECTION"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.finding",
+      "record_name": "CA-DEMO-V1-OWN-FINDING",
+      "project_key": "own",
+      "doctype": "Ferum Finding",
+      "seed_support": "supported",
+      "values": {
+        "source_doctype": "Ferum Inspection",
+        "source_name": {"$ref": "ca.demo.v1.own.inspection"},
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.own.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.own.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.own.object_system"},
+        "found_at": "2030-01-15 11:00:00",
+        "found_by": {"$binding": "own_engineer_user"},
+        "category": "Defect",
+        "severity": "Medium",
+        "title": "Synthetic detector loop observation",
+        "description": "Synthetic finding for UAT workflow verification",
+        "confirmation_status": "Pending",
+        "status": "Open"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.service_request",
+      "record_name": "CA-DEMO-V1-OWN-REQUEST",
+      "project_key": "own",
+      "doctype": "Ferum Service Request",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.own.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.own.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.own.object_system"},
+        "customer": {"$binding": "customer"},
+        "contract_obligation": {"$ref": "ca.demo.v1.own.obligation"},
+        "subject": "Synthetic repair request",
+        "description": "Synthetic request derived from the UAT finding",
+        "source_type": "Finding",
+        "source_doctype": "Ferum Finding",
+        "source_name": {"$ref": "ca.demo.v1.own.finding"},
+        "request_type": "Repair",
+        "priority": "Medium",
+        "requested_at": "2030-01-15 12:00:00",
+        "assigned_engineer": {"$binding": "own_engineer_user"},
+        "status": "Open"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.own.project_document",
+      "record_name": "CA-DEMO-V1-OWN-DOCUMENT",
+      "project_key": "own",
+      "doctype": "Ferum Project Document",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.own.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.own.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.own.service_object"},
+        "document_type": "Other",
+        "document_number": "DEMO-UAT-V1-OWN-FINDING-NOTE",
+        "document_date": "2030-01-15",
+        "version": "1",
+        "status": "Draft",
+        "source_doctype": "Ferum Finding",
+        "source_name": {"$ref": "ca.demo.v1.own.finding"},
+        "digital_copy_status": "Missing",
+        "original_status": "Not Requested",
+        "confidentiality": "Internal",
+        "owner_user": {"$binding": "own_engineer_user"}
+      },
+      "transitions": []
+    },
+
+    {
+      "external_id": "ca.demo.v1.foreign.service_project",
+      "record_name": "CA-DEMO-V1-FOREIGN-PROJECT",
+      "project_key": "foreign",
+      "doctype": "Ferum Service Project",
+      "seed_support": "supported",
+      "values": {
+        "project_name": "Demo UAT Foreign Project",
+        "company": {"$binding": "company"},
+        "customer": {"$binding": "customer"},
+        "contract_number": "DEMO-UAT-V1-FOREIGN",
+        "contract_date": "2029-12-16",
+        "contract_subject": "Synthetic isolated maintenance and inspection scenario",
+        "effective_from": "2030-01-01",
+        "effective_to": "2030-12-31",
+        "currency": {"$binding": "currency"},
+        "legal_status": "Draft",
+        "execution_status": "Not Started",
+        "requires_contractor": 0
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.service_object",
+      "record_name": "CA-DEMO-V1-FOREIGN-OBJECT",
+      "project_key": "foreign",
+      "doctype": "Ferum Service Object",
+      "seed_support": "supported",
+      "values": {
+        "object_name": "Demo UAT Foreign Service Location",
+        "customer": {"$binding": "customer"},
+        "address": {"$binding": "foreign_address"},
+        "region": "DEMO-REGION-B",
+        "access_conditions": "Synthetic isolated UAT access only",
+        "status": "Active"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.project_object",
+      "record_name": "CA-DEMO-V1-FOREIGN-MEMBERSHIP",
+      "project_key": "foreign",
+      "doctype": "Ferum Project Object",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "service_object": {"$ref": "ca.demo.v1.foreign.service_object"},
+        "effective_from": "2030-01-01",
+        "status": "Active",
+        "responsible_engineer": {"$binding": "foreign_engineer_user"},
+        "maintenance_required": 1,
+        "comment": "DEMO-UAT-V1-FOREIGN"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.object_system",
+      "record_name": "CA-DEMO-V1-FOREIGN-SYSTEM",
+      "project_key": "foreign",
+      "doctype": "Ferum Object System",
+      "seed_support": "supported",
+      "values": {
+        "service_object": {"$ref": "ca.demo.v1.foreign.service_object"},
+        "system_type": "CCTV",
+        "system_name": "Demo UAT Foreign CCTV",
+        "condition": "Synthetic isolated baseline",
+        "criticality": "High",
+        "equipment_count": 4,
+        "status": "Active"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.requirement",
+      "record_name": "CA-DEMO-V1-FOREIGN-REQUIREMENT",
+      "project_key": "foreign",
+      "doctype": "Ferum Contract Requirement",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "requirement_type": "Work",
+        "requirement_source": "Contract",
+        "source_document_reference": "DEMO-UAT-V1-FOREIGN",
+        "source_clause": "DEMO-1.1",
+        "description": "Synthetic isolated monthly maintenance requirement",
+        "applicability": "Applicable",
+        "routing_decision": "Recurring Obligation",
+        "assessment_status": "Draft"
+      },
+      "transitions": [
+        {"assessment_status": "Assessed"},
+        {"assessment_status": "Approved"}
+      ]
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.obligation",
+      "record_name": "CA-DEMO-V1-FOREIGN-OBLIGATION",
+      "project_key": "foreign",
+      "doctype": "Ferum Contract Obligation",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "requirement": {"$ref": "ca.demo.v1.foreign.requirement"},
+        "project_object": {"$ref": "ca.demo.v1.foreign.project_object"},
+        "object_system": {"$ref": "ca.demo.v1.foreign.object_system"},
+        "work_type": "Synthetic Isolated Maintenance",
+        "obligation_type": "Maintenance",
+        "deadline_rule": "{\"basis\":\"planned_date\",\"timezone\":\"Europe/Moscow\"}",
+        "acceptance_rule": "{}",
+        "evidence_rule": "{}",
+        "quantity": 1,
+        "currency": {"$binding": "currency"},
+        "criticality": "High",
+        "effective_from": "2030-01-01",
+        "effective_to": "2030-12-31",
+        "status": "Draft",
+        "recurrence": [
+          {
+            "frequency": "Monthly",
+            "interval": 1,
+            "period_anchor": "Contract Start",
+            "window_before_days": 5,
+            "window_after_days": 5,
+            "due_offset_days": 5,
+            "calendar_type": "Calendar Days",
+            "generation_horizon_days": 365
+          }
+        ]
+      },
+      "transitions": [
+        {"status": "Active"}
+      ]
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.schedule",
+      "record_name": "CA-DEMO-V1-FOREIGN-SCHEDULE",
+      "project_key": "foreign",
+      "doctype": "Ferum Maintenance Schedule",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "contract_obligation": {"$ref": "ca.demo.v1.foreign.obligation"},
+        "project_object": {"$ref": "ca.demo.v1.foreign.project_object"},
+        "object_system": {"$ref": "ca.demo.v1.foreign.object_system"},
+        "work_type": "Synthetic Isolated Maintenance",
+        "period_key": "2030-01-16",
+        "planned_date": "2030-01-16",
+        "window_start": "2030-01-11",
+        "window_end": "2030-01-21",
+        "due_date": "2030-01-21",
+        "status": "Planned",
+        "generation_source": "Contract Obligation"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.visit",
+      "record_name": "CA-DEMO-V1-FOREIGN-VISIT",
+      "project_key": "foreign",
+      "doctype": "Ferum Maintenance Visit",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "contract_obligation": {"$ref": "ca.demo.v1.foreign.obligation"},
+        "maintenance_schedule": {"$ref": "ca.demo.v1.foreign.schedule"},
+        "project_object": {"$ref": "ca.demo.v1.foreign.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.foreign.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.foreign.object_system"},
+        "period_key": "2030-01-16",
+        "planned_date": "2030-01-16",
+        "window_start": "2030-01-11",
+        "window_end": "2030-01-21",
+        "assigned_engineer": {"$binding": "foreign_engineer_user"},
+        "status": "Planned",
+        "review_status": "Pending",
+        "acceptance_status": "Pending",
+        "generation_key": "CA-DEMO-V1-FOREIGN-OBLIGATION:2030-01-16"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.inspection",
+      "record_name": "CA-DEMO-V1-FOREIGN-INSPECTION",
+      "project_key": "foreign",
+      "doctype": "Ferum Inspection",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.foreign.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.foreign.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.foreign.object_system"},
+        "inspection_type": "Technical",
+        "status": "Planned",
+        "planned_date": "2030-01-16",
+        "lead_inspector": {"$binding": "foreign_engineer_user"},
+        "template_version_snapshot": "{\"demo_template\":\"v1\"}",
+        "system_inventory_snapshot": "{\"system_count\":1}",
+        "report_snapshot": "{}",
+        "customer_approval": "Pending",
+        "idempotency_key": "CA-DEMO-V1-FOREIGN-INSPECTION"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.finding",
+      "record_name": "CA-DEMO-V1-FOREIGN-FINDING",
+      "project_key": "foreign",
+      "doctype": "Ferum Finding",
+      "seed_support": "supported",
+      "values": {
+        "source_doctype": "Ferum Inspection",
+        "source_name": {"$ref": "ca.demo.v1.foreign.inspection"},
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.foreign.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.foreign.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.foreign.object_system"},
+        "found_at": "2030-01-16 11:00:00",
+        "found_by": {"$binding": "foreign_engineer_user"},
+        "category": "Defect",
+        "severity": "Medium",
+        "title": "Synthetic camera channel observation",
+        "description": "Synthetic isolated finding for UAT workflow verification",
+        "confirmation_status": "Pending",
+        "status": "Open"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.service_request",
+      "record_name": "CA-DEMO-V1-FOREIGN-REQUEST",
+      "project_key": "foreign",
+      "doctype": "Ferum Service Request",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.foreign.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.foreign.service_object"},
+        "object_system": {"$ref": "ca.demo.v1.foreign.object_system"},
+        "customer": {"$binding": "customer"},
+        "contract_obligation": {"$ref": "ca.demo.v1.foreign.obligation"},
+        "subject": "Synthetic isolated repair request",
+        "description": "Synthetic request derived from the isolated UAT finding",
+        "source_type": "Finding",
+        "source_doctype": "Ferum Finding",
+        "source_name": {"$ref": "ca.demo.v1.foreign.finding"},
+        "request_type": "Repair",
+        "priority": "Medium",
+        "requested_at": "2030-01-16 12:00:00",
+        "assigned_engineer": {"$binding": "foreign_engineer_user"},
+        "status": "Open"
+      },
+      "transitions": []
+    },
+    {
+      "external_id": "ca.demo.v1.foreign.project_document",
+      "record_name": "CA-DEMO-V1-FOREIGN-DOCUMENT",
+      "project_key": "foreign",
+      "doctype": "Ferum Project Document",
+      "seed_support": "supported",
+      "values": {
+        "service_project": {"$ref": "ca.demo.v1.foreign.service_project"},
+        "project_object": {"$ref": "ca.demo.v1.foreign.project_object"},
+        "service_object": {"$ref": "ca.demo.v1.foreign.service_object"},
+        "document_type": "Other",
+        "document_number": "DEMO-UAT-V1-FOREIGN-FINDING-NOTE",
+        "document_date": "2030-01-16",
+        "version": "1",
+        "status": "Draft",
+        "source_doctype": "Ferum Finding",
+        "source_name": {"$ref": "ca.demo.v1.foreign.finding"},
+        "digital_copy_status": "Missing",
+        "original_status": "Not Requested",
+        "confidentiality": "Internal",
+        "owner_user": {"$binding": "foreign_engineer_user"}
+      },
+      "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.project_process",
+        "record_name": "CA-DEMO-V1-OWN-PERIOD-CLOSING-PROCESS",
+        "project_key": "own",
+        "doctype": "Ferum Project Process",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "process_template": {
+                "$binding": "process_template"
+            },
+            "process_type": "Period Closing",
+            "template_version": 1,
+            "template_snapshot": "{\"code\":\"FERUM-BILLING-CYCLE\",\"version\":1,\"stage\":\"PERIOD_CLOSING\",\"step\":\"WORK_COMPLETED\"}",
+            "generation_key": "CA-DEMO-V1-OWN-PERIOD-CLOSING-2030",
+            "generated_at": "2030-01-31 18:00:00",
+            "generated_by": {
+                "$binding": "own_engineer_user"
+            },
+            "status": "Planned",
+            "generation_reason": "Synthetic documentary billing UAT",
+            "requirement_revision": "DEMO-UAT-V1"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.project_stage",
+        "record_name": "CA-DEMO-V1-OWN-PERIOD-CLOSING-STAGE",
+        "project_key": "own",
+        "doctype": "Ferum Project Stage",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.own.project_process"
+            },
+            "stage_template": {
+                "$binding": "stage_template"
+            },
+            "stage_code": "PERIOD_CLOSING",
+            "title": "Synthetic Period Closing",
+            "stage_snapshot": "{\"code\":\"PERIOD_CLOSING\",\"sequence\":1,\"template\":\"FERUM-BILLING-CYCLE-v1\"}",
+            "sequence": 1,
+            "status": "Planned",
+            "planned_start": "2030-01-01 09:00:00",
+            "planned_end": "2030-02-10 18:00:00",
+            "owner_role": "Бухгалтер"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.process_step",
+        "record_name": "CA-DEMO-V1-OWN-WORK-COMPLETED-STEP",
+        "project_key": "own",
+        "doctype": "Ferum Project Process Step",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.own.project_process"
+            },
+            "project_stage": {
+                "$ref": "ca.demo.v1.own.project_stage"
+            },
+            "step_template": {
+                "$binding": "step_template"
+            },
+            "template_step_code": "WORK_COMPLETED",
+            "title": "Confirm Work Completed for Period",
+            "step_snapshot": "{\"code\":\"WORK_COMPLETED\",\"template\":\"FERUM-BILLING-CYCLE-v1\",\"evidence\":\"Manual Confirmation\"}",
+            "instance_key": "CA-DEMO-V1-OWN-WORK-COMPLETED-2030",
+            "contract_requirement": {
+                "$ref": "ca.demo.v1.own.requirement"
+            },
+            "contract_obligation": {
+                "$ref": "ca.demo.v1.own.obligation"
+            },
+            "action_type": "Confirm Work Completed for Period",
+            "input_description": "Synthetic period work and evidence summary",
+            "responsible_role": "Бухгалтер",
+            "responsible_user": {
+                "$binding": "own_engineer_user"
+            },
+            "deadline_type": "None",
+            "condition_rule": "{}",
+            "activation_rule": "{}",
+            "criticality": "Mandatory",
+            "blocking": 1,
+            "completion_evidence_type": "Manual Confirmation",
+            "status": "Planned",
+            "is_overdue": 0,
+            "display_status": "Planned"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.process_evidence",
+        "record_name": "CA-DEMO-V1-OWN-PROCESS-EVIDENCE",
+        "project_key": "own",
+        "doctype": "Ferum Process Evidence",
+        "seed_support": "supported",
+        "values": {
+            "process_step": {
+                "$ref": "ca.demo.v1.own.process_step"
+            },
+            "evidence_type": "Manual Confirmation",
+            "validation_status": "Draft",
+            "captured_at": "2030-01-31 18:00:00",
+            "captured_by": {
+                "$binding": "own_engineer_user"
+            },
+            "content_hash": "3782a8e7eebf3dde0cb6c590e10abf472115b49871c94b48bcfaa22f63b03347",
+            "snapshot": "{\"synthetic\":true,\"accounting_posting\":false,\"result\":\"work-completed-declared\"}",
+            "comment": "Synthetic no-PII evidence declaration",
+            "is_completion_evidence": 1,
+            "evidence_key": "CA-DEMO-V1-OWN-PROCESS-EVIDENCE"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.stage_gate",
+        "record_name": "CA-DEMO-V1-OWN-PERIOD-CLOSING-GATE",
+        "project_key": "own",
+        "doctype": "Ferum Stage Gate",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.own.project_process"
+            },
+            "project_stage": {
+                "$ref": "ca.demo.v1.own.project_stage"
+            },
+            "gate_code": "EXIT",
+            "title": "Synthetic Period Closing Exit Gate",
+            "evaluation_mode": "All Blocking Steps",
+            "status": "Not Evaluated",
+            "criteria": "{\"all_blocking_steps\":\"Completed\",\"accounting_posting\":\"not evaluated\"}"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.contractor_worker",
+        "record_name": "CA-DEMO-V1-OWN-CONTRACTOR-WORKER",
+        "project_key": "own",
+        "doctype": "Ferum Contractor Worker",
+        "seed_support": "supported",
+        "values": {
+            "supplier": {
+                "$binding": "own_supplier"
+            },
+            "worker_external_id": "TEST-CA-DEMO-V1-OWN-WORKER",
+            "display_name": "Synthetic Worker OWN",
+            "position": "Synthetic Technician",
+            "work_contact_confirmed": 0,
+            "status": "Inactive",
+            "privacy_basis_reference": "TEST-DEMO-UAT-V1-OWN",
+            "data_owner": {
+                "$binding": "own_engineer_user"
+            },
+            "privacy_policy_reference": "FR05-PD-01 v1.0",
+            "privacy_policy_hash": "19220c689d94046ec24f03ffdf6b00c2cfb33c7749f7d8c59a98398856a4e893",
+            "transition_reason": "Synthetic initial privacy state",
+            "retention_status": "Active"
+        },
+        "transitions": [
+            {
+                "status": "Active"
+            }
+        ]
+    },
+    {
+        "external_id": "ca.demo.v1.own.credential",
+        "record_name": "CA-DEMO-V1-OWN-PERSONNEL-CREDENTIAL",
+        "project_key": "own",
+        "doctype": "Ferum Personnel Credential",
+        "seed_support": "supported",
+        "values": {
+            "holder_type": "Ferum Contractor Worker",
+            "holder": {
+                "$ref": "ca.demo.v1.own.contractor_worker"
+            },
+            "credential_type": "Occupational Safety",
+            "credential_number": "TEST-CREDENTIAL-OWN-0001",
+            "issued_on": "2029-01-01",
+            "expires_on": "2030-06-30",
+            "no_expiry": 0,
+            "issuer": "Synthetic Training Authority",
+            "malware_status": "Not Applicable",
+            "verification_status": "Draft",
+            "privacy_basis_reference": "TEST-DEMO-UAT-V1-OWN-CREDENTIAL",
+            "privacy_policy_reference": "FR05-PD-01 v1.0",
+            "privacy_policy_hash": "19220c689d94046ec24f03ffdf6b00c2cfb33c7749f7d8c59a98398856a4e893",
+            "transition_reason": "Synthetic credential awaiting typed verification",
+            "retention_status": "Active"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.contractor_assignment",
+        "record_name": "CA-DEMO-V1-OWN-CONTRACTOR-ASSIGNMENT",
+        "project_key": "own",
+        "doctype": "Ferum Contractor Assignment",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "company": {
+                "$binding": "company"
+            },
+            "execution_mode": "Contractor",
+            "supplier": {
+                "$binding": "own_supplier"
+            },
+            "contractor_worker": {
+                "$ref": "ca.demo.v1.own.contractor_worker"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.own.project_object"
+            },
+            "object_system": {
+                "$ref": "ca.demo.v1.own.object_system"
+            },
+            "contract_obligation": {
+                "$ref": "ca.demo.v1.own.obligation"
+            },
+            "work_type": "Synthetic Monthly Maintenance",
+            "responsibility": "Synthetic scoped maintenance execution",
+            "effective_from": "2030-01-01",
+            "effective_to": "2030-06-30",
+            "required_credential_types": "[\"Occupational Safety\"]",
+            "approval_required": 1,
+            "status": "Draft",
+            "credentials_readiness": "Pending Verification"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.material_expense",
+        "record_name": "CA-DEMO-V1-OWN-MATERIAL-EXPENSE",
+        "project_key": "own",
+        "doctype": "Ferum Material Expense",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "company": {
+                "$binding": "company"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.own.project_object"
+            },
+            "contract_obligation": {
+                "$ref": "ca.demo.v1.own.obligation"
+            },
+            "contractor_assignment": {
+                "$ref": "ca.demo.v1.own.contractor_assignment"
+            },
+            "maintenance_visit": {
+                "$ref": "ca.demo.v1.own.visit"
+            },
+            "service_request": {
+                "$ref": "ca.demo.v1.own.service_request"
+            },
+            "expense_date": "2030-01-31",
+            "supplier": {
+                "$binding": "own_supplier"
+            },
+            "description": "Synthetic consumable material expense",
+            "currency": {
+                "$binding": "currency"
+            },
+            "amount_with_vat": 1200,
+            "amount_without_vat": 1000,
+            "vat_amount": 200,
+            "status": "Draft"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.photo_evidence",
+        "record_name": "CA-DEMO-V1-OWN-PHOTO-EVIDENCE",
+        "project_key": "own",
+        "doctype": "Ferum Photo Evidence",
+        "seed_support": "supported",
+        "values": {
+            "source_doctype": "Ferum Inspection",
+            "source_name": {
+                "$ref": "ca.demo.v1.own.inspection"
+            },
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.own.project_object"
+            },
+            "service_object": {
+                "$ref": "ca.demo.v1.own.service_object"
+            },
+            "object_system": {
+                "$ref": "ca.demo.v1.own.object_system"
+            },
+            "category": "General",
+            "file": "CA-DEMO-V1-OWN-EVIDENCE-FILE",
+            "captured_at": "2030-01-31 18:00:00",
+            "captured_by": {
+                "$binding": "own_engineer_user"
+            },
+            "content_hash": "484b096263e621d81900f4388f286999",
+            "review_status": "Pending",
+            "comment": "Synthetic private fixture; no person or customer data"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.billing_cycle",
+        "record_name": "CA-DEMO-V1-OWN-BILLING-CYCLE",
+        "project_key": "own",
+        "doctype": "Ferum Billing Cycle",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.own.project_process"
+            },
+            "period_start": "2030-01-01",
+            "period_end": "2030-01-31",
+            "period_key": "2030-01-01..2030-01-31",
+            "due_date": "2030-02-10",
+            "status": "Open",
+            "expected_work_snapshot": "{\"maintenance_visits\":1,\"inspections\":1,\"synthetic\":true}",
+            "completion_snapshot": "{}",
+            "idempotency_key": "CA-DEMO-V1-OWN-BILLING-2030-01-01-2030-01-31",
+            "created_at": "2030-01-31 18:00:00",
+            "created_by": {
+                "$binding": "own_engineer_user"
+            }
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.billing_document",
+        "record_name": "CA-DEMO-V1-OWN-BILLING-DOCUMENT",
+        "project_key": "own",
+        "doctype": "Ferum Project Document",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.own.project_object"
+            },
+            "service_object": {
+                "$ref": "ca.demo.v1.own.service_object"
+            },
+            "document_type": "Act",
+            "document_number": "DEMO-UAT-V1-OWN-BILLING-DOC",
+            "document_date": "2030-01-31",
+            "version": "1",
+            "status": "Draft",
+            "source_doctype": "Ferum Service Project",
+            "source_name": {
+                "$ref": "ca.demo.v1.own.service_project"
+            },
+            "digital_copy_status": "Missing",
+            "original_status": "Not Requested",
+            "owner_user": {
+                "$binding": "own_engineer_user"
+            },
+            "confidentiality": "Internal",
+            "comment": "Documentary billing fixture only; no Sales Invoice submission, ledger posting, or payment claim."
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.own.project_document_event",
+        "record_name": "CA-DEMO-V1-OWN-BILLING-DOCUMENT-EVENT",
+        "project_key": "own",
+        "doctype": "Ferum Project Document Event",
+        "seed_support": "supported",
+        "values": {
+            "project_document": {
+                "$ref": "ca.demo.v1.own.billing_document"
+            },
+            "dimension": "Document",
+            "from_status": "None",
+            "to_status": "Draft",
+            "actor": {
+                "$binding": "own_engineer_user"
+            },
+            "occurred_at": "2030-01-31 18:00:00",
+            "reason": "Synthetic creation provenance",
+            "correlation_id": "CA-DEMO-V1-OWN-BILLING-DOCUMENT-CREATED",
+            "snapshot_json": "{\"synthetic\":true,\"dimension\":\"Document\",\"from\":\"None\",\"to\":\"Draft\"}"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.project_process",
+        "record_name": "CA-DEMO-V1-FOREIGN-PERIOD-CLOSING-PROCESS",
+        "project_key": "foreign",
+        "doctype": "Ferum Project Process",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "process_template": {
+                "$binding": "process_template"
+            },
+            "process_type": "Period Closing",
+            "template_version": 1,
+            "template_snapshot": "{\"code\":\"FERUM-BILLING-CYCLE\",\"version\":1,\"stage\":\"PERIOD_CLOSING\",\"step\":\"WORK_COMPLETED\"}",
+            "generation_key": "CA-DEMO-V1-FOREIGN-PERIOD-CLOSING-2030",
+            "generated_at": "2030-02-28 18:00:00",
+            "generated_by": {
+                "$binding": "foreign_engineer_user"
+            },
+            "status": "Planned",
+            "generation_reason": "Synthetic documentary billing UAT",
+            "requirement_revision": "DEMO-UAT-V1"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.project_stage",
+        "record_name": "CA-DEMO-V1-FOREIGN-PERIOD-CLOSING-STAGE",
+        "project_key": "foreign",
+        "doctype": "Ferum Project Stage",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.foreign.project_process"
+            },
+            "stage_template": {
+                "$binding": "stage_template"
+            },
+            "stage_code": "PERIOD_CLOSING",
+            "title": "Synthetic Period Closing",
+            "stage_snapshot": "{\"code\":\"PERIOD_CLOSING\",\"sequence\":1,\"template\":\"FERUM-BILLING-CYCLE-v1\"}",
+            "sequence": 1,
+            "status": "Planned",
+            "planned_start": "2030-02-01 09:00:00",
+            "planned_end": "2030-03-10 18:00:00",
+            "owner_role": "Бухгалтер"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.process_step",
+        "record_name": "CA-DEMO-V1-FOREIGN-WORK-COMPLETED-STEP",
+        "project_key": "foreign",
+        "doctype": "Ferum Project Process Step",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.foreign.project_process"
+            },
+            "project_stage": {
+                "$ref": "ca.demo.v1.foreign.project_stage"
+            },
+            "step_template": {
+                "$binding": "step_template"
+            },
+            "template_step_code": "WORK_COMPLETED",
+            "title": "Confirm Work Completed for Period",
+            "step_snapshot": "{\"code\":\"WORK_COMPLETED\",\"template\":\"FERUM-BILLING-CYCLE-v1\",\"evidence\":\"Manual Confirmation\"}",
+            "instance_key": "CA-DEMO-V1-FOREIGN-WORK-COMPLETED-2030",
+            "contract_requirement": {
+                "$ref": "ca.demo.v1.foreign.requirement"
+            },
+            "contract_obligation": {
+                "$ref": "ca.demo.v1.foreign.obligation"
+            },
+            "action_type": "Confirm Work Completed for Period",
+            "input_description": "Synthetic period work and evidence summary",
+            "responsible_role": "Бухгалтер",
+            "responsible_user": {
+                "$binding": "foreign_engineer_user"
+            },
+            "deadline_type": "None",
+            "condition_rule": "{}",
+            "activation_rule": "{}",
+            "criticality": "Mandatory",
+            "blocking": 1,
+            "completion_evidence_type": "Manual Confirmation",
+            "status": "Planned",
+            "is_overdue": 0,
+            "display_status": "Planned"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.process_evidence",
+        "record_name": "CA-DEMO-V1-FOREIGN-PROCESS-EVIDENCE",
+        "project_key": "foreign",
+        "doctype": "Ferum Process Evidence",
+        "seed_support": "supported",
+        "values": {
+            "process_step": {
+                "$ref": "ca.demo.v1.foreign.process_step"
+            },
+            "evidence_type": "Manual Confirmation",
+            "validation_status": "Draft",
+            "captured_at": "2030-02-28 18:00:00",
+            "captured_by": {
+                "$binding": "foreign_engineer_user"
+            },
+            "content_hash": "da08a901738bb98353a0ee622261d98639017003c8d200ca7e91df32939fdff0",
+            "snapshot": "{\"synthetic\":true,\"accounting_posting\":false,\"result\":\"work-completed-declared\"}",
+            "comment": "Synthetic no-PII evidence declaration",
+            "is_completion_evidence": 1,
+            "evidence_key": "CA-DEMO-V1-FOREIGN-PROCESS-EVIDENCE"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.stage_gate",
+        "record_name": "CA-DEMO-V1-FOREIGN-PERIOD-CLOSING-GATE",
+        "project_key": "foreign",
+        "doctype": "Ferum Stage Gate",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.foreign.project_process"
+            },
+            "project_stage": {
+                "$ref": "ca.demo.v1.foreign.project_stage"
+            },
+            "gate_code": "EXIT",
+            "title": "Synthetic Period Closing Exit Gate",
+            "evaluation_mode": "All Blocking Steps",
+            "status": "Not Evaluated",
+            "criteria": "{\"all_blocking_steps\":\"Completed\",\"accounting_posting\":\"not evaluated\"}"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.contractor_worker",
+        "record_name": "CA-DEMO-V1-FOREIGN-CONTRACTOR-WORKER",
+        "project_key": "foreign",
+        "doctype": "Ferum Contractor Worker",
+        "seed_support": "supported",
+        "values": {
+            "supplier": {
+                "$binding": "foreign_supplier"
+            },
+            "worker_external_id": "TEST-CA-DEMO-V1-FOREIGN-WORKER",
+            "display_name": "Synthetic Worker FOREIGN",
+            "position": "Synthetic Technician",
+            "work_contact_confirmed": 0,
+            "status": "Inactive",
+            "privacy_basis_reference": "TEST-DEMO-UAT-V1-FOREIGN",
+            "data_owner": {
+                "$binding": "foreign_engineer_user"
+            },
+            "privacy_policy_reference": "FR05-PD-01 v1.0",
+            "privacy_policy_hash": "19220c689d94046ec24f03ffdf6b00c2cfb33c7749f7d8c59a98398856a4e893",
+            "transition_reason": "Synthetic initial privacy state",
+            "retention_status": "Active"
+        },
+        "transitions": [
+            {
+                "status": "Active"
+            }
+        ]
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.credential",
+        "record_name": "CA-DEMO-V1-FOREIGN-PERSONNEL-CREDENTIAL",
+        "project_key": "foreign",
+        "doctype": "Ferum Personnel Credential",
+        "seed_support": "supported",
+        "values": {
+            "holder_type": "Ferum Contractor Worker",
+            "holder": {
+                "$ref": "ca.demo.v1.foreign.contractor_worker"
+            },
+            "credential_type": "Occupational Safety",
+            "credential_number": "TEST-CREDENTIAL-FOREIGN-0001",
+            "issued_on": "2029-01-01",
+            "expires_on": "2030-06-30",
+            "no_expiry": 0,
+            "issuer": "Synthetic Training Authority",
+            "malware_status": "Not Applicable",
+            "verification_status": "Draft",
+            "privacy_basis_reference": "TEST-DEMO-UAT-V1-FOREIGN-CREDENTIAL",
+            "privacy_policy_reference": "FR05-PD-01 v1.0",
+            "privacy_policy_hash": "19220c689d94046ec24f03ffdf6b00c2cfb33c7749f7d8c59a98398856a4e893",
+            "transition_reason": "Synthetic credential awaiting typed verification",
+            "retention_status": "Active"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.contractor_assignment",
+        "record_name": "CA-DEMO-V1-FOREIGN-CONTRACTOR-ASSIGNMENT",
+        "project_key": "foreign",
+        "doctype": "Ferum Contractor Assignment",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "company": {
+                "$binding": "company"
+            },
+            "execution_mode": "Contractor",
+            "supplier": {
+                "$binding": "foreign_supplier"
+            },
+            "contractor_worker": {
+                "$ref": "ca.demo.v1.foreign.contractor_worker"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.foreign.project_object"
+            },
+            "object_system": {
+                "$ref": "ca.demo.v1.foreign.object_system"
+            },
+            "contract_obligation": {
+                "$ref": "ca.demo.v1.foreign.obligation"
+            },
+            "work_type": "Synthetic Isolated Maintenance",
+            "responsibility": "Synthetic scoped maintenance execution",
+            "effective_from": "2030-01-01",
+            "effective_to": "2030-06-30",
+            "required_credential_types": "[\"Occupational Safety\"]",
+            "approval_required": 1,
+            "status": "Draft",
+            "credentials_readiness": "Pending Verification"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.material_expense",
+        "record_name": "CA-DEMO-V1-FOREIGN-MATERIAL-EXPENSE",
+        "project_key": "foreign",
+        "doctype": "Ferum Material Expense",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "company": {
+                "$binding": "company"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.foreign.project_object"
+            },
+            "contract_obligation": {
+                "$ref": "ca.demo.v1.foreign.obligation"
+            },
+            "contractor_assignment": {
+                "$ref": "ca.demo.v1.foreign.contractor_assignment"
+            },
+            "maintenance_visit": {
+                "$ref": "ca.demo.v1.foreign.visit"
+            },
+            "service_request": {
+                "$ref": "ca.demo.v1.foreign.service_request"
+            },
+            "expense_date": "2030-02-28",
+            "supplier": {
+                "$binding": "foreign_supplier"
+            },
+            "description": "Synthetic consumable material expense",
+            "currency": {
+                "$binding": "currency"
+            },
+            "amount_with_vat": 1200,
+            "amount_without_vat": 1000,
+            "vat_amount": 200,
+            "status": "Draft"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.photo_evidence",
+        "record_name": "CA-DEMO-V1-FOREIGN-PHOTO-EVIDENCE",
+        "project_key": "foreign",
+        "doctype": "Ferum Photo Evidence",
+        "seed_support": "supported",
+        "values": {
+            "source_doctype": "Ferum Inspection",
+            "source_name": {
+                "$ref": "ca.demo.v1.foreign.inspection"
+            },
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.foreign.project_object"
+            },
+            "service_object": {
+                "$ref": "ca.demo.v1.foreign.service_object"
+            },
+            "object_system": {
+                "$ref": "ca.demo.v1.foreign.object_system"
+            },
+            "category": "General",
+            "file": "CA-DEMO-V1-FOREIGN-EVIDENCE-FILE",
+            "captured_at": "2030-02-28 18:00:00",
+            "captured_by": {
+                "$binding": "foreign_engineer_user"
+            },
+            "content_hash": "c381bc7d36fcdb25fbc25a9baaa69a96",
+            "review_status": "Pending",
+            "comment": "Synthetic private fixture; no person or customer data"
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.billing_cycle",
+        "record_name": "CA-DEMO-V1-FOREIGN-BILLING-CYCLE",
+        "project_key": "foreign",
+        "doctype": "Ferum Billing Cycle",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "project_process": {
+                "$ref": "ca.demo.v1.foreign.project_process"
+            },
+            "period_start": "2030-02-01",
+            "period_end": "2030-02-28",
+            "period_key": "2030-02-01..2030-02-28",
+            "due_date": "2030-03-10",
+            "status": "Open",
+            "expected_work_snapshot": "{\"maintenance_visits\":1,\"inspections\":1,\"synthetic\":true}",
+            "completion_snapshot": "{}",
+            "idempotency_key": "CA-DEMO-V1-FOREIGN-BILLING-2030-02-01-2030-02-28",
+            "created_at": "2030-02-28 18:00:00",
+            "created_by": {
+                "$binding": "foreign_engineer_user"
+            }
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.billing_document",
+        "record_name": "CA-DEMO-V1-FOREIGN-BILLING-DOCUMENT",
+        "project_key": "foreign",
+        "doctype": "Ferum Project Document",
+        "seed_support": "supported",
+        "values": {
+            "service_project": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "project_object": {
+                "$ref": "ca.demo.v1.foreign.project_object"
+            },
+            "service_object": {
+                "$ref": "ca.demo.v1.foreign.service_object"
+            },
+            "document_type": "UPD",
+            "document_number": "DEMO-UAT-V1-FOREIGN-BILLING-DOC",
+            "document_date": "2030-02-28",
+            "version": "1",
+            "status": "Draft",
+            "source_doctype": "Ferum Service Project",
+            "source_name": {
+                "$ref": "ca.demo.v1.foreign.service_project"
+            },
+            "digital_copy_status": "Missing",
+            "original_status": "Not Requested",
+            "owner_user": {
+                "$binding": "foreign_engineer_user"
+            },
+            "confidentiality": "Internal",
+            "comment": "Documentary billing fixture only; no Sales Invoice submission, ledger posting, or payment claim."
+        },
+        "transitions": []
+    },
+    {
+        "external_id": "ca.demo.v1.foreign.project_document_event",
+        "record_name": "CA-DEMO-V1-FOREIGN-BILLING-DOCUMENT-EVENT",
+        "project_key": "foreign",
+        "doctype": "Ferum Project Document Event",
+        "seed_support": "supported",
+        "values": {
+            "project_document": {
+                "$ref": "ca.demo.v1.foreign.billing_document"
+            },
+            "dimension": "Document",
+            "from_status": "None",
+            "to_status": "Draft",
+            "actor": {
+                "$binding": "foreign_engineer_user"
+            },
+            "occurred_at": "2030-02-28 18:00:00",
+            "reason": "Synthetic creation provenance",
+            "correlation_id": "CA-DEMO-V1-FOREIGN-BILLING-DOCUMENT-CREATED",
+            "snapshot_json": "{\"synthetic\":true,\"dimension\":\"Document\",\"from\":\"None\",\"to\":\"Draft\"}"
+        },
+        "transitions": []
+    }
+  ],
+  "expected": {
+    "total_records": 50,
+    "counts": {
+      "by_project": {
+        "foreign": 25,
+        "own": 25
+      },
+      "by_doctype": {
+        "Ferum Billing Cycle": 2,
+        "Ferum Contract Obligation": 2,
+        "Ferum Contract Requirement": 2,
+        "Ferum Contractor Assignment": 2,
+        "Ferum Contractor Worker": 2,
+        "Ferum Finding": 2,
+        "Ferum Inspection": 2,
+        "Ferum Maintenance Schedule": 2,
+        "Ferum Maintenance Visit": 2,
+        "Ferum Material Expense": 2,
+        "Ferum Object System": 2,
+        "Ferum Personnel Credential": 2,
+        "Ferum Photo Evidence": 2,
+        "Ferum Process Evidence": 2,
+        "Ferum Project Document": 4,
+        "Ferum Project Document Event": 2,
+        "Ferum Project Object": 2,
+        "Ferum Project Process": 2,
+        "Ferum Project Process Step": 2,
+        "Ferum Project Stage": 2,
+        "Ferum Service Object": 2,
+        "Ferum Service Project": 2,
+        "Ferum Service Request": 2,
+        "Ferum Stage Gate": 2
+      }
+    },
+    "links": {
+      "count": 146,
+      "cross_project_count": 0,
+      "canonical_sha256": "bd7bd3242fb85da26a78716049eff8b812e38395daad851448ad80bcc18d0d80"
+    }
+  },
+  "unsupported": [
+    {
+      "area": "human UAT and sign-off",
+      "reason": "A structural verifier cannot act as accountable role owners, judge usability, or capture named approval evidence.",
+      "effect": "Successful structural verification remains MANUAL_UAT_REQUIRED and never constitutes acceptance or sign-off."
+    },
+    {
+      "area": "production activation and deployment",
+      "reason": "Synthetic local-site data does not authorize production PII, production credentials, migration, cutover, or deployment.",
+      "effect": "No production readiness, activation, deployment, or accounting-posting claim can be inferred."
+    },
+    {
+      "area": "performance race and representative load",
+      "reason": "The deterministic two-project fixture is intentionally small and does not exercise concurrency or representative volume.",
+      "effect": "Race, latency, throughput, and load qualification remain separate gates."
+    },
+    {
+      "area": "backup restore rollback and disaster recovery",
+      "reason": "Dataset reset is not a backup restore, migration rollback, or disaster-recovery rehearsal.",
+      "effect": "Restore integrity, rollback timing, recovery objectives, and cutover rehearsal remain separate gates."
+    }
+  ]
+}

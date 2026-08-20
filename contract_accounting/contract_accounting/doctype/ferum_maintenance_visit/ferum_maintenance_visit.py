@@ -9,6 +9,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_datetime, now_datetime
 
+from contract_accounting.infrastructure.assignment_guard import guard_assignment_changes
+
 DOCTYPE: Final[str] = "Ferum Maintenance Visit"
 STATUS_TRANSITIONS: Final[dict[str, frozenset[str]]] = {
 	"Planned": frozenset({"In Progress", "Cancelled"}),
@@ -53,6 +55,7 @@ _IDENTITY_FIELDS: Final[tuple[str, ...]] = (
 
 class FerumMaintenanceVisit(Document):
 	def validate(self) -> None:
+		guard_assignment_changes(self, ("assigned_engineer",))
 		self._set_service_object()
 		self._validate_context()
 		self._validate_status_transition()

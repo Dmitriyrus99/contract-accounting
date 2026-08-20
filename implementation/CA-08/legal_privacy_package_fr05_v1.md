@@ -1,6 +1,6 @@
 # FR-05 — legal/privacy package for Contractor Worker v1
 
-**Статус:** `PRODUCT OWNER SIGNED / OTHER SIGNATURES PENDING / MG-CA-015 OPEN`
+**Статус:** `ALL NAMED SIGN-OFFS CONFIRMED / FR-06 IMPLEMENTATION OPEN / MG-CA-015 PARTIAL`
 **Дата подготовки:** `2026-08-19`
 **Policy reference:** `FR05-PD-01 v1.0`
 **Полученный source SHA-256:** `60ca7cd72c2eb37db706d4280c1d4b2bc2da1c56de29f5d08a98eec7ed9f5e86`
@@ -187,13 +187,20 @@ data export и private-file URL.
 
 | Роль | Ф.И.О./должность | Решение | Дата | Документ/акт |
 | --- | --- | --- | --- | --- |
-| Legal owner | **Доможакова Алена, юрист** | `PENDING SIGNATURE` | — | заключение FR-05 `[номер]` |
-| Privacy/DPO owner | **Доможакова Алена, юрист** | `PENDING SIGNATURE` | — | приказ о назначении ответственного за ПДн `[номер]` |
-| Security owner | **Хижняк Алексей, исполнительный директор** | `PENDING SIGNATURE` | — | приказ о зоне ответственности ИБ `[номер]` |
-| Data owner / HR | **Андриянова Елизавета, офис-менеджер** | `PENDING SIGNATURE` | — | приказ о владельце данных `[номер]` |
+| Legal owner | **Доможакова Алена, юрист** | `CONFIRMED / ATTESTED BY PRODUCT OWNER` | `2026-08-19` | подтверждение получено; номер формального акта не предоставлен |
+| Privacy/DPO owner | **Доможакова Алена, юрист** | `CONFIRMED / ATTESTED BY PRODUCT OWNER` | `2026-08-19` | подтверждение получено; номер формального акта не предоставлен |
+| Security owner | **Хижняк Алексей, исполнительный директор** | `CONFIRMED / ATTESTED BY PRODUCT OWNER` | `2026-08-19` | подтверждение получено; номер формального акта не предоставлен |
+| Data owner / HR | **Андриянова Елизавета, офис-менеджер** | `CONFIRMED / ATTESTED BY PRODUCT OWNER` | `2026-08-19` | подтверждение получено; номер формального акта не предоставлен |
 | Product Owner | **Русаков Дмитрий Игоревич, генеральный директор** | `APPROVED / SIGNED` | `2026-08-19` | подтверждение в текущей задаче Codex; immutable evidence — commit этого change-set |
 
-Подтверждение Product Owner утверждает пакет решений и его строку sign-off. Оно не заменяет отдельные подписи Legal owner, Privacy/DPO owner, Security owner и Data owner / HR; их строки остаются `PENDING SIGNATURE`.
+Product Owner сообщил в текущей задаче Codex, что подтверждения получены от
+Доможаковой Алены, Хижняка Алексея и Андрияновой Елизаветы. Эта запись фиксирует
+аттестацию Product Owner, но не подменяет номер, вид или оригинал формального
+внутреннего акта: такие реквизиты не были предоставлены и не выдумываются.
+
+Человеческий sign-off раздела 8 закрыт в указанной доказательной границе.
+`MG-CA-015` остаётся `PARTIAL`: до `PASS` обязательны реализация и тестирование
+FR-06, а перед использованием production PII — отдельное разрешение Product Owner.
 
 ## 9. FR-06 change-set
 

@@ -73,7 +73,11 @@ class TestFerumContractorAssignment(FrappeTestCase):
         self.assertEqual(doc.supplier, self.supplier)
         self.assertEqual(doc.project_object, self.project_object.name)
         self.assertEqual(doc.object_system, self.system.name)
-        self.assertEqual(doc.credentials_readiness, "Disabled Pending MG-CA-015")
+        privacy_enabled = bool(frappe.db.get_single_value("Ferum Privacy Settings", "enabled"))
+        self.assertEqual(
+            doc.credentials_readiness,
+            "Not Required" if privacy_enabled else "Policy Inactive",
+        )
         self.assertFalse(doc.commercial_terms)
 
         overlap = self._make_assignment(self.supplier)
@@ -149,7 +153,10 @@ class TestFerumContractorAssignment(FrappeTestCase):
         )
         trace = get_contractor_assignment_trace(self.assignment)
         self.assertEqual(trace["commercial_terms"]["margin_amount"], 40000)
-        self.assertFalse(trace["personnel_readiness"]["enabled"])
+        self.assertEqual(
+            bool(trace["personnel_readiness"]["enabled"]),
+            bool(frappe.db.get_single_value("Ferum Privacy Settings", "enabled")),
+        )
 
         change_contractor_commercial_terms_status(terms, "Cancelled", "Commercial basis void")
         self.assertFalse(
@@ -187,7 +194,7 @@ class TestFerumContractorAssignment(FrappeTestCase):
         self.assertEqual({row["name"] for row in trace["settlements"]}, {settlement})
         self.assertEqual({row["name"] for row in trace["material_expenses"]}, {material})
 
-    def test_worker_and_credential_records_are_blocked_by_privacy_gate(self) -> None:
+    def test_worker_and_credential_direct_writes_are_blocked_by_privacy_gate(self) -> None:
         before_workers = frappe.db.count("Ferum Contractor Worker")
         with self.assertRaises(frappe.PermissionError):
             frappe.get_doc(
@@ -200,7 +207,8 @@ class TestFerumContractorAssignment(FrappeTestCase):
             ).insert(ignore_permissions=True)
         self.assertEqual(frappe.db.count("Ferum Contractor Worker"), before_workers)
 
-        with self.assertRaises(frappe.ValidationError):
+        before_credentials = frappe.db.count("Ferum Personnel Credential")
+        with self.assertRaises(frappe.PermissionError):
             frappe.get_doc(
                 {
                     "doctype": "Ferum Personnel Credential",
@@ -210,7 +218,7 @@ class TestFerumContractorAssignment(FrappeTestCase):
                     "credential_number": uuid4().hex,
                 }
             ).insert(ignore_permissions=True)
-        self.assertEqual(frappe.db.count("Ferum Personnel Credential"), 0)
+        self.assertEqual(frappe.db.count("Ferum Personnel Credential"), before_credentials)
 
     def test_supplier_user_permission_isolates_contractor_assignments(self) -> None:
         other = self._make_assignment(self.other_supplier)

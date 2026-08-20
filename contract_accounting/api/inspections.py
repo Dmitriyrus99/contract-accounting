@@ -8,12 +8,13 @@ from typing import Any, Final, TypeVar
 
 import frappe
 from frappe import _
-from frappe.utils import getdate, now_datetime
+from frappe.utils import get_datetime, getdate, now_datetime
 
 from contract_accounting.contract_accounting.doctype.ferum_inspection.ferum_inspection import (
     INSPECTION_WRITE_FLAG,
 )
 from contract_accounting.domain.process import canonical_snapshot
+from contract_accounting.infrastructure.file_access import get_authorized_file
 
 _T = TypeVar("_T")
 INSPECTION_DOCTYPE: Final[str] = "Ferum Inspection"
@@ -156,7 +157,10 @@ def complete_inspection(
     _apply_evidence(document, _json_list(evidence, "evidence"))
     document.outcome = outcome
     document.summary = _required(summary, "summary")
-    document.actual_end = now_datetime()
+    # Wall clocks can move backwards between lifecycle commands (for example,
+    # after host/WSL clock synchronisation).  Preserve the persisted lifecycle
+    # ordering instead of emitting an impossible end timestamp.
+    document.actual_end = max(now_datetime(), get_datetime(document.actual_start))
     report_payload = _report_payload(document)
     report_snapshot, _report_hash = canonical_snapshot(report_payload)
     document.report_snapshot = report_snapshot
@@ -294,9 +298,7 @@ def _apply_evidence(document: Any, rows: list[dict[str, Any]]) -> None:
     document.set("completion_evidence", [])
     for payload in rows:
         file_name = _required(str(payload.get("file") or ""), "evidence.file")
-        content_hash = frappe.db.get_value("File", file_name, "content_hash")
-        if not content_hash:
-            frappe.throw(_("Inspection evidence File требует content_hash."))
+        content_hash = get_authorized_file(file_name).content_hash
         document.append(
             "completion_evidence",
             {

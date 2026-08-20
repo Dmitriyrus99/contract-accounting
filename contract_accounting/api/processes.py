@@ -26,6 +26,7 @@ from contract_accounting.domain.process import (
     failed_blocking_steps,
     validate_step_transition,
 )
+from contract_accounting.infrastructure.file_access import get_authorized_file
 from contract_accounting.infrastructure.process_guard import (
     EVENT_WRITER_FLAG,
     EVIDENCE_WRITER_FLAG,
@@ -340,9 +341,7 @@ def add_process_evidence(
         source_name,
     )
     if evidence_file:
-        file_hash = frappe.db.get_value("File", evidence_file, "content_hash")
-        if not file_hash:
-            frappe.throw(_("Evidence File требует content_hash."))
+        file_hash = get_authorized_file(evidence_file).content_hash
     else:
         file_hash = None
     snapshot_object = _json_object(snapshot, "snapshot")
@@ -441,11 +440,15 @@ def transition_process_step(
     if target_status in {"Completed", "Not Applicable"} and (
         step.template_step_code == "PERSONNEL_READY" or step.action_type == "Personnel Readiness"
     ):
-        frappe.throw(
-            _(
-                "PERSONNEL READY заблокирован до закрытия MG-CA-015; обход через Completed/Not Applicable запрещён."
-            )
+        from contract_accounting.application.personnel_readiness import (
+            assert_personnel_not_applicable,
+            assert_project_personnel_ready,
         )
+
+        if target_status == "Completed":
+            assert_project_personnel_ready(step.service_project)
+        else:
+            assert_personnel_not_applicable(step.service_project)
     if target_status in {"Ready", "In Progress"}:
         _require_dependencies_complete(step)
         _require_step_condition(step)

@@ -9,6 +9,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_datetime
 
+from contract_accounting.infrastructure.assignment_guard import guard_assignment_changes
+
 DOCTYPE: Final[str] = "Ferum Service Request"
 SUCCESSOR_WRITER_FLAG: Final[str] = "ca_request_successor_writer"
 SOURCE_DOCTYPE_BY_TYPE: Final[dict[str, str]] = {
@@ -44,6 +46,7 @@ _IDENTITY_FIELDS: Final[tuple[str, ...]] = (
 
 class FerumServiceRequest(Document):
 	def validate(self) -> None:
+		guard_assignment_changes(self, ("assigned_engineer",))
 		self.subject = (self.get("subject") or "").strip()
 		self.description = (self.get("description") or "").strip()
 		if not self.subject or not self.description:

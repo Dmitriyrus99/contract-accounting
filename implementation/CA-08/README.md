@@ -1,14 +1,14 @@
 # CA-08 — contractor assignment and guarded personnel topology
 
-**Статус:** `CA-08 PARTIAL — ASSIGNMENT/COMMERCIAL CORE v0.9.0 BENCH VERIFIED; PERSONNEL READINESS BLOCKED BY MG-CA-015`.
+**Статус:** `CA-08/FR-06 PARTIAL — CURRENT LOCAL STATIC/FULL DISPOSABLE BENCH + ENGINEER BROWSER ACL PASS; PRIOR ROLE MATRIX SUPERSEDED; UI REVIEW AND HUMAN UAT PENDING; PRODUCTION PII DISABLED`.
 
 Инкремент отделяет операционное назначение «кто/где/что/когда» от pricing и settlement. `Ferum Contractor Assignment` связывает единый `Ferum Service Project` с Supplier либо Employee, Project Object, optional Object System/Obligation, work type, responsibility и effective interval. Цены не хранятся в Assignment: отдельные `Ferum Contractor Commercial Terms` содержат client price, contractor cost и derived margin, а фактические начисление/оплата остаются в `Ferum Contractor Settlement` и стандартном `Payment Entry`.
 
 Supplier-level Assignment доступен подрядчику только при совпадающем standard `User Permission` на Supplier. Один Supplier может быть назначен параллельно на другие object/system/work-type dimensions, но пересекающиеся active intervals одной dimension отклоняются.
 
-`Ferum Contractor Worker` и `Ferum Personnel Credential` установлены только как schema/privacy spike. Их controllers безусловно отклоняют insert/update/delete до MG-CA-015; mutating API отсутствует, паспортных полей нет, `credentials_readiness` всегда `Disabled Pending MG-CA-015`, gate `PERSONNEL READY` не реализован.
+В v0.20.0 прежний schema/privacy spike заменён fail-closed FR-06 implementation: typed Worker/Credential FSM, versioned policy stamp, dual verification, masking, project-scoped RBAC, private-file guard, live readiness fingerprint, exact-target break-glass, joint legal hold и dry-run-first retention. Production activation отделена от Synthetic Test и не выполнялась; `PERSONNEL_READY` positive path требует активную policy и актуальное PM confirmation.
 
-FR-05 owners, field registry, purpose/retention/RBAC/private-file/break-glass decisions и FR-06 change-set заполнены в [legal/privacy package v1](legal_privacy_package_fr05_v1.md). Product Owner подписал свою строку 2026-08-19; Legal, Privacy/DPO, Security и Data Owner/HR signatures, FR-06 CODE/UAT и production-data permission остаются OPEN.
+FR-05 owners, field registry, purpose/retention/RBAC/private-file/break-glass decisions и FR-06 change-set заполнены в [legal/privacy package v1](legal_privacy_package_fr05_v1.md). Product Owner подписал пакет и 2026-08-19 аттестовал получение подтверждений от Legal/Privacy/DPO, Security и Data Owner/HR; номера формальных актов не предоставлены. Human sign-off закрыт в этой границе. Earlier credential-specific Bench and 12-role matrix сохранены как historical provenance. Current accepted local evidence — static `205/205`, scoped policy `9/9`, alias/retention `24/24`, File boundaries `3/3`, full disposable Bench `179/179 OK` и Engineer own/foreign browser slice; blanket browser/File acceptance остаётся OPEN. До реальных пользователей обязательно совместно утвердить Workspace, списки, формы/labels и timezone; actual scanner, human UAT, hosted CI on the current change-set и отдельное production-data permission остаются OPEN.
 
 Typed API: [contractors.py](../../contract_accounting/api/contractors.py).
 
@@ -32,6 +32,6 @@ Implementation traceability: [traceability_v0_9_0.md](traceability_v0_9_0.md).
 - controlled uninstall/install/migrate: 35 DocType, contractor role и adapters восстановлены;
 - post-reinstall full-app suite: `47/47`, `OK`.
 
-## Открытая граница
+## Открытая граница v0.20.0
 
-Не выполнялись production Worker/Credential data, Employee positive runtime, credential matching/expiry, `PERSONNEL READY`, cross-entity positive portal access к Finding/Photo/Visit, legacy assignment migration, concurrent overlap race/load, HR/privacy/legal UAT и production deployment. Эти пункты нельзя закрыть owner approval: для них требуется MG-CA-015 и последующая CA-12 реализация/приёмка.
+Authenticated synthetic browser cross-role/RBAC matrix выполнена, но не является human UAT. Не выполнялись actual scanner integration, concurrent race/load, HR/DPO/Security human UAT, production activation и deployment. До совместного Product Owner UI review и отдельного production-PII permission settings остаются Disabled, а `MG-CA-015` — PARTIAL.

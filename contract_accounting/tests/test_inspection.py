@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from base64 import b64decode
+from datetime import datetime, timedelta
+from unittest.mock import patch
 from uuid import uuid4
 
 import frappe
@@ -116,6 +118,24 @@ class TestFerumInspection(FrappeTestCase):
             before_processes,
         )
 
+    def test_reference_graph_rejects_non_key_field_drift(self) -> None:
+        template = ensure_reference_launch_template()
+        stage = frappe.db.get_value(
+            "Ferum Stage Template", {"process_template": template}, "name"
+        )
+        step = frappe.db.get_value(
+            "Ferum Step Template", {"stage_template": stage}, "name"
+        )
+        original = frappe.db.get_value("Ferum Step Template", step, "failure_action")
+        frappe.db.set_value(
+            "Ferum Step Template", step, "failure_action", "Synthetic drift"
+        )
+        try:
+            with self.assertRaisesRegex(frappe.ValidationError, "failure_action"):
+                ensure_reference_launch_template()
+        finally:
+            frappe.db.set_value("Ferum Step Template", step, "failure_action", original)
+
     def test_reference_generation_is_explicit_and_personnel_gate_is_fail_closed(
         self,
     ) -> None:
@@ -147,12 +167,26 @@ class TestFerumInspection(FrappeTestCase):
                 "name",
             ),
         )
-        with self.assertRaisesRegex(frappe.ValidationError, "MG-CA-015"):
+        self.project.reload()
+        self.project.requires_contractor = 1
+        self.project.save(ignore_permissions=True)
+        with self.assertRaisesRegex(frappe.ValidationError, "нельзя обойти"):
             transition_process_step(
                 personnel.name, "Not Applicable", not_applicable_reason="Owner waiver"
             )
         self.assertEqual(
             frappe.db.get_value(personnel.doctype, personnel.name, "status"), "Planned"
+        )
+        self.project.reload()
+        self.project.requires_contractor = 0
+        self.project.save(ignore_permissions=True)
+        transition_process_step(
+            personnel.name,
+            "Not Applicable",
+            not_applicable_reason="No contractor or credential requirement",
+        )
+        self.assertEqual(
+            frappe.db.get_value(personnel.doctype, personnel.name, "status"), "Not Applicable"
         )
 
     def test_inspection_derives_report_finding_photo_and_validated_step_evidence(
@@ -177,13 +211,18 @@ class TestFerumInspection(FrappeTestCase):
             ],
         )
         inspection_name = created["inspection"]
-        start_inspection(
-            inspection_name,
-            {
-                "captured_at": "2026-08-18T12:00:00+03:00",
-                "systems": [{"name": self.system.name, "equipment_count": 3}],
-            },
-        )
+        started_at = datetime(2026, 8, 18, 12, 0, 1)
+        with patch(
+            "contract_accounting.api.inspections.now_datetime",
+            return_value=started_at,
+        ):
+            start_inspection(
+                inspection_name,
+                {
+                    "captured_at": "2026-08-18T12:00:00+03:00",
+                    "systems": [{"name": self.system.name, "equipment_count": 3}],
+                },
+            )
         file_doc = save_file(
             "ca12-inspection.txt",
             b64decode("Q0EtMTIgcnVudGltZSBl"),
@@ -191,22 +230,28 @@ class TestFerumInspection(FrappeTestCase):
             inspection_name,
             is_private=1,
         )
-        completed = complete_inspection(
-            inspection_name,
-            "Ready With Findings",
-            "Panel defect recorded with exact source result.",
-            [
-                {
-                    "item_code": "APS-PANEL",
-                    "result": "Defect",
-                    "severity": "High",
-                    "finding_title": "Panel fault",
-                    "observation": "Fault indicator is active.",
-                    "photo_file": file_doc.name,
-                }
-            ],
-            [{"evidence_type": "Report", "file": file_doc.name}],
-        )
+        with patch(
+            "contract_accounting.api.inspections.now_datetime",
+            return_value=started_at - timedelta(seconds=1),
+        ):
+            completed = complete_inspection(
+                inspection_name,
+                "Ready With Findings",
+                "Panel defect recorded with exact source result.",
+                [
+                    {
+                        "item_code": "APS-PANEL",
+                        "result": "Defect",
+                        "severity": "High",
+                        "finding_title": "Panel fault",
+                        "observation": "Fault indicator is active.",
+                        "photo_file": file_doc.name,
+                    }
+                ],
+                [{"evidence_type": "Report", "file": file_doc.name}],
+            )
+        inspection = frappe.get_doc("Ferum Inspection", inspection_name)
+        self.assertEqual(inspection.actual_end, inspection.actual_start)
         self.assertEqual(completed["finding_count"], 1)
         self.assertEqual(completed["photo_evidence_count"], 1)
         self.assertTrue(completed["report_document"])

@@ -20,6 +20,7 @@ from contract_accounting.contract_accounting.doctype.ferum_project_document.feru
 	ORIGINAL_TRANSITIONS,
 	PROJECT_DOCUMENT_DOCTYPE,
 )
+from contract_accounting.infrastructure.file_access import get_authorized_file
 
 _DOCUMENT_ROLES: Final[frozenset[str]] = frozenset(
 	{"Юрист", "Бухгалтер", "Менеджер проектов", "Руководитель проектов", "System Manager"}
@@ -293,9 +294,7 @@ def _get_authorized_document(name: str, permission_type: str) -> Any:
 
 
 def _validate_file(name: str) -> None:
-	row = frappe.db.get_value("File", name, "content_hash", as_dict=True)
-	if not row or not row.content_hash:
-		frappe.throw(_("Evidence требует существующий File с content_hash."))
+	get_authorized_file(name)
 
 
 def _require_role(allowed: frozenset[str]) -> None:

@@ -142,7 +142,7 @@ Claude CODE был dirty до начала анализа. Поэтому [03_as
 | Full Frappe app suite | PASS: 71/71 in 382.003s | exact `--skip-test-records` protocol |
 | Hosted GitHub CI | PASS: run `32261790230`, head `9f2cce9`, 18s | [terminal evidence](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md); не Bench/UAT/deploy |
 
-Общий статус остаётся `NOT READY FOR PRODUCTION`: clean Staging, RBAC/browser/export, load/race/performance, UAT, restore/rollback/cutover, approvals и deployment не выполнялись.
+По итогам именно этого historical 2026-08-19 slice общий статус оставался `NOT READY FOR PRODUCTION`: clean Staging, RBAC/browser/export, load/race/performance, UAT, restore/rollback/cutover, approvals и deployment не выполнялись. Более позднее scoped synthetic browser evidence и всё ещё открытые gates приведены в разделе 15.
 
 ## 10. FR-02 ERPNext master-data boundary — v0.17.0
 
@@ -154,9 +154,9 @@ Claude CODE был dirty до начала анализа. Поэтому [03_as
 | Standard Address/Contact | PASS: schema + positive/negative Bench | browser/role UAT open |
 | Standard Warehouse | PASS: same-Company/non-group Bench | warehouse business process UAT open |
 | Project/Task/Issue/Asset semantic review | PASS: documented negative acceptance + no second SSOT schema check | future use requires explicit semantic mapping |
-| Current release matrix | PASS: 557 rows; 278 Implemented / 274 Partial / 2 Absent | planning/evidence, not product completion |
-| Current static suite | PASS: 147/147 | no Frappe DB in this count |
-| Final full Frappe suite | PASS: 79/79 in 380.526s | disposable `ca01.localhost`, exact `--skip-test-records` protocol |
+| Historical v0.17.0 release matrix | PASS: 557 rows; 278 Implemented / 274 Partial / 2 Absent | superseded by the current snapshot in section 15; planning/evidence, not product completion |
+| Historical v0.17.0 static suite | PASS: 147/147 | superseded by the current snapshot in section 15; no Frappe DB in this count |
+| Historical v0.17.0 full Frappe suite | PASS: 79/79 in 380.526s | superseded by the current snapshot in section 15; disposable `ca01.localhost` |
 | Workflow / Communication | PARTIAL / OPEN | separate positive acceptance required |
 | Hosted CI / UAT / deploy | NOT RUN | no commit/push/deploy claimed |
 
@@ -197,4 +197,45 @@ Claude CODE был dirty до начала анализа. Поэтому [03_as
 
 ## 13. FR-05 legal/privacy package preparation
 
-[FR-05 package v1](implementation/CA-08/legal_privacy_package_fr05_v1.md) содержит заполненный field registry, purpose/basis/source/consent/retention, RBAC/export/private-file/break-glass, назначенных ответственных и FR-06 change-set. Полученный файл зафиксирован по SHA-256; Product Owner подписал свою строку 2026-08-19. Это не blanket legal approval: Legal, Privacy/DPO, Security и Data Owner/HR остаются `PENDING SIGNATURE`, а FR-06 ещё не реализован. Поэтому `MG-CA-015`, production PII и positive `PERSONNEL_READY` остаются заблокированы.
+[FR-05 package v1](implementation/CA-08/legal_privacy_package_fr05_v1.md) содержит заполненный field registry, purpose/basis/source/consent/retention, RBAC/export/private-file/break-glass, назначенных ответственных и FR-06 change-set. Product Owner подписал пакет и 2026-08-19 аттестовал получение подтверждений от Legal/Privacy/DPO, Security и Data Owner/HR; номера и оригиналы формальных актов не предоставлены и не заявляются как проверенные evidence. FR-06 v0.20.0 реализует fail-closed policy, protected lifecycle, RBAC/File, readiness, break-glass/legal hold/retention и прошёл automated server qualification на disposable `ca01.localhost`. Server tests подтверждают scoped/masked/no-number role projections, отрицательные роли, report/export boundaries, exact-target download, Clean/Rejected, private file allowlist и pre-unlink guards. Current [authenticated synthetic browser evidence](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md) подтверждает symmetric own/foreign Engineer Form ACL, own-only List и foreign direct `403`; это automated synthetic result, не human UAT и не blanket whole-graph acceptance. Workspace visibility остаётся `OPEN BLOCKER` до Product Owner review; `socket.io 404` под `bench serve` требует full-stack rerun. До human UAT также требуется review list/form/translation/timezone; actual scanner integration и отдельное production-PII permission не выполнены. Поэтому `MG-CA-015` остаётся PARTIAL и production PII запрещены; synthetic positive `PERSONNEL_READY` runtime-qualified, но human UAT ещё не закрыт.
+
+## 14. Completeness and cross-project authorization audit — v0.20.0
+
+[Аудит полноты](implementation/CA-00/completeness_audit_v0_20_0_2026-08-19.md)
+сверил source/runtime `62/62` DocType и `1 068` DocField, 14 ролей, 557
+requirements/248 atomic refs, API/test/UI/install/CI поверхность. Структурная
+целостность schema подтверждена, но release boundary ухудшена до обязательного
+STOP: scoped synthetic Engineer не читает foreign Service Project, однако
+`frappe.has_permission` возвращает `true` для связанного foreign Service
+Request; scoped Office Manager аналогично читает foreign Project Document.
+Таким образом, проверенные Page/projection и credential policies нельзя
+экстраполировать на direct Desk/List/Form/API/report/export/File всего project
+graph.
+
+На момент этого read-only аудита дополнительно были подтверждены отсутствие
+Workspace/Workflow/Report/Print Format/translations, English-only 1 067/1 068
+labels, неполная drift validation двух reference templates, 13 endpoint без
+прямого test-name evidence, три audited read endpoint без POST-only boundary,
+static-only hosted CI и отсутствие canonical demo seed/reset/verifier. Тогда на
+site оставались 2 synthetic Worker и 2 synthetic Credential при отключённых
+users/policies; записи в рамках аудита не удалялись. Последующая remediation
+source-controlled demo lifecycle и current qualification зафиксированы в
+разделе 15; они не закрывают Workspace, full-stack realtime или human UAT.
+
+## 15. Current v0.20.0 qualification snapshot — 2026-08-20
+
+Этот раздел актуализирует только current qualification status и не переписывает
+исторические результаты разделов 8–14.
+
+| Проверка | Текущий результат | Граница |
+|---|---|---|
+| Release Scope | 557/557 строк; 554 обязательных: 280 `Implemented`, 274 `Partial`, 0 `Absent` | planning/evidence, не product completion |
+| Static qualification | current final-tree `205/205 PASS` | без browser/human UAT и production deployment |
+| Full Frappe app suite | current dirty-tree disposable `179/179 OK` на isolated `ca01.localhost` за `3767.802s` | local runtime evidence, не immutable RC, не hosted CI и не human UAT |
+| Targeted Inspection | `5/5 PASS` | узкая runtime-квалификация; не заменяет Demo/full Bench |
+| Synthetic demo lifecycle | installer/reset/verifier установлен; exact reset `74`, повтор `0`; до/после: Comment `159` / `b9d32dc17c2ab6553df0d1d4a777988b4345e55726099790ce33b93c98b6bc8f`, Deleted Document `340` / `34fd6a9d165891f1a3224a631c51a597335ad2c85c6a036af953269013fb3291`, Version `91` / `bec2d1a60e893f98c0fa78a558231f39d7ec5c33b0f8b0a758497303ce398e79`; included in full disposable Bench `179/179 OK`; post-run synthetic DB/File/recovery categories ended `0` after exact zero-DB cleanup | local automated runtime evidence; не пользовательская приёмка |
+| Privacy/retention runtime | latest scoped: policy `9/9`, alias/retention `24/24`, File boundaries `3/3`; DB/path/ledger residue `0` | targeted automated evidence, не whole-app qualification, production activation или human UAT |
+| Authenticated synthetic browser UAT | scoped automated PASS: symmetric own/foreign Engineer Form ACL, own-only List, foreign direct `403` | не human UAT; Workspace visibility OPEN, `socket.io 404` требует full-stack rerun |
+| Human role UAT | `NOT RUN / NOT APPROVED` | требуется Product Owner review Workspace/list/form/translation/timezone до допуска реальных пользователей |
+| Restore, performance and release qualification | `OPEN` | restore/rollback, race/load/performance, clean Staging, production approval и deployment не выполнены |
+| Overall release status | `NOT READY FOR PRODUCTION / RC NOT READY` | automated PASS и structural demo verify не заменяют оставшиеся manual/operational gates |

@@ -4,7 +4,7 @@
 
 **Дата анализа:** 2026-08-17. **Owner decisions:** 2026-08-18. **Release decisions:** 2026-08-19.
 
-**Источник истины:** release topology/scope/policies — [Release Decisions v1](11_release_decisions_v1.md); TARGET — `Structure of the contract accounting system.md`; discovery SPEC/CODE — прежние snapshots; completion CODE baseline — `contract-accounting` `7145d87` / `0.16.2`; текущая committed delta — `5249e00` / `0.16.3`, проверенный незакоммиченный working tree — `0.19.0`.
+**Источник истины:** release topology/scope/policies — [Release Decisions v1](11_release_decisions_v1.md); TARGET — `Structure of the contract accounting system.md`; discovery SPEC/CODE — прежние snapshots; completion CODE baseline — `contract-accounting` `7145d87` / `0.16.2`; текущая committed branch head — `500cdaf` / `0.19.0`, проверенный незакоммиченный FR-06 working tree — `0.20.0`.
 
 **Как проверить:** для дальнейшей работы начать с [Release Decisions v1](11_release_decisions_v1.md), [roadmap](06_roadmap.md) и [последовательного плана](10_remaining_questions_and_actions.md); discovery facts проверять через inventory/AS-IS/coverage artifacts.
 
@@ -18,7 +18,7 @@ TARGET разложен на 557 атомарных требований во в
 
 Ключевой discovery-конфликт «Service Project или отдельный Contract» закрыт: `Ferum Service Project` — единый юридический/execution SSOT, а [ADR-CA-0002](implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md) запрещает shared runtime/schema с `ferum_custom`. Legacy N:M data не мигрируются; `MG-CA-001=N/A` подтверждается zero-record inventory и backup.
 
-**Текущий первый исполнимый шаг:** completion tag/manifest, technical legacy inventory/backup, Release Scope v1, local static+Bench и terminal hosted static quality выполнены. Engineering boundary `FR-02/03/04` локально подтверждён. Решения `FR-05` заполнены, ответственные назначены, Product Owner подписал пакет; следующий зависимый gate — отдельные подписи Legal, Privacy/DPO, Security и Data Owner/HR, затем реализация FR-06. Ручные gates `FR-02/03/04` остаются открыты. Release qualification остаётся partial/open.
+**Текущий первый исполнимый шаг:** инженерные инкременты и их локальные PASS не объявляются готовым продуктом. Для текущего dirty v0.20.0 подтверждены final-tree static `205/205 PASS`, targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled demo lifecycle and full disposable Bench `179/179 OK` on isolated `ca01.localhost` (`3767.802s`). Post-run synthetic DB/File/recovery residue был проверен и очищен только от доказанных zero-DB test-only blobs; финальный postcheck по demo/credential/download/recovery категориям — `0`. Это локальная техническая квалификация dirty tree, а не RC/release readiness: immutable commit, hosted CI for the current change-set, Workspace/full-stack browser rerun, actual scanner, human HR/DPO/Security UAT, restore/rollback, performance/race/load, clean Staging, production approval/deployment and separate production-PII permission остаются открытыми.
 
 Заказчик утвердил 23 discovery owner questions и 17 release decisions. Архитектура/scope больше не требуют опроса владельца; остаются CODE/configuration/legal/RBAC/performance/UAT/restore/deployment gates. Migration legacy business data и Import Batch не блокируют first release, но требуют N/A/negative evidence.
 
@@ -41,6 +41,8 @@ TARGET разложен на 557 атомарных требований во в
 | [12_release_scope_v1.md](12_release_scope_v1.md) / [557-row CSV](12_release_scope_matrix_v1.csv) | текущая mandatory/partial/absent/deferred capability delta |
 | [13_first_release_backlog_v1.md](13_first_release_backlog_v1.md) | dependency-ordered backlog `FR-01…18` |
 | [14_quality_profile_v1.md](14_quality_profile_v1.md) | единый static/Bench CI-профиль, команды и границы PASS |
+| [15_first_stage_completion_sequence.md](15_first_stage_completion_sequence.md) | текущая короткая последовательность от FR-06 runtime до production/hypercare |
+| [implementation/CA-00/demo_uat_productization_plan_v1.md](implementation/CA-00/demo_uat_productization_plan_v1.md) | обязательный воспроизводимый demo/UAT package и fresh-site gate до human UAT |
 | [implementation/CA-00/README.md](implementation/CA-00/README.md) | фактический preflight CA-00, W2 readiness и MG-CA-016 gates |
 | [implementation/CA-00/ADR-CA-0001-erpnext-custom-party-boundary.md](implementation/CA-00/ADR-CA-0001-erpnext-custom-party-boundary.md) | утверждённая граница ERPNext/custom и Party Identity |
 | [implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md](implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md) | `contract_accounting` replaces `ferum_custom` без shared runtime/schema/data |
@@ -89,7 +91,10 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-08/schema_v0_9_0.md](implementation/CA-08/schema_v0_9_0.md) | физическая Assignment/Terms schema и fail-closed Worker/Credential privacy spike |
 | [implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md](implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md) | exact v0.9.0 versions, 47/47 runtime и clean reinstall 35 DocType |
 | [implementation/CA-08/traceability_v0_9_0.md](implementation/CA-08/traceability_v0_9_0.md) | CODE/runtime mapping CA-08 с явным MG-CA-015/PERSONNEL READY OPEN |
-| [implementation/CA-08/legal_privacy_package_fr05_v1.md](implementation/CA-08/legal_privacy_package_fr05_v1.md) | FR-05 filled decisions; Product Owner signed, четыре отдельные подписи и MG-CA-015 OPEN |
+| [implementation/CA-08/legal_privacy_package_fr05_v1.md](implementation/CA-08/legal_privacy_package_fr05_v1.md) | FR-05 filled decisions; all named sign-offs confirmed via Product Owner attestation, FR-06 и MG-CA-015 OPEN |
+| [implementation/CA-08/privacy_controls_v0_20_0.md](implementation/CA-08/privacy_controls_v0_20_0.md) | FR-06 activation, Worker/Credential, RBAC, readiness, break-glass/legal hold/retention design |
+| [implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | v0.20.0 final-tree static `205/205`, targeted Inspection `5/5`, scoped privacy runtime, full disposable Bench `179/179 OK` and narrow Engineer browser ACL PASS; human UAT PENDING, RC/release NOT READY |
+| [implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md) | 12-role synthetic browser matrix, исправления Office/masked form и Product Owner UI checklist |
 | [implementation/CA-09/README.md](implementation/CA-09/README.md) | current CA-09/FR-03 status, derived timeline и production calendar boundary |
 | [implementation/CA-09/projection_v0_10_0.md](implementation/CA-09/projection_v0_10_0.md) | normalized row/source adapters и fail-closed classification contract |
 | [implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md](implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md) | exact v0.10.0 versions, 50/50 runtime и 35-DocType inventory |
@@ -138,6 +143,6 @@ TARGET разложен на 557 атомарных требований во в
 - SPEC: Claude v6.2.21; рабочая и versioned-копии побайтно совпадают.
 - CODE discovery snapshots `b1fcaac`/`c97c34a` сохраняются только как historical evidence.
 - Completion baseline: `7145d87` / `0.16.2` от 2026-08-18; local+remote annotated tag, manifest/schema hashes и clean `136/136` standalone run — PASS; baseline-exact live inventory и restore — OPEN.
-- Current committed implementation delta: `5249e00` / `0.16.3`; evaluated uncommitted working tree: `0.19.0`.
+- Current committed branch head: `500cdaf` / `0.19.0`; evaluated uncommitted working tree: `0.20.0`.
 - OWNER: OQ-CA-001…023 и DP-01…17 утверждены; manual/runtime/legal/release gates не закрыты owner approval.
 - Текущая работа не читала secrets/record contents; выполнила count-only legacy inventory и local backup, но не restore, UAT или deployment gates.

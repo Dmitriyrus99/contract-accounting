@@ -6,19 +6,28 @@ from typing import Any, Final
 
 import frappe
 
+from contract_accounting.infrastructure.project_graph_permissions import (
+	contractor_assignment_query,
+	has_project_graph_permission,
+)
+
 DOCTYPE: Final[str] = "Ferum Contractor Assignment"
 CONTRACTOR_ROLE: Final[str] = "Подрядчик"
 
 
 def get_permission_query_conditions(user: str | None = None, doctype: str | None = None) -> str:
 	user = user or frappe.session.user
-	if user == "Administrator" or CONTRACTOR_ROLE not in frappe.get_roles(user):
-		return ""
-	suppliers = _allowed_suppliers(user)
-	if not suppliers:
-		return "1=0"
-	escaped = ", ".join(frappe.db.escape(value) for value in suppliers)
-	return f"`tab{DOCTYPE}`.`supplier` in ({escaped})"
+	conditions: list[str] = []
+	project_condition = contractor_assignment_query(user)
+	if project_condition:
+		conditions.append(project_condition)
+	if user != "Administrator" and CONTRACTOR_ROLE in frappe.get_roles(user):
+		suppliers = allowed_suppliers(user)
+		if not suppliers:
+			return "1=0"
+		escaped = ", ".join(frappe.db.escape(value) for value in suppliers)
+		conditions.append(f"`tab{DOCTYPE}`.`supplier` in ({escaped})")
+	return " and ".join(f"({condition})" for condition in conditions)
 
 
 def has_permission(
@@ -28,14 +37,17 @@ def has_permission(
 	debug: bool = False,
 ) -> bool | None:
 	user = user or frappe.session.user
+	project_result = has_project_graph_permission(doc, ptype, user, debug)
+	if project_result is False:
+		return False
 	if user == "Administrator" or CONTRACTOR_ROLE not in frappe.get_roles(user):
-		return None
+		return project_result
 	if ptype not in {None, "read", "select"}:
 		return False
-	return bool(doc.supplier and doc.supplier in _allowed_suppliers(user))
+	return bool(doc.supplier and doc.supplier in allowed_suppliers(user))
 
 
-def _allowed_suppliers(user: str) -> tuple[str, ...]:
+def allowed_suppliers(user: str) -> tuple[str, ...]:
 	rows = frappe.get_all(
 		"User Permission",
 		filters={"user": user, "allow": "Supplier", "is_default": ["in", [0, 1]]},

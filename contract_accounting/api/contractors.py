@@ -7,8 +7,12 @@ from typing import Any, Final, TypeVar
 
 import frappe
 from frappe import _
-from frappe.utils import now_datetime
+from frappe.utils import cint, now_datetime
 
+from contract_accounting.application.personnel_readiness import (
+	canonical_required_credential_types,
+	evaluate_assignment,
+)
 from contract_accounting.contract_accounting.doctype.ferum_contractor_assignment.ferum_contractor_assignment import (
 	ASSIGNMENT_TRANSITION_FLAG,
 	ASSIGNMENT_WRITER_FLAG,
@@ -50,6 +54,7 @@ def create_contractor_assignment(
 	contractor_worker: str | None = None,
 	object_system: str | None = None,
 	contract_obligation: str | None = None,
+	required_credential_types: str | list[str] | None = None,
 ) -> dict[str, str]:
 	_require_role(_ASSIGNMENT_CREATE_ROLES, "create Contractor Assignment")
 	_project(service_project).check_permission("read")
@@ -68,10 +73,49 @@ def create_contractor_assignment(
 			"responsibility": responsibility,
 			"effective_from": effective_from,
 			"effective_to": effective_to,
+			"required_credential_types": canonical_required_credential_types(
+				required_credential_types
+			),
 		}
 	)
 	_with_flag(ASSIGNMENT_WRITER_FLAG, True, lambda: doc.insert(ignore_permissions=True))
 	return {"contractor_assignment": doc.name, "status": doc.status}
+
+
+@frappe.whitelist(methods=["POST"])
+def evaluate_contractor_readiness(
+	name: str,
+	confirm: int | str = 0,
+	reason: str | None = None,
+) -> dict[str, Any]:
+	_require_role(_ASSIGNMENT_APPROVE_ROLES, "evaluate Contractor Assignment readiness")
+	frappe.db.get_value(ASSIGNMENT_DOCTYPE, name, "name", for_update=True)
+	doc = frappe.get_doc(ASSIGNMENT_DOCTYPE, name)
+	doc.check_permission("write")
+	result = evaluate_assignment(doc)
+	doc.credentials_readiness = result.status
+	doc.readiness_reason = result.reason
+	doc.readiness_fingerprint = result.fingerprint
+	if cint(confirm):
+		if result.status not in {"Ready", "Not Required"}:
+			frappe.throw(_("Readiness confirmation разрешён только для Ready/Not Required."))
+		if len(str(reason or "").strip()) < 10:
+			frappe.throw(_("Readiness confirmation требует reason не короче 10 символов."))
+		doc.readiness_confirmed_fingerprint = result.fingerprint
+		doc.readiness_confirmed_at = now_datetime()
+		doc.readiness_confirmed_by = frappe.session.user
+	else:
+		doc.readiness_confirmed_fingerprint = None
+		doc.readiness_confirmed_at = None
+		doc.readiness_confirmed_by = None
+	_with_flag(ASSIGNMENT_WRITER_FLAG, True, lambda: doc.save(ignore_permissions=True))
+	return {
+		"contractor_assignment": doc.name,
+		"credentials_readiness": doc.credentials_readiness,
+		"readiness_reason": doc.readiness_reason,
+		"confirmed": bool(doc.readiness_confirmed_fingerprint),
+	}
+
 
 
 @frappe.whitelist(methods=["POST"])
@@ -203,10 +247,19 @@ def get_contractor_assignment_trace(name: str) -> dict[str, Any]:
 			fields=["name", "status", "expense_date", "amount_without_vat"],
 			order_by="expense_date asc, name asc",
 		),
-		"personnel_readiness": {
-			"enabled": False,
-			"reason": "MG-CA-015 is open",
-		},
+		"personnel_readiness": _readiness_trace(doc),
+	}
+
+
+def _readiness_trace(doc: Any) -> dict[str, Any]:
+	result = evaluate_assignment(doc)
+	return {
+		"enabled": result.status != "Policy Inactive",
+		"status": result.status,
+		"reason": result.reason,
+		"confirmed": doc.readiness_confirmed_fingerprint == result.fingerprint,
+		"confirmed_at": str(doc.readiness_confirmed_at) if doc.readiness_confirmed_at else None,
+		"confirmed_by": doc.readiness_confirmed_by,
 	}
 
 

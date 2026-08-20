@@ -7,6 +7,7 @@ from uuid import uuid4
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+from frappe.utils import getdate
 from frappe.utils.file_manager import save_file
 
 from contract_accounting.api.billing import (
@@ -62,6 +63,7 @@ class TestFerumBillingOutput(FrappeTestCase):
             }
         ).insert(ignore_permissions=True)
         self.obligation = self._make_obligation()
+        self.billing_date = getdate(self.obligation.effective_from)
         self.visit = self._make_accepted_visit()
         self.invoice = self._make_submitted_invoice()
 
@@ -72,7 +74,7 @@ class TestFerumBillingOutput(FrappeTestCase):
     def test_selector_and_basis_snapshot_claim_exact_accepted_sources(self) -> None:
         request = self._make_resolved_request()
         candidates = get_unbilled_accepted_work(
-            self.project.name, str(date.today()), str(date.today())
+            self.project.name, str(self.billing_date), str(self.billing_date)
         )
         candidate_keys = {(row["source_doctype"], row["source_name"]) for row in candidates}
         self.assertIn(("Ferum Maintenance Visit", self.visit.name), candidate_keys)
@@ -91,7 +93,7 @@ class TestFerumBillingOutput(FrappeTestCase):
         self.assertTrue(output.basis_hash)
         self.assertTrue(all(row.source_hash for row in output.basis_items))
         remaining = get_unbilled_accepted_work(
-            self.project.name, str(date.today()), str(date.today())
+            self.project.name, str(self.billing_date), str(self.billing_date)
         )
         remaining_keys = {(row["source_doctype"], row["source_name"]) for row in remaining}
         self.assertNotIn(("Ferum Maintenance Visit", self.visit.name), remaining_keys)
@@ -179,7 +181,7 @@ class TestFerumBillingOutput(FrappeTestCase):
         self.invoice.cancel()
         self.assertEqual(self.invoice.docstatus, 2)
         candidates = get_unbilled_accepted_work(
-            self.project.name, str(date.today()), str(date.today())
+            self.project.name, str(self.billing_date), str(self.billing_date)
         )
         self.assertIn(self.visit.name, {row["source_name"] for row in candidates})
 
@@ -201,7 +203,7 @@ class TestFerumBillingOutput(FrappeTestCase):
         self.assertTrue(new.basis_items[0].active_claim_key)
         self.assertEqual(old.basis_items[0].source_hash, new.basis_items[0].source_hash)
         candidates = get_unbilled_accepted_work(
-            self.project.name, str(date.today()), str(date.today())
+            self.project.name, str(self.billing_date), str(self.billing_date)
         )
         self.assertNotIn(self.visit.name, {row["source_name"] for row in candidates})
 
@@ -236,9 +238,9 @@ class TestFerumBillingOutput(FrappeTestCase):
             self.project.name,
             self.invoice.name,
             "Act",
-            str(date.today()),
-            str(date.today()),
-            str(date.today()),
+            str(self.billing_date),
+            str(self.billing_date),
+            str(self.billing_date),
             refs
             or [
                 {
@@ -304,7 +306,7 @@ class TestFerumBillingOutput(FrappeTestCase):
                 "uom": "Nos",
                 "currency": self.project.currency,
                 "price_component": 1200,
-                "effective_from": date.today(),
+                "effective_from": getdate(self.project_object.effective_from),
             }
         ).insert(ignore_permissions=True)
         obligation.status = "Active"
@@ -312,9 +314,10 @@ class TestFerumBillingOutput(FrappeTestCase):
         return obligation
 
     def _make_accepted_visit(self):
-        result = generate_planned_visits(self.obligation.name, str(date.today()), str(date.today()))
+        work_date = getdate(self.obligation.effective_from)
+        result = generate_planned_visits(self.obligation.name, str(work_date), str(work_date))
         visit_name = result["items"][0]["visit"]
-        started_at = datetime.combine(date.today(), datetime.min.time()) + timedelta(hours=9)
+        started_at = datetime.combine(work_date, datetime.min.time()) + timedelta(hours=9)
         change_visit_status(visit_name, "In Progress", actual_start=str(started_at))
         visit = frappe.get_doc("Ferum Maintenance Visit", visit_name)
         visit.work_result = "Completed"
@@ -384,6 +387,7 @@ class TestFerumBillingOutput(FrappeTestCase):
         return request
 
     def _make_submitted_invoice(self):
+        posting_date = getdate(getattr(self, "billing_date", self.obligation.effective_from))
         item_code = f"CA06-{uuid4().hex[:10]}"
         frappe.get_doc(
             {
@@ -410,10 +414,13 @@ class TestFerumBillingOutput(FrappeTestCase):
                 "doctype": "Sales Invoice",
                 "company": self.project.company,
                 "customer": self.project.customer,
-                "posting_date": date.today(),
-                "due_date": date.today() + timedelta(days=30),
+                "posting_date": posting_date,
+                "due_date": posting_date + timedelta(days=30),
                 "currency": self.project.currency,
                 "conversion_rate": 1,
+                "selling_price_list": "Standard Selling",
+                "price_list_currency": self.project.currency,
+                "plc_conversion_rate": 1,
                 "ferum_service_project": self.project.name,
                 "items": [
                     {

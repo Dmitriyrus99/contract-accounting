@@ -1,0 +1,1 @@
+"""Ferum Privacy Event DocType."""

@@ -22,7 +22,7 @@ TRANSITIONS: Final[dict[str, frozenset[str]]] = {
 	"Completed": frozenset(),
 	"Cancelled": frozenset(),
 }
-READINESS_DISABLED: Final[str] = "Disabled Pending MG-CA-015"
+READINESS_POLICY_INACTIVE: Final[str] = "Policy Inactive"
 
 
 class FerumContractorAssignment(Document):
@@ -39,7 +39,7 @@ class FerumContractorAssignment(Document):
 		self._validate_transition()
 		self._validate_no_overlap()
 		self._freeze_after_approval()
-		self.credentials_readiness = READINESS_DISABLED
+		self._derive_readiness()
 		self.overlap_guard_key = self._overlap_guard_key()
 
 	def on_trash(self) -> None:
@@ -80,16 +80,13 @@ class FerumContractorAssignment(Document):
 			for fieldname in ("project_object", "object_system", "work_type"):
 				value = getattr(obligation, fieldname, None)
 				if value and value != self.get(fieldname):
-					frappe.throw(_("Assignment scope не совпадает с Contract Obligation."))
+					frappe.throw(
+						_("Assignment.{0} не совпадает с Contract Obligation.").format(fieldname)
+					)
 
 	def _validate_executor(self) -> None:
-		if self.contractor_worker:
-			frappe.throw(
-				_("Contractor Worker data заблокированы до закрытия MG-CA-015."),
-				frappe.PermissionError,
-			)
 		if self.execution_mode == "Internal":
-			if not self.employee or self.supplier:
+			if not self.employee or self.supplier or self.contractor_worker:
 				frappe.throw(_("Internal Assignment требует Employee и запрещает Supplier."))
 			employee_company = frappe.db.get_value("Employee", self.employee, "company")
 			if employee_company != self.company:
@@ -97,6 +94,20 @@ class FerumContractorAssignment(Document):
 		elif self.execution_mode == "Contractor":
 			if not self.supplier or self.employee:
 				frappe.throw(_("Contractor Assignment требует Supplier и запрещает Employee."))
+			if self.contractor_worker:
+				if not frappe.db.get_single_value("Ferum Privacy Settings", "enabled"):
+					frappe.throw(
+						_("Contractor Worker заблокирован: FR-05 policy inactive."),
+						frappe.PermissionError,
+					)
+				worker = frappe.db.get_value(
+					"Ferum Contractor Worker",
+					self.contractor_worker,
+					("supplier", "status"),
+					as_dict=True,
+				)
+				if not worker or worker.supplier != self.supplier or worker.status != "Active":
+					frappe.throw(_("Contractor Worker должен быть Active и принадлежать Supplier."))
 		else:
 			frappe.throw(_("Assignment execution_mode не поддерживается."))
 
@@ -174,13 +185,28 @@ class FerumContractorAssignment(Document):
 		allowed = {
 			"status", "commercial_terms", "credentials_readiness", "status_reason",
 			"approved_at", "approved_by", "completed_at", "completed_by",
-			"cancelled_at", "cancelled_by", "overlap_guard_key",
+			"cancelled_at", "cancelled_by", "overlap_guard_key", "readiness_reason",
+			"readiness_fingerprint", "readiness_confirmed_fingerprint",
+			"readiness_confirmed_at", "readiness_confirmed_by",
 		}
 		for field in self.meta.fields:
 			if field.fieldname in allowed or field.fieldtype in {"Section Break", "Column Break", "Tab Break"}:
 				continue
 			if self.get(field.fieldname) != before.get(field.fieldname):
 				frappe.throw(_("Approved Assignment identity immutable."))
+
+
+	def _derive_readiness(self) -> None:
+		from contract_accounting.application.personnel_readiness import evaluate_assignment
+
+		result = evaluate_assignment(self)
+		self.credentials_readiness = result.status
+		self.readiness_reason = result.reason
+		self.readiness_fingerprint = result.fingerprint
+		if self.readiness_confirmed_fingerprint != result.fingerprint:
+			self.readiness_confirmed_fingerprint = None
+			self.readiness_confirmed_at = None
+			self.readiness_confirmed_by = None
 
 	def _overlap_guard_key(self) -> str | None:
 		if self.status not in ACTIVE_STATUSES:

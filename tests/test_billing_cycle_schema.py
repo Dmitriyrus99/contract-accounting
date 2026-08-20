@@ -9,9 +9,7 @@ DOCTYPE_ROOT = ROOT / "contract_accounting" / "contract_accounting" / "doctype"
 
 
 def schema(folder: str) -> dict[str, object]:
-    return json.loads(
-        (DOCTYPE_ROOT / folder / f"{folder}.json").read_text(encoding="utf-8")
-    )
+    return json.loads((DOCTYPE_ROOT / folder / f"{folder}.json").read_text(encoding="utf-8"))
 
 
 def fields(document: dict[str, object]) -> dict[str, dict[str, object]]:
@@ -30,9 +28,7 @@ class BillingCycleSchemaTests(unittest.TestCase):
             by_name["status"]["options"].splitlines(),
             ["Open", "Completed", "Cancelled"],
         )
-        self.assertFalse(
-            {"debit", "credit", "gl_entry", "paid_amount"}.intersection(by_name)
-        )
+        self.assertFalse({"debit", "credit", "gl_entry", "paid_amount"}.intersection(by_name))
 
     def test_output_links_cycle_without_replacing_basis_or_invoice(self) -> None:
         output = fields(schema("ferum_billing_output"))
@@ -40,10 +36,23 @@ class BillingCycleSchemaTests(unittest.TestCase):
         self.assertEqual(output["basis_items"]["options"], "Ferum Billing Basis Item")
         self.assertEqual(output["sales_invoice"]["options"], "Sales Invoice")
 
+    def test_billing_runtime_fixture_uses_site_references_and_monotonic_dates(self) -> None:
+        source = (DOCTYPE_ROOT / "ferum_billing_output" / "test_ferum_billing_output.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("from frappe.utils import getdate", source)
+        self.assertIn("self.billing_date = getdate(self.obligation.effective_from)", source)
+        self.assertIn('"effective_from": getdate(self.project_object.effective_from)', source)
+        self.assertIn("work_date = getdate(self.obligation.effective_from)", source)
+        self.assertIn("str(self.billing_date)", source)
+        self.assertIn('"selling_price_list": "Standard Selling"', source)
+        self.assertIn('"price_list_currency": self.project.currency', source)
+        self.assertIn('"plc_conversion_rate": 1', source)
+
     def test_reference_graph_has_exact_nine_milestones(self) -> None:
-        source = (
-            ROOT / "contract_accounting" / "setup" / "billing_cycle_template.py"
-        ).read_text(encoding="utf-8")
+        source = (ROOT / "contract_accounting" / "setup" / "billing_cycle_template.py").read_text(
+            encoding="utf-8"
+        )
         for code in (
             "WORK_COMPLETED",
             "EXECUTION_CONFIRMED",

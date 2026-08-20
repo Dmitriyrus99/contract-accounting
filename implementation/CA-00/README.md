@@ -72,7 +72,7 @@ Live inventory зафиксирован в [live_inventory_w2t12b_2026-08-18.md]
 | baseline-exact live apps/config/schema | OPEN | disposable DB stopped; no secret config read |
 | full restore | OPEN | credential-safe rehearsal required |
 | Release Scope v1 | PASS | [557-row matrix](../../12_release_scope_matrix_v1.csv), [summary](../../12_release_scope_v1.md), [backlog](../../13_first_release_backlog_v1.md) |
-| local quality profile | PASS | current static `161/161` + disposable Bench `89/89`; [v0.19.0 evidence](../CA-09/runtime_evidence_v0_19_0_2026-08-19.md) |
+| local quality profile | HISTORICAL v0.19.0 PASS | committed baseline static `161/161` + disposable Bench `89/89`; historical, not v0.20.0 current-tree qualification; [v0.19.0 evidence](../CA-09/runtime_evidence_v0_19_0_2026-08-19.md) |
 | `FR-02` master-data core | PASS (automation) | [boundary](master_data_boundary_v0_17_0.md), [traceability](traceability_v0_17_0_master_data.md); owner/browser/race gates OPEN |
 | hosted CI on current change-set | OPEN | workflow configured; no remote run/immutable change-set SHA yet |
 
@@ -91,6 +91,7 @@ Legacy `MG-CA-001=N/A` execution/sign-off protocol: [legacy_data_disposition_202
 | baseline dataset/configuration | Product Owner + Release Engineer | OPEN | versioned fixture/config manifest без секретов |
 | rollback rehearsal | Release Engineer | PARTIAL | backup и compensating rollback PASS; full `bench restore` остановлен на credential prompt — [протокол](rollback_rehearsal_2026-08-18.md) |
 | ERPNext/custom + Party Identity boundary | Architect | RECORDED | [ADR-CA-0001](ADR-CA-0001-erpnext-custom-party-boundary.md) |
+| Party Identity owner decision audit | Architect | EVIDENCE GATE OPEN | [audit](party_identity_owner_decision_audit_v0_17_0.md) |
 
 ## Следующий исполнимый шаг
 

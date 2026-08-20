@@ -101,12 +101,13 @@ class InspectionSchemaTests(unittest.TestCase):
         self.assertIn("NO_AUTOMATIC_COMPLETED_OR_NOT_APPLICABLE_BACKFILL", launch)
         self.assertNotIn('"status": "Completed"', source)
 
-    def test_personnel_gate_is_fail_closed_pending_mg_ca_015(self) -> None:
+    def test_personnel_gate_dispatches_live_fail_closed_assertions(self) -> None:
         processes = (ROOT / "contract_accounting" / "api" / "processes.py").read_text(
             encoding="utf-8"
         )
         self.assertIn('step.template_step_code == "PERSONNEL_READY"', processes)
-        self.assertIn("MG-CA-015", processes)
+        self.assertIn("assert_project_personnel_ready", processes)
+        self.assertIn("assert_personnel_not_applicable", processes)
         self.assertIn('target_status in {"Completed", "Not Applicable"}', processes)
 
 

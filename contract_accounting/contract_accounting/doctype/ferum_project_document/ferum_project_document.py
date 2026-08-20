@@ -11,6 +11,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import getdate
 
+from contract_accounting.infrastructure.assignment_guard import guard_assignment_changes
 from contract_accounting.infrastructure.deadline_guard import DEADLINE_SOURCE_WRITE_FLAG
 
 PROJECT_DOCUMENT_DOCTYPE: Final[str] = "Ferum Project Document"
@@ -112,6 +113,7 @@ _SIGNATURE_DEADLINE_FIELDS: Final[tuple[str, ...]] = (
 
 class FerumProjectDocument(Document):
     def validate(self) -> None:
+        guard_assignment_changes(self, ("owner_user",))
         self._derive_source_context()
         self._validate_dates()
         self._validate_party("issuer_doctype", "issuer")

@@ -1,6 +1,6 @@
 # 14. Quality/CI Profile v1
 
-**Статус на 2026-08-19:** `CONFIGURED / LOCAL STATIC+BENCH PASS / HOSTED STATIC PASS / MANUAL RELEASE GATES OPEN`.
+**Статус на 2026-08-21:** `CONFIGURED / CURRENT DIRTY v0.20.0 STATIC 205/205 PASS / FULL DISPOSABLE BENCH 179/179 OK / SCOPED SYNTHETIC BROWSER ACL PASS / HUMAN UAT, RC AND RELEASE NOT READY`.
 
 **Назначение:** один воспроизводимый профиль технических проверок первого выпуска. Профиль не подменяет RBAC/browser UAT, performance/load/race, restore, legal/finance/security approval, Staging или Production deployment.
 
@@ -10,14 +10,19 @@
 | --- | --- | --- | --- |
 | Traceability | детерминированная сборка и сверка 557-row Release Scope | [generator](scripts/build_release_scope_matrix.py), `--check` | PASS: 557 unique IDs, exact distribution |
 | Python correctness | `E4/E7/E9/F/I` на `contract_accounting`, `tests`, `scripts` | [ruff.toml](ruff.toml), Ruff `0.16.3` | PASS; 31 прежняя ошибка устранена |
-| Python format | существующий долг не растёт | [.quality/ruff_format_baseline.json](.quality/ruff_format_baseline.json) | PASS ratchet; current 99 / reviewed baseline 121, removed 22, новые нарушения запрещены |
-| Type safety | pure domain/application и quality scripts | [pyproject.toml](pyproject.toml), mypy `1.20.2`, Python target `3.11` | PASS: 15 modules |
-| Static/runtime-independent tests | schema, domain policies и quality-wrapper guards | `python -m unittest discover -s tests -v` | PASS: 161/161 |
-| Static assets | compileall, JSON parse, JS syntax, local Markdown links | [quality gate](scripts/quality_gate.py) | PASS: 66 JSON, 8 JS, 460 links |
-| Secret boundary | только Git-visible text; ignored env/site/private/backups не читаются | [quality gate](scripts/quality_gate.py) | PASS: 414 files, findings 0 |
-| Package | isolated sdist + wheel build | `build==1.5.0` | PASS: `0.19.0` sdist/wheel |
+| Python format | существующий долг не растёт | [.quality/ruff_format_baseline.json](.quality/ruff_format_baseline.json) | PASS ratchet; current 94 / reviewed baseline 121, removed 27, новые нарушения запрещены |
+| Type safety | pure domain/application и quality scripts | [pyproject.toml](pyproject.toml), mypy `1.20.2`, Python target `3.11` | PASS: 17 modules |
+| Static/runtime-independent tests | schema, domain policies и quality-wrapper guards | `python -m unittest discover -s tests -v` | current final-tree dirty v0.20.0: PASS `205/205`; earlier `161/161` is historical baseline |
+| Static assets | compileall, JSON parse, JS syntax, local Markdown links | [quality gate](scripts/quality_gate.py) | PASS в составе current static `205/205` profile |
+| Secret boundary | только Git-visible text; ignored env/site/private/backups не читаются | [quality gate](scripts/quality_gate.py) | PASS в составе current static profile; findings 0 |
+| Package | isolated sdist + wheel build | `build==1.5.0` | PASS: `0.20.0` sdist/wheel |
 | Hosted static CI | pull request, push to `main`/`agent/**`, manual dispatch после появления workflow на default branch | [static-quality workflow](.github/workflows/static-quality.yml) | PASS: [run 32261790230](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md), head `9f2cce9`, 18s |
-| Bench runtime | installed apps, migrate, asset build, full app tests | [Bench gate](scripts/bench_quality_gate.py) | local WSL `89/89 OK`; [v0.19.0 evidence](implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md) |
+| Bench runtime | installed apps, migrate, asset build, full app tests | [Bench gate](scripts/bench_quality_gate.py) | current dirty-tree disposable run: `179/179 OK` on `ca01.localhost` in `3767.802s`; not RC/UAT PASS and not hosted evidence |
+| Synthetic browser ACL | real Desk/List/Form/direct URL for owned/foreign Engineer users | [browser evidence](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md) | symmetric Form ACL, own-only List and foreign direct `403` PASS; automated synthetic slice only |
+| Demo reset | exact registry ownership, derived-row cleanup and idempotent reset | [verification evidence](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | exact `delete_count=74`, repeat `0`; stable audit sets: Comment `159`, Deleted Document `340`, Version `91` |
+| Privacy/retention | policy/alias/retention targeted runtime and residue checks | [verification evidence](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | latest scoped: policy `9/9`, alias/retention `24/24`, File boundaries `3/3`; DB/path/ledger residue `0`; included in full disposable Bench `179/179 OK` |
+| Inspection runtime | targeted Inspection module | Bench on isolated `ca01.localhost` | `5/5 PASS`; narrow evidence only |
+| Demo lifecycle runtime | full Demo module | Bench on isolated `ca01.localhost` | final dirty-tree full Bench includes demo lifecycle and completed `179/179 OK`; prior 34-test failures are superseded diagnostics |
 
 Pinned CI dependencies находятся в [requirements-ci.txt](requirements-ci.txt). Hosted workflow использует Python `3.11` и Node.js `22`; локальный static run выполнен на Windows Python `3.14.3`/Node `24.13.1`, а Bench runtime — на Python `3.11.14`/Node `22.23.1`.
 
@@ -39,7 +44,7 @@ python scripts/bench_quality_gate.py \
   --site ca01.localhost
 ```
 
-Bench gate намеренно использует `--skip-test-records`. В текущем ERPNext `15.119.2` автоматический upstream test-record traversal обращается к удалённому `Payment Gateway` и падает до выполнения тестов приложения; test modules `contract_accounting` создают свои изолированные records и дают полный `89/89 OK` с утверждённым флагом. Wrapper проверяет transcript: маркер `FAILED` отклоняется даже при ошибочном exit code 0 от Bench, а PASS требует финальный `OK`. Запуск без флага остаётся диагностическим FAIL и не маскируется.
+Bench gate намеренно использует `--skip-test-records`. В текущем ERPNext `15.119.2` автоматический upstream test-record traversal обращается к удалённому `Payment Gateway` и падает до выполнения тестов приложения. Исторический профиль давал `89/89 OK`, а более поздний dirty-tree baseline — `127/127 OK`; оба предшествуют текущему расширенному набору. Current dirty-tree disposable full run: `bench --site ca01.localhost run-tests --app contract_accounting --skip-test-records` → `Ran 179 tests in 3767.802s`, final `OK`. Wrapper проверяет transcript: маркер `FAILED` отклоняется даже при ошибочном exit code 0 от Bench, а PASS требует финальный `OK`. Запуск без флага остаётся диагностическим FAIL и не маскируется.
 
 ## 3. Правила изменения
 
@@ -47,11 +52,13 @@ Bench gate намеренно использует `--skip-test-records`. В т�
 - Форматный baseline может только уменьшаться. Добавление файла в baseline требует отдельного waiver с причиной и владельцем.
 - Static CI PASS не повышается до Bench, UAT или release PASS.
 - Bench PASS считается относящимся к tree только при checksum-equivalent app sync либо immutable commit/tag.
+- The current `v0.20.0` tree is dirty; local static `205/205` and disposable full Bench `179/179 OK` do not constitute hosted CI, blanket browser acceptance, human UAT, RC or release PASS.
+- Workspace visibility remains an `OPEN BLOCKER` until Product Owner review. `socket.io 404` observed under `bench serve` is an environment limitation and requires a full-stack rerun; it is not accepted as realtime PASS or product FAIL.
 - Remote CI получает PASS только после фактического GitHub Actions run; наличие YAML не является run evidence.
 
 ## 4. Открытые ворота FR-01
 
-1. `DONE`: change-set зафиксирован и опубликован в разрешённой feature branch.
-2. `DONE`: terminal hosted `static-quality` PASS на immutable head `9f2cce9`.
+1. `OPEN`: current v0.20.0 change-set ещё не зафиксирован и не опубликован в разрешённой feature branch.
+2. `OPEN`: terminal hosted `static-quality` PASS нужен на immutable current head; historical head `9f2cce9` сохранён только как provenance.
 3. Подключить Bench gate как защищённый external/self-hosted status либо сохранять подписанный локальный runtime evidence для каждого RC.
-4. Для RC повторить static+Bench профили на одном immutable SHA; затем отдельно выполнить RBAC, load/race, UAT, restore и deployment gates.
+4. Для RC повторить/закрепить static+Bench профили на одном immutable SHA; затем отдельно выполнить RBAC browser acceptance, load/race, UAT, restore и deployment gates.

@@ -1,0 +1,31 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["enabled", "activation_mode", "activated_at", "activated_by", "approval_reference", "last_reason", "configuration_revision", "policy_reference", "policy_hash"],
+ "fields": [
+  {"default": "0", "fieldname": "enabled", "fieldtype": "Check", "label": "Enabled", "read_only": 1},
+  {"default": "Disabled", "fieldname": "activation_mode", "fieldtype": "Select", "label": "Activation Mode", "options": "Disabled\nSynthetic Test\nProduction", "read_only": 1, "reqd": 1},
+  {"fieldname": "activated_at", "fieldtype": "Datetime", "label": "Activated At", "read_only": 1},
+  {"fieldname": "activated_by", "fieldtype": "Link", "label": "Activated By", "options": "User", "read_only": 1},
+  {"fieldname": "approval_reference", "fieldtype": "Data", "label": "Approval Reference", "read_only": 1},
+  {"fieldname": "last_reason", "fieldtype": "Small Text", "label": "Last Change Reason", "read_only": 1},
+  {"default": "0", "fieldname": "configuration_revision", "fieldtype": "Int", "label": "Configuration Revision", "read_only": 1},
+  {"default": "FR05-PD-01 v1.0", "fieldname": "policy_reference", "fieldtype": "Data", "label": "Policy Reference", "read_only": 1, "reqd": 1},
+  {"default": "19220c689d94046ec24f03ffdf6b00c2cfb33c7749f7d8c59a98398856a4e893", "fieldname": "policy_hash", "fieldtype": "Data", "label": "Policy SHA-256", "read_only": 1, "reqd": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Privacy Settings",
+ "permissions": [
+  {"read": 1, "role": "System Manager"},
+  {"read": 1, "role": "Генеральный директор"},
+  {"read": 1, "role": "Ответственный за ПДн"},
+  {"read": 1, "role": "Ответственный за ИБ"},
+  {"read": 1, "role": "Менеджер персональных данных"}
+ ],
+ "states": [],
+ "track_changes": 1
+}

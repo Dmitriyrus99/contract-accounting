@@ -1,6 +1,6 @@
 [project]
 name = "contract_accounting"
-version = "0.19.0"
+version = "0.20.0"
 description = "Target domain policy for the contract-accounting project"
 requires-python = ">=3.10"
 readme = "README.md"

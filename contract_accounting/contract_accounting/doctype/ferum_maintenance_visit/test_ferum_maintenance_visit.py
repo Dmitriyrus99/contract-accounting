@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from base64 import b64decode
 from datetime import date, datetime, time, timedelta
+from hashlib import sha256
+from io import BytesIO
+from pathlib import Path
 from uuid import uuid4
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils.file_manager import save_file
+from PIL import Image
 
 from contract_accounting.api.execution import (
     accept_visit,
@@ -269,18 +272,20 @@ class TestFerumMaintenanceExecution(FrappeTestCase):
         document.save(ignore_permissions=True)
         return document
 
-    @staticmethod
-    def _save_evidence_file(attached_doctype: str, attached_name: str):
-        return save_file(
+    def _save_evidence_file(self, attached_doctype: str, attached_name: str):
+        digest = sha256(f"maintenance:{attached_doctype}:{attached_name}".encode()).digest()
+        content = BytesIO()
+        Image.new("RGB", (1, 1), tuple(digest[:3])).save(content, format="PNG")
+        file_doc = save_file(
             f"ca03-{uuid4().hex[:10]}.png",
-            b64decode(
-                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
-                "+A8AAQUBAScY42YAAAAASUVORK5CYII="
-            ),
+            content.getvalue(),
             attached_doctype,
             attached_name,
             is_private=1,
         )
+        path = Path(file_doc.get_full_path()).resolve()
+        self.addCleanup(path.unlink, missing_ok=True)
+        return file_doc
 
     @staticmethod
     def _make_system(service_object: str):

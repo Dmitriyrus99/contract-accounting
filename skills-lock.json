@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "skills": {
+    "ferum-architecture-survey": {
+      "source": "./agent-skills",
+      "sourceType": "local",
+      "computedHash": "732b3976622d9572a8cbb18333a49d55b0476be97d078dacae68f59f2781bd4b"
+    },
+    "ferum-code-review": {
+      "source": "./agent-skills",
+      "sourceType": "local",
+      "computedHash": "4fd70c90945e4ef5889201f1d94e4b0164850573d4fde6671555096b8f354ccd"
+    },
+    "ferum-codebase-design": {
+      "source": "./agent-skills",
+      "sourceType": "local",
+      "computedHash": "d88c468446a9cd9a0d8007ca2981c7f1ac23f435c4441e1e25fcefeb6bb18a3f"
+    },
+    "ferum-diagnosing-bugs": {
+      "source": "./agent-skills",
+      "sourceType": "local",
+      "computedHash": "9fb5d2b423d29de326f5e8509662c7bfee990d6a3aa94d0c8a4518dad84948a6"
+    },
+    "ferum-domain-modeling": {
+      "source": "./agent-skills",
+      "sourceType": "local",
+      "computedHash": "ff1ded6238e6f23b52afef0fff1c0776526294041ea54a2fc3564bafe2270150"
+    },
+    "ferum-grill-with-docs": {
+      "source": "./agent-skills",
+      "sourceType": "local",
+      "computedHash": "14725a8a25c5ee3cb4a961cd192d89c256ef40161c164e12488c21a0e78ec54c"
+    },
+    "ferum-tdd": {
+      "source": "./agent-skills",
+      "sourceType": "local",
+      "computedHash": "94e2057cc93a7e474fe676ed7b8494db8cd189e619d0cccaf91a1ba7369ef428"
+    }
+  }
+}

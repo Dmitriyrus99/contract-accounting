@@ -2,6 +2,15 @@
 
 **Статус:** `CA-15 PARTIAL — READ-ONLY E2E TRACE + PROJECT INTEGRITY + OPERATIONS CROSS-ROLE + SERVICE REQUEST DISPOSITION CORE v0.16.3 VERIFIED`.
 
+**Boundary correction — 2026-08-19:** последующий
+[completeness audit](../CA-00/completeness_audit_v0_20_0_2026-08-19.md)
+подтвердил runtime FAIL прямого cross-project доступа: scoped Engineer не
+читает foreign Service Project, но читает связанный Service Request; scoped
+Office Manager аналогично читает foreign Project Document. Термин
+`permission-safe` ниже относится только к проверенным projection API/Page и
+самому Service Project, а не к каждому direct Desk/List/Form/API/export/File
+пути графа. CA-15 остаётся PARTIAL и получает обязательный row-policy stop-gate.
+
 **Release scope update — 2026-08-19:** [Release Decisions v1](../../11_release_decisions_v1.md) исключает Client/Contractor interactive portals и Import Batch из first release. Их отсутствие требует negative evidence, но portal implementation/UAT и production Import Batch E2E больше не являются first-release blockers. Internal role, export/report, performance, scheduler, legal, restore, UAT и deployment gates остаются обязательными.
 
 Инкремент объединяет ранее реализованные доменные контуры в одну permission-safe read projection. `get_end_to_end_trace` отвечает девятью сегментами «почему → где → когда → кто → что сделано → чем подтверждено → что выставлено → что оплачено → сколько заработали» и семью сквозными измерениями: подрядчики, материалы, затраты, документы, коммуникации, сроки и аудит. Каждая возвращённая строка содержит source DocType/name и drill-down; новый cache/trace/ledger SSOT не создавался.
@@ -46,4 +55,4 @@ Service Request disposition core and v0.16.3 evidence: [service_request_disposit
 
 ## Открытая граница
 
-CA-15 не получает blanket PASS. Выполнены manager/director и Operations Engineer/Accountant/Office Manager/Project Lead browser slices; Service Request core disposition v0.16.3 bench-verified. Не выполнены Lawyer/Process Owner/System Manager, новые Request commands cross-role/browser UAT, API export/report и остальные internal cross-role сценарии, representative-volume performance/load/race, scheduler/retry/idempotency в production topology, clean-environment cutover/rollback rehearsal и legal retention/archive. Для OQ-CA-022 остаются Internal/Other typed owner, access-denied Process Event command и ручные/production gates. Client/Contractor interactive portals отсутствуют по scope; Import Batch должен оставаться disabled и пройти negative evidence. Production deployment и sign-off не выполнялись.
+CA-15 не получает blanket PASS. Выполнены manager/director и Operations Engineer/Accountant/Office Manager/Project Lead browser slices; Service Request core disposition v0.16.3 bench-verified. Прямой project-graph authorization сейчас FAIL для как минимум Service Request/Engineer и Project Document/Office Manager; нужны общая row policy и полная negative entity/file/export matrix. Не выполнены Lawyer/Process Owner/System Manager, новые Request commands cross-role/browser UAT, API export/report и остальные internal cross-role сценарии, representative-volume performance/load/race, scheduler/retry/idempotency в production topology, clean-environment cutover/rollback rehearsal и legal retention/archive. Для OQ-CA-022 остаются Internal/Other typed owner, access-denied Process Event command и ручные/production gates. Client/Contractor interactive portals отсутствуют по scope; Import Batch должен оставаться disabled и пройти negative evidence. Production deployment и sign-off не выполнялись.

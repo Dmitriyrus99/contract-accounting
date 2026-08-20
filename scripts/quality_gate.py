@@ -18,6 +18,8 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import unquote
 
+import yaml  # type: ignore[import-untyped]
+
 ROOT = Path(__file__).resolve().parents[1]
 FORMAT_BASELINE = ROOT / ".quality" / "ruff_format_baseline.json"
 PYTHON_TARGETS = ("contract_accounting", "tests", "scripts")
@@ -204,6 +206,11 @@ def check_json_and_javascript() -> None:
     for path in javascript_files:
         run(["node", "--check", str(path.relative_to(ROOT))])
     print(f"JAVASCRIPT_SYNTAX=PASS|FILES={len(javascript_files)}")
+
+    yaml_files = [*project_files(".yaml"), *project_files(".yml")]
+    for path in yaml_files:
+        yaml.load(path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+    print(f"YAML_PARSE=PASS|FILES={len(yaml_files)}")
 
 
 def git_visible_files() -> list[Path]:

@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from base64 import b64decode
 from datetime import date, datetime, timedelta
+from hashlib import sha256
+from io import BytesIO
+from pathlib import Path
 from unittest.mock import patch
 from uuid import uuid4
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils.file_manager import save_file
+from PIL import Image
 
 from contract_accounting.api.execution import generate_planned_visits
 from contract_accounting.api.findings import (
@@ -333,15 +336,17 @@ class TestFerumFinding(FrappeTestCase):
             }
         ).insert(ignore_permissions=True)
 
-    @staticmethod
-    def _save_evidence_file(finding_name: str):
-        return save_file(
+    def _save_evidence_file(self, finding_name: str):
+        digest = sha256(f"finding:{finding_name}".encode()).digest()
+        content = BytesIO()
+        Image.new("RGB", (1, 1), tuple(digest[:3])).save(content, format="PNG")
+        file_doc = save_file(
             f"ca04-{uuid4().hex[:10]}.png",
-            b64decode(
-                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
-                "+A8AAQUBAScY42YAAAAASUVORK5CYII="
-            ),
+            content.getvalue(),
             "Ferum Finding",
             finding_name,
             is_private=1,
         )
+        path = Path(file_doc.get_full_path()).resolve()
+        self.addCleanup(path.unlink, missing_ok=True)
+        return file_doc
