@@ -1,6 +1,6 @@
 # 14. Quality/CI Profile v1
 
-**Статус на 2026-08-21:** `CONFIGURED / LOCAL REVIEW CANDIDATE v0.20.0 / STATIC 209/209 PASS / EXACT-SOURCE BENCH 179/179 OK / FULL-STACK SYNTHETIC ENGINEER SLICE PASS / HOSTED CI FOR CURRENT CHANGE-SET OPEN / HUMAN UAT, RC AND RELEASE NOT READY`.
+**Статус на 2026-08-21:** `CONFIGURED / LOCAL REVIEW CANDIDATE v0.20.0 / STATIC 211/211 PASS / EXACT-SOURCE BENCH 179/179 OK / FULL-STACK SYNTHETIC ENGINEER SLICE PASS / HOSTED CI FOR CURRENT CHANGE-SET OPEN / HUMAN UAT, RC AND RELEASE NOT READY`.
 
 **Назначение:** один воспроизводимый профиль технических проверок первого выпуска. Профиль не подменяет RBAC/browser UAT, performance/load/race, restore, legal/finance/security approval, Staging или Production deployment.
 
@@ -12,15 +12,16 @@
 | Python correctness | `E4/E7/E9/F/I` на `contract_accounting`, `tests`, `scripts` | [ruff.toml](ruff.toml), Ruff `0.16.3` | PASS; 31 прежняя ошибка устранена |
 | Python format | существующий долг не растёт | [.quality/ruff_format_baseline.json](.quality/ruff_format_baseline.json) | PASS ratchet; current 94 / reviewed baseline 121, removed 27, новые нарушения запрещены |
 | Type safety | pure domain/application и quality scripts | [pyproject.toml](pyproject.toml), mypy `1.20.2`, Python target `3.11` | PASS: 17 modules |
-| Static/runtime-independent tests | schema, domain policies и quality-wrapper guards | `python -m unittest discover -s tests -v` | current final-tree local review candidate `v0.20.0`: PASS `209/209`; earlier `161/161` is historical baseline |
-| Static assets | compileall, JSON parse, JS syntax, local Markdown links | [quality gate](scripts/quality_gate.py) | PASS в составе current static `209/209` profile |
+| Static/runtime-independent tests | schema, domain policies и quality-wrapper guards | `python -m unittest discover -s tests -v` | current final-tree local review candidate `v0.20.0`: PASS `211/211`; earlier `161/161` is historical baseline |
+| Static assets | compileall, JSON parse, JS syntax, local Markdown links | [quality gate](scripts/quality_gate.py) | PASS в составе current static `211/211` profile |
 | Secret boundary | только Git-visible text; ignored env/site/private/backups не читаются | [quality gate](scripts/quality_gate.py) | PASS в составе current static profile; findings 0 |
 | Package | isolated sdist + wheel build | `build==1.5.0` | PASS: `0.20.0` sdist/wheel |
 | Hosted static CI | pull request, push to `main`/`agent/**`, manual dispatch после появления workflow на default branch | [static-quality workflow](.github/workflows/static-quality.yml) | historical PASS: draft PR head `2865400` via runs `32425117645` and `32425141660`, plus [run 32261790230](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) on head `9f2cce9`; hosted CI for the current local change-set remained OPEN at this evidence point |
-| Bench runtime | installed apps, migrate, asset build, full app tests | [Bench gate](scripts/bench_quality_gate.py) | current exact-source disposable gate: `179/179 OK` on `ca01.localhost` in `3693.178s`; not RC/UAT PASS and not hosted evidence |
+| Bench runtime | installed apps, migrate, asset build, full app tests | [Bench gate](scripts/bench_quality_gate.py) | current exact-source disposable gate: `179/179 OK` on `ca01.localhost` in `3711.997s`; not RC/UAT PASS and not hosted evidence |
 | Synthetic browser ACL | real Desk/List/Form/direct URL for owned/foreign Engineer users | [browser evidence](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md) | symmetric Form ACL, own-only List and foreign direct `403` PASS; automated synthetic slice only |
 | Demo reset | exact registry ownership, derived-row cleanup and idempotent reset | [verification evidence](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | exact `delete_count=74`, repeat `0`; stable audit sets: Comment `159`, Deleted Document `340`, Version `91` |
 | Privacy/retention | policy/alias/retention targeted runtime and residue checks | [verification evidence](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | latest scoped: policy `9/9`, alias/retention `24/24`, File boundaries `3/3`; DB/path/ledger residue `0`; included in full disposable Bench `179/179 OK` |
+| Browser runtime contract | repo-local browser dependency and harness import boundary | [quality gate](scripts/quality_gate.py) + `tests/test_demo_uat_browser_runtime_contract.py` | `playwright-core 1.62.1` pinned in repo, harness imports repo dependency only, no fallback to generated `output/.../node_modules` |
 | Inspection runtime | targeted Inspection module | Bench on isolated `ca01.localhost` | `5/5 PASS`; narrow evidence only |
 | Demo lifecycle runtime | full Demo module | Bench on isolated `ca01.localhost` | current exact-source Bench gate includes demo lifecycle and completed `179/179 OK`; prior 34-test failures are superseded diagnostics |
 
@@ -44,7 +45,7 @@ python scripts/bench_quality_gate.py \
   --site ca01.localhost
 ```
 
-Bench gate намеренно использует `--skip-test-records`. В текущем ERPNext `15.119.2` автоматический upstream test-record traversal обращается к удалённому `Payment Gateway` и падает до выполнения тестов приложения. Исторический профиль давал `89/89 OK`, а более поздний dirty-tree baseline — `127/127 OK`; оба предшествуют текущему расширенному набору. Current exact-source disposable gate: `python scripts/bench_quality_gate.py --bench-root /home/rus/contract-accounting-bench --site ca01.localhost` → `Ran 179 tests in 3693.178s`, final `OK`, `BENCH_QUALITY_GATE=PASS`. Wrapper проверяет transcript: маркер `FAILED` отклоняется даже при ошибочном exit code 0 от Bench, а PASS требует финальный `OK`. Запуск без флага остаётся диагностическим FAIL и не маскируется.
+Bench gate намеренно использует `--skip-test-records`. В текущем ERPNext `15.119.2` автоматический upstream test-record traversal обращается к удалённому `Payment Gateway` и падает до выполнения тестов приложения. Исторический профиль давал `89/89 OK`, а более поздний dirty-tree baseline — `127/127 OK`; оба предшествуют текущему расширенному набору. Current exact-source disposable gate: `python scripts/bench_quality_gate.py --bench-root /home/rus/contract-accounting-bench --site ca01.localhost` → `Ran 179 tests in 3711.997s`, final `OK`, `BENCH_QUALITY_GATE=PASS`. Wrapper проверяет transcript: маркер `FAILED` отклоняется даже при ошибочном exit code 0 от Bench, а PASS требует финальный `OK`. Запуск без флага остаётся диагностическим FAIL и не маскируется.
 
 ## 3. Правила изменения
 
@@ -52,7 +53,7 @@ Bench gate намеренно использует `--skip-test-records`. В т�
 - Форматный baseline может только уменьшаться. Добавление файла в baseline требует отдельного waiver с причиной и владельцем.
 - Static CI PASS не повышается до Bench, UAT или release PASS.
 - Bench PASS считается относящимся к tree только при checksum-equivalent app sync либо immutable commit/tag.
-- The current `v0.20.0` local review candidate has static `209/209` and exact-source disposable Bench `179/179 OK`, but these still do not constitute blanket browser acceptance, human UAT, RC or release PASS.
+- The current `v0.20.0` local review candidate has static `211/211`, exact-source disposable Bench `179/179 OK`, and a pinned repo-local browser runtime contract, but these still do not constitute blanket browser acceptance, human UAT, RC or release PASS.
 - Workspace visibility remains an `OPEN BLOCKER` until Product Owner review. The authenticated full-stack synthetic Engineer slice now has `socket.io` polling `200`, but this still is not blanket browser acceptance or human UAT.
 - Remote CI получает PASS только после фактического GitHub Actions run; наличие YAML не является run evidence.
 

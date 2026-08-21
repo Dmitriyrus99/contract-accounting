@@ -1,17 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { createRequire } = require("module");
-
-const runtimeNodeModules = path.join(
-  __dirname,
-  "..",
-  "output",
-  "playwright",
-  "fullstack_runtime",
-  "node_modules",
-);
-const runtimeRequire = createRequire(path.join(runtimeNodeModules, "index.js"));
-const { chromium } = runtimeRequire("playwright-core");
+const { chromium } = require("playwright-core");
 
 const password = process.env.CA01_SYNTHETIC_PASSWORD;
 const baseUrl = "http://ca01.localhost:8000";

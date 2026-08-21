@@ -1,6 +1,6 @@
 # FR-06 v0.20.0 verification evidence — 2026-08-19
 
-**Текущий итог на 2026-08-21:** `DIRTY v0.20.0 / FINAL-TREE STATIC 209/209 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / FULL-STACK AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / EXACT RESET 74→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / WORKSPACE REVIEW, HUMAN UAT, HOSTED CI, RC AND RELEASE NOT READY`.
+**Текущий итог на 2026-08-21:** `DIRTY v0.20.0 / FINAL-TREE STATIC 211/211 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / FULL-STACK AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / PINNED REPO-LOCAL BROWSER RUNTIME CONTRACT / EXACT RESET 74→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / WORKSPACE REVIEW, HUMAN UAT, HOSTED CI, RC AND RELEASE NOT READY`.
 
 Исторические credential-specific server/file/Bench/browser результаты ниже
 сохранены как provenance. После обнаруженного cross-project leak они
@@ -39,7 +39,7 @@ RUNTIME_UAT_DEPLOYMENT_GATES=NOT_EVALUATED
 ```
 
 Excerpt намеренно не повторяет superseded standalone total; current static
-результат зафиксирован ниже как `209/209 PASS`.
+результат зафиксирован ниже как `211/211 PASS`.
 
 `git diff --check` также завершён без ошибок.
 
@@ -99,9 +99,9 @@ Excerpt намеренно не повторяет superseded standalone total; 
 На текущем dirty `v0.20.0` после обнаружения cross-project leak приняты
 следующие ограниченные локальные результаты:
 
-- final-tree static quality: `209/209 PASS`;
+- final-tree static quality: `211/211 PASS`;
 - targeted Inspection: `5/5 PASS`;
-- full disposable Frappe app suite on isolated `ca01.localhost`: `Ran 179 tests in 3693.178s`, final `OK`;
+- full disposable Frappe app suite on isolated `ca01.localhost`: `Ran 179 tests in 3711.997s`, final `OK`;
 - targeted project-graph runtime: `4/4 OK`;
 - launch-template runtime: `5/5 OK`;
 - billing-template runtime: `3/3 OK`;
@@ -109,6 +109,7 @@ Excerpt намеренно не повторяет superseded standalone total; 
   complete;
 - latest scoped privacy runtime: policy `9/9`, alias/retention `24/24`, File boundaries `3/3` OK; included in the full disposable `179/179 OK` run;
   DB/path/ledger residue `0`;
+- repo-local browser runtime contract: `playwright-core 1.62.1` pinned in `package.json`/`package-lock.json`; browser harness imports repo dependency only and no longer depends on generated `output/.../node_modules`;
 - authenticated synthetic browser: own/foreign Engineer symmetric Form ACL,
   own-only List, foreign direct `403`, and full-stack `socket.io` polling `200`
   — PASS;

@@ -186,7 +186,15 @@ def check_release_scope() -> None:
 
 
 def project_files(suffix: str) -> list[Path]:
-    excluded = {".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", "dist", "output"}
+    excluded = {
+        ".git",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".ruff_cache",
+        "dist",
+        "node_modules",
+        "output",
+    }
     return sorted(
         path
         for path in ROOT.rglob(f"*{suffix}")

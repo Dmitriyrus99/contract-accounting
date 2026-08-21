@@ -1,10 +1,10 @@
 # Последовательность завершения первого этапа
 
 **Состояние на 2026-08-21:** engineering foundation `v0.20.0` — local review
-candidate, не RC. Current accepted technical evidence: static `209/209 PASS`,
+candidate, не RC. Current accepted technical evidence: static `211/211 PASS`,
 targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
 synthetic demo installer/reset/verifier, exact-source Bench gate `179/179 OK`
-on isolated `ca01.localhost` (`3693.178s`), historical hosted `static-quality`
+on isolated `ca01.localhost` (`3711.997s`), historical hosted `static-quality`
 PASS on draft PR head `2865400`, verified `main` protection, and active tag
 ruleset blocking `refs/tags/v*`. This is still not an immutable RC
 qualification. Authenticated synthetic browser slice подтвердил symmetric
