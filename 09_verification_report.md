@@ -231,7 +231,7 @@ source-controlled demo lifecycle и current qualification зафиксирова
 |---|---|---|
 | Release Scope | 557/557 строк; 554 обязательных: 280 `Implemented`, 274 `Partial`, 0 `Absent` | planning/evidence, не product completion |
 | Static qualification | current final-tree `212/212 PASS` | без browser/human UAT и production deployment |
-| Full Frappe app suite | current published review-candidate exact-source gate `179/179 OK` на isolated `ca01.localhost` за `3671.606s` | local runtime evidence, не immutable RC и не human UAT |
+| Full Frappe app suite | current local review-candidate exact-source gate `179/179 OK` на isolated `ca01.localhost` | local runtime evidence, не immutable RC и не human UAT |
 | Targeted Inspection | `5/5 PASS` | узкая runtime-квалификация; не заменяет Demo/full Bench |
 | Synthetic demo lifecycle | installer/reset/verifier установлен; latest post-browser exact reset `79`, повтор `0`; до/после: Comment `159` / `b9d32dc17c2ab6553df0d1d4a777988b4345e55726099790ce33b93c98b6bc8f`, Deleted Document `340` / `34fd6a9d165891f1a3224a631c51a597335ad2c85c6a036af953269013fb3291`, Version `91` / `bec2d1a60e893f98c0fa78a558231f39d7ec5c33b0f8b0a758497303ce398e79`; included in full disposable Bench `179/179 OK`; post-run synthetic DB/File/recovery categories ended `0` after exact zero-DB cleanup | local automated runtime evidence; не пользовательская приёмка |
 | Privacy/retention runtime | latest scoped: policy `9/9`, alias/retention `24/24`, File boundaries `3/3`; DB/path/ledger residue `0` | targeted automated evidence, не whole-app qualification, production activation или human UAT |

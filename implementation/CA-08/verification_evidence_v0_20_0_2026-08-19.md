@@ -1,6 +1,6 @@
 # FR-06 v0.20.0 verification evidence — 2026-08-19
 
-**Текущий итог на 2026-08-21:** `PUBLISHED REVIEW CANDIDATE / FINAL-TREE STATIC 212/212 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / FULL-STACK AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / PINNED REPO-LOCAL BROWSER RUNTIME CONTRACT / LATEST POST-BROWSER RESET 79→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / WORKSPACE REVIEW, HUMAN UAT, RC AND RELEASE NOT READY`.
+**Текущий итог на 2026-08-21:** `LOCAL REVIEW CANDIDATE / FINAL-TREE STATIC 212/212 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / FULL-STACK AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / PINNED REPO-LOCAL BROWSER RUNTIME CONTRACT / LATEST POST-BROWSER RESET 79→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / PUBLISHED-HEAD HOSTED CI PASS / CURRENT LOCAL TREE REQUIRES FRESH HOSTED RUN / WORKSPACE REVIEW, HUMAN UAT, RC AND RELEASE NOT READY`.
 
 Исторические credential-specific server/file/Bench/browser результаты ниже
 сохранены как provenance. После обнаруженного cross-project leak они
@@ -101,7 +101,7 @@ Excerpt намеренно не повторяет superseded standalone total; 
 
 - final-tree static quality: `212/212 PASS`;
 - targeted Inspection: `5/5 PASS`;
-- full disposable Frappe app suite on isolated `ca01.localhost`: `Ran 179 tests in 3671.606s`, final `OK`;
+- full disposable Frappe app suite on isolated `ca01.localhost`: full app tests `179/179 OK`, final `OK`;
 - targeted project-graph runtime: `4/4 OK`;
 - launch-template runtime: `5/5 OK`;
 - billing-template runtime: `3/3 OK`;

@@ -4,9 +4,11 @@
 candidate, не RC. Current accepted technical evidence: static `212/212 PASS`,
 targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
 synthetic demo installer/reset/verifier, exact-source Bench gate `179/179 OK`
-on isolated `ca01.localhost` (`3671.606s`), historical hosted `static-quality`
+on isolated `ca01.localhost`, historical hosted `static-quality`
 PASS on draft PR head `2865400`, verified `main` protection, and active tag
-ruleset blocking `refs/tags/v*`. This is still not an immutable RC
+ruleset blocking `refs/tags/v*`. The latest published draft-PR head still has
+hosted `static-quality` PASS, while this newer local tree requires a fresh
+hosted run before it can be called published/verified. This is still not an immutable RC
 qualification. Authenticated synthetic browser slice подтвердил symmetric
 own/foreign Engineer Form ACL, own-only List, foreign direct `403`, and
 full-stack `socket.io` polling `200`; это automated result, не human UAT.
@@ -26,7 +28,7 @@ approval, production activation или deployment.
 | 2 — HISTORICAL, SUPERSEDED FOR WHOLE GRAPH | Исторически выполнены targeted FR-06 и full Frappe suite; evidence не удаляется | Backend/QA | `5/5` и `94/94 OK` относятся к прежнему credential-specific tree и не сертифицируют текущий project graph или RC | только историческая техническая трассируемость |
 | 3 — HISTORICAL SYNTHETIC BROWSER EVIDENCE | Исторически проверены credential roles/API/report/export/search/private-file | Security + QA | matrix retained; Office full-context и PM/Verifier mask defects были исправлены, но matrix superseded для whole-graph claim; это не human UAT | только credential-specific provenance |
 | 3A0 — LOCAL AUTOMATION QUALIFIED / MANUAL GATES OPEN | Исправить и отрицательно проверить row-level project scope для каждого связанного DocType, direct List/Form/API/report/export и File | Security + Backend + QA | scoped targeted runtime PASS; full disposable Bench `179/179 OK`; автоматизация не закрывает browser/human UAT | Product Owner UI review без release promotion |
-| 3A — OPEN BLOCKER / OWNER APPROVAL REQUIRED | Совместно с Product Owner утвердить canonical end-to-end demo/UAT scenario, Workspace visibility, list columns/filters, form grouping/labels/options и timezone `Europe/Moscow` | Product Owner + Product/QA | Workspace видимость и UI checklist утверждены; до этого реальные пользователи не допускаются | утверждённая поверхность human UAT |
+| 3A — OPEN BLOCKER / OWNER APPROVAL REQUIRED | Совместно с Product Owner утвердить canonical end-to-end demo/UAT scenario, Workspace visibility, list columns/filters, form grouping/labels/options и timezone `Europe/Moscow` | Product Owner + Product/QA | Явный sign-off по Workspace visibility и UI checklist отсутствует; до него реальные пользователи не допускаются | утверждённая поверхность human UAT |
 | 3B — LIFECYCLE VERIFIED | Поддерживать source-controlled idempotent synthetic demo installer/reset/verifier без секретов | Backend + QA | structural verify PASS; latest post-browser dataset reset PASS `delete_count=79`, повтор `0`; Comment/Deleted Document/Version до/после совпали по count и SHA-256; latest scoped privacy runtime: policy `9/9`, alias/retention `24/24`, File boundaries `3/3`, DB/path/ledger residue `0`; included in full disposable Bench `179/179 OK` | controlled browser rehearsal без residue |
 | 3C — AUTOMATED SYNTHETIC SLICE PASS / FULL-STACK PASS | На разрешённом isolated site выполнить install-app → migrate → seed → verify → authenticated synthetic browser E2E | Release + QA | own/foreign Engineer symmetric Form ACL, own-only List, foreign direct `403`, and full-stack `socket.io` polling `200` PASS; это не human UAT | после утверждения 3A — допуск реальных пользователей |
 | 4 — TEST ADAPTER PASS / INTEGRATION OPEN | Подключить scanner test adapter и проверить quarantine, Clean/Rejected, streamed download и audit | Security + Backend | synthetic Clean/Rejected, PDF/JPEG/PNG ≤10 MB, private stream PASS; public/direct read, forbidden type/size and protected delete FAIL; actual scanner integration ещё требуется | attachment gate |

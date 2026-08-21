@@ -10,7 +10,7 @@ published hosted CI PASS.
 
 - final-tree static qualification: `212/212 PASS`;
 - exact-source disposable Bench gate on isolated `ca01.localhost`:
-  `179/179 OK` in `3671.606s`;
+  `179/179 OK`;
 - targeted Inspection runtime: `5/5 PASS`;
 - scoped privacy runtime: policy `9/9`, alias/retention `24/24`,
   File boundaries `3/3`, residue `0`;
