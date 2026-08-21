@@ -45,7 +45,7 @@ Settings и 1 Version для Company. После fail-closed ownership remediati
 
 - dry-run получил `blockers=[]` и включил exact Activity Log в deletion plan;
 - реальный reset завершился `RESET_COMPLETE_NOT_A_UAT_RESULT`,
-  `delete_count=74`;
+  `delete_count=79`;
 - повторный reset завершился `delete_count=0`;
 - positive browser-like cleanup и negative historical/mismatched Activity Log
   blocker прошли targeted Bench: `2/2 OK` за `129.608s`;

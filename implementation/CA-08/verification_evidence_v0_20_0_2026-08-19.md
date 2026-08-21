@@ -1,6 +1,6 @@
 # FR-06 v0.20.0 verification evidence — 2026-08-19
 
-**Текущий итог на 2026-08-21:** `DIRTY v0.20.0 / FINAL-TREE STATIC 212/212 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / FULL-STACK AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / PINNED REPO-LOCAL BROWSER RUNTIME CONTRACT / EXACT RESET 74→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / WORKSPACE REVIEW, HUMAN UAT, HOSTED CI, RC AND RELEASE NOT READY`.
+**Текущий итог на 2026-08-21:** `PUBLISHED REVIEW CANDIDATE / FINAL-TREE STATIC 212/212 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / FULL-STACK AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / PINNED REPO-LOCAL BROWSER RUNTIME CONTRACT / LATEST POST-BROWSER RESET 79→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / WORKSPACE REVIEW, HUMAN UAT, RC AND RELEASE NOT READY`.
 
 Исторические credential-specific server/file/Bench/browser результаты ниже
 сохранены как provenance. После обнаруженного cross-project leak они
@@ -101,7 +101,7 @@ Excerpt намеренно не повторяет superseded standalone total; 
 
 - final-tree static quality: `212/212 PASS`;
 - targeted Inspection: `5/5 PASS`;
-- full disposable Frappe app suite on isolated `ca01.localhost`: `Ran 179 tests in 3711.997s`, final `OK`;
+- full disposable Frappe app suite on isolated `ca01.localhost`: `Ran 179 tests in 3671.606s`, final `OK`;
 - targeted project-graph runtime: `4/4 OK`;
 - launch-template runtime: `5/5 OK`;
 - billing-template runtime: `3/3 OK`;
@@ -113,7 +113,7 @@ Excerpt намеренно не повторяет superseded standalone total; 
 - authenticated synthetic browser: own/foreign Engineer symmetric Form ACL,
   own-only List, foreign direct `403`, and full-stack `socket.io` polling `200`
   — PASS;
-- browser dataset exact reset: `delete_count=74`, immediate repeat `0`;
+- latest post-browser dataset exact reset: `delete_count=79`, immediate repeat `0`;
 - independent before/after audit sets remained exact: Comment `159` /
   `b9d32dc17c2ab6553df0d1d4a777988b4345e55726099790ce33b93c98b6bc8f`,
   Deleted Document `340` /
@@ -167,7 +167,7 @@ Browser evidence является automated synthetic result, не human UAT. О
   Activity Log. Последующий no-registry detector классифицировал только exact
   historical derived set из 72 rows: 67 Comment (65 deterministic + 2 Activity
   cluster), 4 Deleted Document для Notification Settings и 1 Version для
-  Company. После fail-closed ownership remediation финальный reset `74` и
+  Company. После fail-closed ownership remediation latest post-browser reset `79` и
   repeat `0` завершились успешно, а независимые audit counts/hashes не
   изменились.
 - Первый повтор targeted suite после browser-fix создал дополнительного User в
