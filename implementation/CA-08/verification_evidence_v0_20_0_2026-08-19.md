@@ -1,6 +1,6 @@
 # FR-06 v0.20.0 verification evidence — 2026-08-19
 
-**Текущий итог на 2026-08-21:** `DIRTY v0.20.0 / FINAL-TREE STATIC 205/205 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / SCOPED AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / EXACT RESET 74→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / WORKSPACE, FULL-STACK REALTIME, HUMAN UAT, HOSTED CI, RC AND RELEASE NOT READY`.
+**Текущий итог на 2026-08-21:** `DIRTY v0.20.0 / FINAL-TREE STATIC 209/209 PASS / TARGETED INSPECTION 5/5 PASS / FULL DISPOSABLE BENCH 179/179 OK / LATEST SCOPED PRIVACY 9+24+3 OK / FULL-STACK AUTHENTICATED SYNTHETIC ENGINEER ACL PASS / EXACT RESET 74→0 WITH STABLE AUDIT HASHES / POST-RUN SYNTHETIC RESIDUE 0 / WORKSPACE REVIEW, HUMAN UAT, HOSTED CI, RC AND RELEASE NOT READY`.
 
 Исторические credential-specific server/file/Bench/browser результаты ниже
 сохранены как provenance. После обнаруженного cross-project leak они
@@ -39,7 +39,7 @@ RUNTIME_UAT_DEPLOYMENT_GATES=NOT_EVALUATED
 ```
 
 Excerpt намеренно не повторяет superseded standalone total; current static
-результат зафиксирован ниже как `205/205 PASS`.
+результат зафиксирован ниже как `209/209 PASS`.
 
 `git diff --check` также завершён без ошибок.
 
@@ -94,14 +94,14 @@ Excerpt намеренно не повторяет superseded standalone total; 
     временный password file и fixture module удалены. Disposable services
    остановлены; порты `3317/11000/13000/8000` не слушают.
 
-## Current post-leak remediation evidence — 2026-08-20
+## Current post-leak remediation evidence — 2026-08-21
 
 На текущем dirty `v0.20.0` после обнаружения cross-project leak приняты
 следующие ограниченные локальные результаты:
 
-- final-tree static quality: `205/205 PASS`;
+- final-tree static quality: `209/209 PASS`;
 - targeted Inspection: `5/5 PASS`;
-- full disposable Frappe app suite on isolated `ca01.localhost`: `Ran 179 tests in 3767.802s`, final `OK`;
+- full disposable Frappe app suite on isolated `ca01.localhost`: `Ran 179 tests in 3693.178s`, final `OK`;
 - targeted project-graph runtime: `4/4 OK`;
 - launch-template runtime: `5/5 OK`;
 - billing-template runtime: `3/3 OK`;
@@ -110,7 +110,8 @@ Excerpt намеренно не повторяет superseded standalone total; 
 - latest scoped privacy runtime: policy `9/9`, alias/retention `24/24`, File boundaries `3/3` OK; included in the full disposable `179/179 OK` run;
   DB/path/ledger residue `0`;
 - authenticated synthetic browser: own/foreign Engineer symmetric Form ACL,
-  own-only List и foreign direct `403` — PASS;
+  own-only List, foreign direct `403`, and full-stack `socket.io` polling `200`
+  — PASS;
 - browser dataset exact reset: `delete_count=74`, immediate repeat `0`;
 - independent before/after audit sets remained exact: Comment `159` /
   `b9d32dc17c2ab6553df0d1d4a777988b4345e55726099790ce33b93c98b6bc8f`,
@@ -123,8 +124,9 @@ Excerpt намеренно не повторяет superseded standalone total; 
 
 Browser evidence является automated synthetic result, не human UAT. Оно не
 повышает scoped slice до blanket whole-graph RBAC: Workspace visibility остаётся
-`OPEN BLOCKER` до Product Owner review, а `socket.io 404` под `bench serve`
-требует rerun на полном Frappe stack. RC и release остаются `NOT READY`.
+`OPEN BLOCKER` до Product Owner review, but historical `socket.io 404` under
+`bench serve` is superseded by current full-stack polling `200`. RC и release
+остаются `NOT READY`.
 
 ## Диагностические результаты, не принятые как PASS
 
@@ -151,9 +153,11 @@ Browser evidence является automated synthetic result, не human UAT. О
   WSL. Новый браузер не устанавливался. In-app browser сначала выполнил
   anonymous smoke, а после отдельного разрешения — authenticated synthetic role
   matrix.
-- Current browser run через `bench serve` получил `socket.io 404`. Этот запуск
-  не поднимал полный websocket/socket.io stack, поэтому результат записан как
-  environment limitation и не принят ни как realtime PASS, ни как product FAIL.
+- Historical browser run через `bench serve` получил `socket.io 404`. Он не
+  поднимал полный websocket/socket.io stack и сохраняется как environment
+  limitation provenance. Current full-stack synthetic Engineer rerun completed
+  with `socket.io` polling `200` for both identities and is the accepted
+  scoped browser evidence.
 - Первый real reset current browser dataset корректно остановился на
   postcondition: четыре structured Shared Comment, созданные bootstrap
   DocShare→User, не входили в deletion plan. Транзакция/physical File rollback

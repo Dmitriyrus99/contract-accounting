@@ -1,6 +1,6 @@
 # Воспроизводимый demo/UAT-контур — productization plan v1
 
-**Статус на 2026-08-20:** `STRUCTURAL PRODUCTIZATION AND EXACT RESET VERIFIED / WORKSPACE AND FULL-STACK RERUN OPEN / HUMAN UAT NOT RUN / RC NOT READY`.
+**Статус на 2026-08-21:** `STRUCTURAL PRODUCTIZATION, EXACT RESET AND FULL-STACK SYNTHETIC ENGINEER SLICE VERIFIED / WORKSPACE REVIEW OPEN / HUMAN UAT NOT RUN / RC NOT READY`.
 
 ## 1. Корректная оценка текущего состояния
 
@@ -118,8 +118,8 @@ installer.
 
 - Совместно утвердить Workspace visibility, lists/forms/translations/timezone и
   canonical UI checklist; Workspace остаётся `OPEN BLOCKER`.
-- Повторить synthetic browser run на полном Frappe stack: `socket.io 404` под
-  `bench serve` зафиксирован как environment limitation, не realtime PASS.
+- Historical `socket.io 404` under `bench serve` is superseded: current
+  full-stack synthetic Engineer run completed with `socket.io` polling `200`.
 - Сохранить exact installer/reset/verifier и privacy/retention regressions в RC
   qualification.
 
@@ -128,7 +128,7 @@ installer.
 - Исправить Workspace/forms/lists/translations/workflows/reports/prints по
   результатам совместного Product Owner review.
 - Подключить actual scanner adapter и повторить attachment flow.
-- После owner review и full-stack synthetic rerun отдельно допустить human UAT.
+- После owner review отдельно допустить human UAT.
 
 ### Later
 
@@ -139,7 +139,7 @@ installer.
 ## 6. Что отложено этой перестановкой
 
 Human UAT и любые утверждения о release readiness остаются отложены, несмотря
-на воспроизводимый structural demo/UAT package. Их блокируют Product Owner UI
-review, Workspace visibility, full-stack realtime rerun и отдельные manual/
-operational gates. Новые изолированные feature-инкременты не должны вытеснять
-эту последовательность.
+на воспроизводимый structural demo/UAT package и завершённый full-stack
+synthetic Engineer slice. Их блокируют Product Owner UI review, Workspace
+visibility и отдельные manual/operational gates. Новые изолированные
+feature-инкременты не должны вытеснять эту последовательность.

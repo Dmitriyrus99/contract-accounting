@@ -1,6 +1,6 @@
 # FR-06 authenticated browser UAT v0.20.0 — synthetic-only
 
-**Статус на 2026-08-20:** `CURRENT SCOPED AUTOMATED SYNTHETIC ENGINEER ACL PASS / WORKSPACE AND FULL-STACK RERUN OPEN / HUMAN UAT NOT RUN / RC NOT READY`.
+**Статус на 2026-08-21:** `CURRENT SCOPED AUTOMATED FULL-STACK SYNTHETIC ENGINEER ACL PASS / WORKSPACE REVIEW OPEN / HUMAN UAT NOT RUN / RC NOT READY`.
 
 Документ сохраняет историческую Worker/Credential matrix и отдельно фиксирует
 current remediation rerun на source-controlled synthetic dataset. Ни один из
@@ -20,7 +20,7 @@ release readiness. Current server/reset evidence ведётся в
 - Проверка выполнялась через настоящий Frappe Desk login и формы/списки, а не
   только через server API.
 
-## 2. Current remediation browser rerun — 2026-08-20
+## 2. Current remediation browser rerun — 2026-08-21
 
 | Проверка | Фактический результат | Статус/граница |
 | --- | --- | --- |
@@ -30,12 +30,12 @@ release readiness. Current server/reset evidence ведётся в
 | Foreign Engineer → own Form | прямой URL возвращает `403` | PASS |
 | Симметрия ACL | обе Engineer identity имеют одинаковое правило own-positive/foreign-negative | PASS, scoped automated synthetic evidence |
 | Workspace visibility | целевой personnel/privacy Workspace не доступен как утверждённая рабочая поверхность | `OPEN BLOCKER` до совместного Product Owner review |
-| Realtime transport | `socket.io` вернул `404` при запуске только через `bench serve` | environment limitation; требуется rerun на полном Frappe stack |
+| Realtime transport | full-stack `socket.io` polling на `:9000` вернул только `200` для обеих Engineer identity | PASS, scoped automated synthetic evidence |
 
 Это authenticated automated synthetic browser evidence. Оно не является human
-UAT или sign-off названных реальных пользователей. `socket.io 404` не принят ни
-как realtime PASS, ни как product defect: текущий запуск не включал полный
-websocket/socket.io stack.
+UAT или sign-off названных реальных пользователей. Historical `socket.io 404`
+при прямом `bench serve` superseded: текущий запуск включал полный
+websocket/socket.io stack и зафиксировал polling `200`.
 
 Browser teardown сначала был заблокирован двумя `Activity Log`, связанными с
 registry-owned synthetic Engineer users. Последующий exact no-registry detector
@@ -168,10 +168,10 @@ Desk показывает timezone `Asia/Kolkata`, тогда как утвер�
 4. Группировку полей форм и русские labels.
 5. Предложенную таблицу переводов при сохранении технических enum в БД.
 6. Переключение timezone UAT-site на `Europe/Moscow`.
-7. После full-stack synthetic browser rerun — порядок human UAT:
+7. После owner review — порядок human UAT:
    Data Owner/HR → DPO/Legal → Security → совместный sign-off.
 
-До этих решений, закрытия Workspace blocker и full-stack rerun реальные
+До этих решений и закрытия Workspace blocker реальные
 пользователи из ранее названного списка не подключаются. Source-controlled
 demo lifecycle структурно и reset-проверен, но human UAT не выполнялся;
 production privacy settings и production PII остаются запрещены.

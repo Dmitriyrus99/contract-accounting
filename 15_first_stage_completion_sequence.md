@@ -1,16 +1,16 @@
 # Последовательность завершения первого этапа
 
-**Состояние на 2026-08-20:** engineering foundation `v0.20.0` — committed
-review candidate, не RC. Current accepted technical evidence: static `205/205
-PASS`, targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
+**Состояние на 2026-08-21:** engineering foundation `v0.20.0` — local review
+candidate, не RC. Current accepted technical evidence: static `209/209 PASS`,
+targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
 synthetic demo installer/reset/verifier, exact-source Bench gate `179/179 OK`
-on isolated `ca01.localhost` (`3714.584s`), hosted `static-quality` PASS on
-draft PR head `2865400`, verified `main` protection, and active tag ruleset
-blocking `refs/tags/v*`. This is still not an immutable RC qualification.
-Authenticated synthetic browser slice подтвердил symmetric own/foreign
-Engineer Form ACL, own-only List и foreign direct `403`; это automated result,
-не human UAT. Workspace visibility остаётся `OPEN BLOCKER` до review с
-Product Owner, а `socket.io 404` под `bench serve` требует full-stack rerun. Из
+on isolated `ca01.localhost` (`3693.178s`), historical hosted `static-quality`
+PASS on draft PR head `2865400`, verified `main` protection, and active tag
+ruleset blocking `refs/tags/v*`. This is still not an immutable RC
+qualification. Authenticated synthetic browser slice подтвердил symmetric
+own/foreign Engineer Form ACL, own-only List, foreign direct `403`, and
+full-stack `socket.io` polling `200`; это automated result, не human UAT.
+Workspace visibility остаётся `OPEN BLOCKER` до review с Product Owner. Из
 554 обязательных требований 280 имеют статус `Implemented`, а 274 — `Partial`;
 этот planning verdict не является приёмкой. Human UAT,
 restore/rollback, performance/race/load, clean Staging, production approval и
@@ -28,7 +28,7 @@ approval, production activation или deployment.
 | 3A0 — LOCAL AUTOMATION QUALIFIED / MANUAL GATES OPEN | Исправить и отрицательно проверить row-level project scope для каждого связанного DocType, direct List/Form/API/report/export и File | Security + Backend + QA | scoped targeted runtime PASS; full disposable Bench `179/179 OK`; автоматизация не закрывает browser/human UAT | Product Owner UI review без release promotion |
 | 3A — OPEN BLOCKER / OWNER APPROVAL REQUIRED | Совместно с Product Owner утвердить canonical end-to-end demo/UAT scenario, Workspace visibility, list columns/filters, form grouping/labels/options и timezone `Europe/Moscow` | Product Owner + Product/QA | Workspace видимость и UI checklist утверждены; до этого реальные пользователи не допускаются | утверждённая поверхность human UAT |
 | 3B — LIFECYCLE VERIFIED | Поддерживать source-controlled idempotent synthetic demo installer/reset/verifier без секретов | Backend + QA | structural verify PASS; exact browser dataset reset PASS `delete_count=74`, повтор `0`; Comment/Deleted Document/Version до/после совпали по count и SHA-256; latest scoped privacy runtime: policy `9/9`, alias/retention `24/24`, File boundaries `3/3`, DB/path/ledger residue `0`; included in full disposable Bench `179/179 OK` | controlled browser rehearsal без residue |
-| 3C — AUTOMATED SYNTHETIC SLICE PASS / FULL-STACK OPEN | На разрешённом isolated site выполнить install-app → migrate → seed → verify → authenticated synthetic browser E2E | Release + QA | own/foreign Engineer symmetric Form ACL, own-only List и foreign direct `403` PASS; `socket.io 404` под `bench serve` требует rerun на full stack; это не human UAT | после full-stack rerun и утверждения 3A — допуск реальных пользователей |
+| 3C — AUTOMATED SYNTHETIC SLICE PASS / FULL-STACK PASS | На разрешённом isolated site выполнить install-app → migrate → seed → verify → authenticated synthetic browser E2E | Release + QA | own/foreign Engineer symmetric Form ACL, own-only List, foreign direct `403`, and full-stack `socket.io` polling `200` PASS; это не human UAT | после утверждения 3A — допуск реальных пользователей |
 | 4 — TEST ADAPTER PASS / INTEGRATION OPEN | Подключить scanner test adapter и проверить quarantine, Clean/Rejected, streamed download и audit | Security + Backend | synthetic Clean/Rejected, PDF/JPEG/PNG ≤10 MB, private stream PASS; public/direct read, forbidden type/size and protected delete FAIL; actual scanner integration ещё требуется | attachment gate |
 | 5 — ЗАБЛОКИРОВАН УТВЕРЖДЕНИЕМ 3A И 3C | Провести HR/DPO/Security UAT: Worker/Credential FSM, dual verification, readiness, expiry/revoke, retention dry-run, legal hold и break-glass | Андриянова Елизавета + Доможакова Алена + Хижняк Алексей | UAT протокол, Sev1/Sev2=0, подписанные результаты | FR-06 UAT PASS |
 | 6 | Записать предоставленные номера/оригиналы внутренних актов, если компания использует их в документообороте | Legal + Product Owner | ссылки/номера без изменения уже утверждённой policy | полнота audit package; не подменяет UAT |
@@ -49,8 +49,8 @@ Product Owner предоставил отдельное разрешение:
 ```
 
 Разрешение использовано только для `ca01.localhost`; migrate, structural
-install/verify, scoped authenticated synthetic browser ACL и reset lifecycle
-выполнены в synthetic-only границе. Это не human UAT; Workspace review и
-full-stack rerun остаются OPEN. Разрешение не включало
+install/verify, scoped authenticated full-stack synthetic browser ACL и reset lifecycle
+выполнены в synthetic-only границе. Это не human UAT; Workspace review остаётся
+OPEN. Разрешение не включало
 `ferum.localhost`, `dev.localhost`, production PII, commit/push нового v0.20.0
 change-set или deployment.
