@@ -16,7 +16,7 @@
 | Static assets | compileall, JSON parse, JS syntax, local Markdown links | [quality gate](scripts/quality_gate.py) | PASS в составе current static `212/212` profile |
 | Secret boundary | только Git-visible text; ignored env/site/private/backups не читаются | [quality gate](scripts/quality_gate.py) | PASS в составе current static profile; findings 0 |
 | Package | isolated sdist + wheel build | `build==1.5.0` | PASS: `0.20.0` sdist/wheel |
-| Hosted static CI | pull request, push to `main`/`agent/**`, manual dispatch после появления workflow на default branch | [static-quality workflow](.github/workflows/static-quality.yml) | current published draft-PR head `6e3f89b` PASS via run `32470200904`; historical PASS: draft PR head `2865400` via runs `32425117645` and `32425141660`, plus [run 32261790230](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) on head `9f2cce9` |
+| Hosted static CI | pull request, push to `main`/`agent/**`, manual dispatch после появления workflow на default branch | [static-quality workflow](.github/workflows/static-quality.yml) | current published draft-PR head `2e27643` PASS via run `32470646882`; historical PASS: draft PR head `2865400` via runs `32425117645` and `32425141660`, plus [run 32261790230](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) on head `9f2cce9` |
 | Bench runtime | installed apps, migrate, asset build, full app tests | [Bench gate](scripts/bench_quality_gate.py) | current exact-source disposable gate: `179/179 OK` on `ca01.localhost`; not RC/UAT PASS and not hosted evidence |
 | Synthetic browser ACL | real Desk/List/Form/direct URL for owned/foreign Engineer users | [browser evidence](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md) | symmetric Form ACL, own-only List and foreign direct `403` PASS; automated synthetic slice only |
 | Demo reset | exact registry ownership, derived-row cleanup and idempotent reset | [verification evidence](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | latest post-browser `delete_count=79`, repeat `0`; stable audit sets: Comment `159`, Deleted Document `340`, Version `91` |
@@ -60,6 +60,6 @@ Bench gate намеренно использует `--skip-test-records`. В т�
 ## 4. Открытые ворота FR-01
 
 1. `DONE`: current `v0.20.0` change-set зафиксирован в разрешённой feature branch `agent/release-hardening-v0.20.0`, опубликован и открыт draft PR `#1`.
-2. `PARTIAL`: current draft PR already has terminal hosted `static-quality` PASS on immutable published head `6e3f89b` via run `32470200904`; для любого следующего нового change-set hosted CI должен быть зафиксирован повторно после публикации нового SHA.
+2. `PARTIAL`: current draft PR already has terminal hosted `static-quality` PASS on immutable published head `2e27643` via run `32470646882`; для любого следующего нового change-set hosted CI должен быть зафиксирован повторно после публикации нового SHA.
 3. `OPEN`: Bench gate пока остаётся локальным signed/runtime evidence; как защищённый external/self-hosted status для RC он ещё не подключён.
 4. `OPEN`: Для RC повторить/закрепить static+Bench профили на одном immutable RC SHA; затем отдельно выполнить RBAC browser acceptance, load/race, UAT, restore и deployment gates.

@@ -1,14 +1,13 @@
 # Последовательность завершения первого этапа
 
-**Состояние на 2026-08-21:** engineering foundation `v0.20.0` — local review
-candidate, не RC. Current accepted technical evidence: static `212/212 PASS`,
+**Состояние на 2026-08-21:** engineering foundation `v0.20.0` — published review
+candidate, не RC. Current accepted technical evidence: hosted `static-quality`
+PASS on current published draft-PR head `2e27643` via run `32470646882`, static `212/212 PASS`,
 targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
 synthetic demo installer/reset/verifier, exact-source Bench gate `179/179 OK`
 on isolated `ca01.localhost`, historical hosted `static-quality`
 PASS on draft PR head `2865400`, verified `main` protection, and active tag
-ruleset blocking `refs/tags/v*`. The latest published draft-PR head still has
-hosted `static-quality` PASS, while this newer local tree requires a fresh
-hosted run before it can be called published/verified. This is still not an immutable RC
+ruleset blocking `refs/tags/v*`. This is still not an immutable RC
 qualification. Authenticated synthetic browser slice подтвердил symmetric
 own/foreign Engineer Form ACL, own-only List, foreign direct `403`, and
 full-stack `socket.io` polling `200`; это automated result, не human UAT.
