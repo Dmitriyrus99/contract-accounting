@@ -43,6 +43,7 @@ TARGET разложен на 557 атомарных требований во в
 | [14_quality_profile_v1.md](14_quality_profile_v1.md) | единый static/Bench CI-профиль, команды и границы PASS |
 | [15_first_stage_completion_sequence.md](15_first_stage_completion_sequence.md) | текущая короткая последовательность от FR-06 runtime до production/hypercare |
 | [implementation/CA-00/demo_uat_productization_plan_v1.md](implementation/CA-00/demo_uat_productization_plan_v1.md) | обязательный воспроизводимый demo/UAT package и fresh-site gate до human UAT |
+| [implementation/CA-00/manual_gates_checklist_v0_20_0.md](implementation/CA-00/manual_gates_checklist_v0_20_0.md) | обязательные ручные, operational и production gates после automated qualification |
 | [implementation/CA-00/README.md](implementation/CA-00/README.md) | фактический preflight CA-00, W2 readiness и MG-CA-016 gates |
 | [implementation/CA-00/ADR-CA-0001-erpnext-custom-party-boundary.md](implementation/CA-00/ADR-CA-0001-erpnext-custom-party-boundary.md) | утверждённая граница ERPNext/custom и Party Identity |
 | [implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md](implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md) | `contract_accounting` replaces `ferum_custom` без shared runtime/schema/data |
