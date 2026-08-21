@@ -1,26 +1,26 @@
 # Contract accounting discovery — индекс
 
-**Цель документа:** дать руководителю краткое резюме и навигацию по аналитическому пакету.
+**Цель документа:** дать руководителю краткое резюме и навигацию по discovery, release decisions, реализации и плану завершения.
 
-**Дата анализа:** 2026-08-17. **Owner decisions синхронизированы:** 2026-08-18.
+**Дата анализа:** 2026-08-17. **Owner decisions:** 2026-08-18. **Release decisions:** 2026-08-19.
 
-**Источник истины:** TARGET — `Structure of the contract accounting system.md`; SPEC baseline — Claude `ferum_custom_spec_v6_2_21.md`; CODE — текущий Claude working tree `w2-objects-core` на `b1fcaac`; owner decisions от 2026-08-18 — [08_open_questions.md](08_open_questions.md).
+**Источник истины:** release topology/scope/policies — [Release Decisions v1](11_release_decisions_v1.md); TARGET — `Structure of the contract accounting system.md`; discovery SPEC/CODE — прежние snapshots; completion CODE baseline — `contract-accounting` `7145d87` / `0.16.2`; текущая committed branch head — `500cdaf` / `0.19.0`, проверенный незакоммиченный FR-06 working tree — `0.20.0`.
 
-**Как проверить:** начать с [01_source_inventory.md](01_source_inventory.md), затем сверить AS-IS в [03_asis_model.md](03_asis_model.md) и атомарные вердикты в [04_coverage_matrix.csv](04_coverage_matrix.csv).
+**Как проверить:** для дальнейшей работы начать с [Release Decisions v1](11_release_decisions_v1.md), [roadmap](06_roadmap.md) и [последовательного плана](10_remaining_questions_and_actions.md); discovery facts проверять через inventory/AS-IS/coverage artifacts.
 
 ## Резюме для руководителя
 
 Проанализировано 1651 доступных файлов. Фактически найдено 54 DocType в Claude-ветке и 46 в более старой чистой Codex-ветке; восемь DocType существуют только в Claude. Базовая SPEC — v6.2.21, 6946 строк, SHA-256 `58872EE75E37B68D86F2CBF06B6A4C2B3CA0D6DB87D37B4A6A13372CB7176E6D`; её registry содержит 305 требований: 300 MUST + 5 SHOULD (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/spec/ferum_custom_spec_v6_2_21.md:L1-L9`).
 
-AS-IS уже имеет сильное ядро: юридический `Ferum Contract`, execution project/link, effective-dated objects/scope, генерацию ТО, Visit/Request/evidence, billing output/artifacts, стандартный ERPNext accounting SSOT и Finance Summary read-model. Но текущий W2 находится в dirty working tree и ещё требует фиксации baseline и DB verification (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/plan/09_task_breakdown.md:L480-L515`).
+Discovery AS-IS имел сильное ядро: юридический `Ferum Contract`, execution project/link, effective-dated objects/scope, генерацию ТО, Visit/Request/evidence, billing output/artifacts, стандартный ERPNext accounting SSOT и Finance Summary read-model. Его W2 snapshot и gaps остаются историческим evidence; completion work теперь ведётся в самостоятельном `contract_accounting`.
 
 TARGET разложен на 557 атомарных требований во всех 20 доменных и 39 процессных разделах: A — 261, B — 296. Вердикты: 139 OK, 19 Gap-Code, 395 Gap-Both, 4 Conflict. Главные разрывы — отсутствие Contract Obligation, Finding/Defect, Inspection, Project Document с двойным статусом оригинала/скана, Contractor Assignment/credentials и всего универсального BPM Template/Stage/Step/Gate/Evidence слоя.
 
-Ключевой архитектурный конфликт: TARGET формулирует Service Project как договор, а AS-IS разделяет юридический Contract и execution Project (`Structure of the contract accounting system.md:L44-L85`; `Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/adr/ADR-0003-service-project-vs-legal-contract.md:L52-L69`). OQ-CA-001 утверждён: `Ferum Service Project` — единый юридический и execution SSOT; `Ferum Contract` и `Ferum Project Contract Link` — только read-only migration provenance до контролируемого cutover. Это решение не устраняет CODE gap и не закрывает N:M data exceptions.
+Ключевой discovery-конфликт «Service Project или отдельный Contract» закрыт: `Ferum Service Project` — единый юридический/execution SSOT, а [ADR-CA-0002](implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md) запрещает shared runtime/schema с `ferum_custom`. Legacy N:M data не мигрируются; `MG-CA-001=N/A` подтверждается zero-record inventory и backup.
 
-**Рекомендуемый первый инкремент:** `CA-00 Baseline Freeze`, затем `CA-01 Service Project Contract Core & Dual Status`. OQ-CA-003 закрыт owner decision от 2026-08-18: утверждены clean TARGET legal/execution FSM без переноса тестового 12-state status. До cutover остаются MG-CA-016 и W2-V02; MG-CA-001 применим только при сохранении legacy records вместо утверждённого reset/recreate. После этого MVP строится цепочкой Requirement/Obligation → Schedule → Visit/Evidence → Billing Basis/Output → Sales Invoice → Payment Entry.
+**Текущий первый исполнимый шаг:** инженерные инкременты и их локальные PASS не объявляются готовым продуктом. Для текущего published draft-PR head `e924856` / local `v0.20.0` review candidate на Friday, August 21, 2026 подтверждены hosted `static-quality` PASS via runs `32476386503` and `32476389650`, final-tree static `212/212 PASS`, targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled demo lifecycle, exact-source Bench gate `179/179 OK` on isolated `ca01.localhost`, full-stack synthetic Engineer browser slice with `socket.io` polling `200`, pinned repo-local browser runtime contract (`playwright-core 1.62.1`), protection for `main`, and active tag ruleset blocking `refs/tags/v*`. Historical hosted `static-quality` PASS на draft PR head `2865400` сохранён как provenance. Post-run synthetic DB/File/recovery residue был проверен и очищен только от доказанных zero-DB test-only blobs; финальный postcheck по demo/credential/download/recovery категориям — `0`. Это техническая квалификация review candidate, а не RC/release readiness: Workspace review, actual scanner, human HR/DPO/Security UAT, restore/rollback, performance/race/load, clean Staging, production approval/deployment and separate production-PII permission остаются открытыми.
 
-Заказчик утвердил все 23 owner questions, включая dual-status/Suspend-Resume, Party Identity, VAT, validation-report classification, Codex-only field policy и fail-closed Import Batch classification. Открытых OQ нет; отдельно требуются применимые MG-CA-001/013/015/016/023 evidence. Полный реестр — [08_open_questions.md](08_open_questions.md).
+Заказчик утвердил 23 discovery owner questions и 17 release decisions. Архитектура/scope больше не требуют опроса владельца; остаются CODE/configuration/legal/RBAC/performance/UAT/restore/deployment gates. Migration legacy business data и Import Batch не блокируют first release, но требуют N/A/negative evidence.
 
 ## Навигация
 
@@ -32,12 +32,29 @@ TARGET разложен на 557 атомарных требований во в
 | [04_gap_analysis.md](04_gap_analysis.md) | top-15, конфликты, дельта |
 | [04_coverage_matrix.csv](04_coverage_matrix.csv) | 557 атомарных TARGET-требований |
 | [05_target_model.md](05_target_model.md) | TO-BE DocType, dual status, BPM, ER, UX |
-| [06_roadmap.md](06_roadmap.md) | инкременты, MVP, зависимости, риски |
+| [06_roadmap.md](06_roadmap.md) | актуальные волны завершения, инкременты, зависимости, риски |
 | [07_traceability.csv](07_traceability.csv) | requirement → AS-IS → TO-BE → increment → acceptance |
 | [08_open_questions.md](08_open_questions.md) | 23 APPROVED решения и отдельные manual/runtime gates |
 | [09_verification_report.md](09_verification_report.md) | самопроверка Definition of Done |
+| [10_remaining_questions_and_actions.md](10_remaining_questions_and_actions.md) | отдельный последовательный план из 22 шагов до complete |
+| [11_release_decisions_v1.md](11_release_decisions_v1.md) | утверждённые DP-01…17, Release Scope v1 и Definition of Done |
+| [12_release_scope_v1.md](12_release_scope_v1.md) / [557-row CSV](12_release_scope_matrix_v1.csv) | текущая mandatory/partial/absent/deferred capability delta |
+| [13_first_release_backlog_v1.md](13_first_release_backlog_v1.md) | dependency-ordered backlog `FR-01…18` |
+| [14_quality_profile_v1.md](14_quality_profile_v1.md) | единый static/Bench CI-профиль, команды и границы PASS |
+| [15_first_stage_completion_sequence.md](15_first_stage_completion_sequence.md) | текущая короткая последовательность от FR-06 runtime до production/hypercare |
+| [implementation/CA-00/demo_uat_productization_plan_v1.md](implementation/CA-00/demo_uat_productization_plan_v1.md) | обязательный воспроизводимый demo/UAT package и fresh-site gate до human UAT |
+| [implementation/CA-00/manual_gates_checklist_v0_20_0.md](implementation/CA-00/manual_gates_checklist_v0_20_0.md) | обязательные ручные, operational и production gates после automated qualification |
 | [implementation/CA-00/README.md](implementation/CA-00/README.md) | фактический preflight CA-00, W2 readiness и MG-CA-016 gates |
 | [implementation/CA-00/ADR-CA-0001-erpnext-custom-party-boundary.md](implementation/CA-00/ADR-CA-0001-erpnext-custom-party-boundary.md) | утверждённая граница ERPNext/custom и Party Identity |
+| [implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md](implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md) | `contract_accounting` replaces `ferum_custom` без shared runtime/schema/data |
+| [implementation/CA-00/baseline_manifest_2026-08-18.md](implementation/CA-00/baseline_manifest_2026-08-18.md) | completion baseline `7145d87 / 0.16.2`, versions, local tag, gates и evidence boundary |
+| [implementation/CA-00/baseline_schema_snapshot_v0_16_2.csv](implementation/CA-00/baseline_schema_snapshot_v0_16_2.csv) | 48 DocType + 5 Page с проверенными baseline Git blob IDs |
+| [implementation/CA-00/legacy_data_disposition_2026-08-19.md](implementation/CA-00/legacy_data_disposition_2026-08-19.md) | fail-closed protocol для signed zero-record inventory, backup и `MG-CA-001=N/A` |
+| [implementation/CA-00/quality_evidence_v0_16_3_2026-08-19.md](implementation/CA-00/quality_evidence_v0_16_3_2026-08-19.md) | local static PASS и disposable Bench `71/71 OK`; remote CI/UAT/release open |
+| [implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) | terminal GitHub Actions `static-quality` PASS на head `9f2cce9` |
+| [implementation/CA-00/master_data_boundary_v0_17_0.md](implementation/CA-00/master_data_boundary_v0_17_0.md) | standard ERPNext master reuse, Party Identity и Project/Task/Issue/Asset semantic boundary |
+| [implementation/CA-00/traceability_v0_17_0_master_data.md](implementation/CA-00/traceability_v0_17_0_master_data.md) | current overrides для шести закрытых `TCA-A-17-*` требований |
+| [implementation/CA-00/runtime_evidence_v0_17_0_2026-08-19.md](implementation/CA-00/runtime_evidence_v0_17_0_2026-08-19.md) | v0.17.0 static `147/147`, migrate/build и final Bench `79/79 OK`; manual/release gates open |
 | [implementation/CA-00/live_inventory_w2t12b_2026-08-18.md](implementation/CA-00/live_inventory_w2t12b_2026-08-18.md) | live schema/patch/workflow/role/scheduler inventory post-W2 стенда |
 | [implementation/CA-00/migration_evidence_template.md](implementation/CA-00/migration_evidence_template.md) | обязательный формат migration/rollback evidence |
 | [implementation/CA-00/rollback_rehearsal_2026-08-18.md](implementation/CA-00/rollback_rehearsal_2026-08-18.md) | backup + compensating rollback evidence; full restore gate остаётся OPEN |
@@ -75,10 +92,20 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-08/schema_v0_9_0.md](implementation/CA-08/schema_v0_9_0.md) | физическая Assignment/Terms schema и fail-closed Worker/Credential privacy spike |
 | [implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md](implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md) | exact v0.9.0 versions, 47/47 runtime и clean reinstall 35 DocType |
 | [implementation/CA-08/traceability_v0_9_0.md](implementation/CA-08/traceability_v0_9_0.md) | CODE/runtime mapping CA-08 с явным MG-CA-015/PERSONNEL READY OPEN |
-| [implementation/CA-09/README.md](implementation/CA-09/README.md) | derived source timeline, explicit calendar snapshot и MG-CA-013 boundary |
+| [implementation/CA-08/legal_privacy_package_fr05_v1.md](implementation/CA-08/legal_privacy_package_fr05_v1.md) | FR-05 filled decisions; all named sign-offs confirmed via Product Owner attestation, FR-06 и MG-CA-015 OPEN |
+| [implementation/CA-08/privacy_controls_v0_20_0.md](implementation/CA-08/privacy_controls_v0_20_0.md) | FR-06 activation, Worker/Credential, RBAC, readiness, break-glass/legal hold/retention design |
+| [implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | v0.20.0 final-tree static `212/212`, targeted Inspection `5/5`, scoped privacy runtime, full disposable Bench `179/179 OK`, pinned browser runtime contract and narrow full-stack Engineer browser ACL PASS; human UAT PENDING, RC/release NOT READY |
+| [implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md) | 12-role synthetic browser matrix, исправления Office/masked form и Product Owner UI checklist |
+| [implementation/CA-09/README.md](implementation/CA-09/README.md) | current CA-09/FR-03 status, derived timeline и production calendar boundary |
 | [implementation/CA-09/projection_v0_10_0.md](implementation/CA-09/projection_v0_10_0.md) | normalized row/source adapters и fail-closed classification contract |
 | [implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md](implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md) | exact v0.10.0 versions, 50/50 runtime и 35-DocType inventory |
 | [implementation/CA-09/traceability_v0_10_0.md](implementation/CA-09/traceability_v0_10_0.md) | CODE/runtime mapping TCA-A-14 с явными signature/customer-response gaps |
+| [implementation/CA-09/production_calendar_v0_18_0.md](implementation/CA-09/production_calendar_v0_18_0.md) | DP-05 calendar design, precedence, source fields и immutable calculation contract |
+| [implementation/CA-09/runtime_evidence_v0_18_0_2026-08-19.md](implementation/CA-09/runtime_evidence_v0_18_0_2026-08-19.md) | v0.18.0 migrate/build, targeted `4+3`, full `83/83` и open manual gates |
+| [implementation/CA-09/traceability_v0_18_0_calendar.md](implementation/CA-09/traceability_v0_18_0_calendar.md) | current override для `TCA-A-14-09/13` без blanket release PASS |
+| [implementation/CA-09/notification_delivery_v0_19_0.md](implementation/CA-09/notification_delivery_v0_19_0.md) | DP-06 thresholds, fail-closed activation, digest, transport и retry/dead-letter contract |
+| [implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md](implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md) | v0.19.0 targeted/full runtime, timezone boundary и open production delivery gates |
+| [implementation/CA-09/traceability_v0_19_0_notifications.md](implementation/CA-09/traceability_v0_19_0_notifications.md) | current partial overrides для delivery delta без blanket PASS |
 | [implementation/CA-10/README.md](implementation/CA-10/README.md) | permission-safe Contract 360/Director projections и открытые UI/performance/policy gates |
 | [implementation/CA-10/projection_v0_11_0.md](implementation/CA-10/projection_v0_11_0.md) | widgets, exception rules, source drilldowns и finance redaction contract |
 | [implementation/CA-10/runtime_evidence_v0_11_0_2026-08-18.md](implementation/CA-10/runtime_evidence_v0_11_0_2026-08-18.md) | exact v0.11.0 versions, migrate, 54/54 runtime и 35-DocType inventory |
@@ -108,12 +135,15 @@ TARGET разложен на 557 атомарных требований во в
 | [implementation/CA-15/traceability_v0_16_1.md](implementation/CA-15/traceability_v0_16_1.md) | v0.16.1 manager/director browser и read-only source permission addendum |
 | [implementation/CA-15/cross_role_uat_v0_16_2_2026-08-18.md](implementation/CA-15/cross_role_uat_v0_16_2_2026-08-18.md) | Engineer/Accountant/Office Manager/Project Lead Operations browser UAT и project-scoped permission boundary |
 | [implementation/CA-15/traceability_v0_16_2.md](implementation/CA-15/traceability_v0_16_2.md) | v0.16.2 Operations cross-role traceability addendum без blanket PASS |
+| [implementation/CA-15/service_request_disposition_v0_16_3_2026-08-18.md](implementation/CA-15/service_request_disposition_v0_16_3_2026-08-18.md) | v0.16.3 Service Request disposition core, patch и runtime evidence |
+| [implementation/CA-15/traceability_v0_16_3.md](implementation/CA-15/traceability_v0_16_3.md) | v0.16.3 request-field/successor/approval traceability addendum |
 
-## Принятый baseline
+## Baseline и граница текущего статуса
 
 - TARGET: 2458 строк, SHA-256 `0354D424F623753973101C2B8D30B6BC54FB0351572EF9269DBF60167B7617AC`.
 - SPEC: Claude v6.2.21; рабочая и versioned-копии побайтно совпадают.
-- CODE discovery snapshot: dirty Claude working tree на `b1fcaac`; Codex `c97c34a` — historical conflict evidence. Официальный AS-IS baseline ещё не frozen: OQ-CA-016 требует первый clean post-W2 commit и закрытый MG-CA-016.
-- OWNER: все 23 OQ утверждены 2026-08-18; OPEN/BLOCKING и OPEN/UNKNOWN = 0. Manual/runtime gates не закрыты owner approval.
-- Проверки реализации CA-00: targeted pre-commit (включая full-package mypy), `compileall` и `git diff --check` — PASS; bench/runtime/DB/permission tests не исполнялись и остаются отдельными gates.
-- Live-site metadata, базы и секреты не читались.
+- CODE discovery snapshots `b1fcaac`/`c97c34a` сохраняются только как historical evidence.
+- Completion baseline: `7145d87` / `0.16.2` от 2026-08-18; local+remote annotated tag, manifest/schema hashes и clean `136/136` standalone run — PASS; baseline-exact live inventory и restore — OPEN.
+- Current committed branch head: `500cdaf` / `0.19.0`; evaluated uncommitted working tree: `0.20.0`.
+- OWNER: OQ-CA-001…023 и DP-01…17 утверждены; manual/runtime/legal/release gates не закрыты owner approval.
+- Текущая работа не читала secrets/record contents; выполнила count-only legacy inventory и local backup, но не restore, UAT или deployment gates.

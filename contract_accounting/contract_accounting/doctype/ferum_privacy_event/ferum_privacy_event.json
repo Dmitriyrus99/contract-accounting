@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "FPRVE-.YYYY.-.######",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["event_type", "target_doctype", "target_name", "actor", "reason", "ticket", "occurred_at", "policy_reference", "policy_hash", "payload_json", "correlation_key", "anonymized_at", "anonymization_hash"],
+ "fields": [
+  {"fieldname": "event_type", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Event Type", "reqd": 1},
+  {"fieldname": "target_doctype", "fieldtype": "Link", "label": "Target DocType", "options": "DocType", "reqd": 1},
+  {"fieldname": "target_name", "fieldtype": "Dynamic Link", "label": "Target Name", "options": "target_doctype"},
+  {"fieldname": "actor", "fieldtype": "Link", "label": "Actor", "options": "User"},
+  {"fieldname": "reason", "fieldtype": "Small Text", "label": "Reason"},
+  {"fieldname": "ticket", "fieldtype": "Data", "label": "Ticket"},
+  {"fieldname": "occurred_at", "fieldtype": "Datetime", "in_list_view": 1, "label": "Occurred At", "reqd": 1},
+  {"fieldname": "policy_reference", "fieldtype": "Data", "label": "Policy Reference", "reqd": 1},
+  {"fieldname": "policy_hash", "fieldtype": "Data", "label": "Policy SHA-256", "reqd": 1},
+  {"fieldname": "payload_json", "fieldtype": "JSON", "label": "Payload"},
+  {"fieldname": "correlation_key", "fieldtype": "Data", "label": "Correlation Key", "reqd": 1, "unique": 1},
+  {"fieldname": "anonymized_at", "fieldtype": "Datetime", "label": "Anonymized At", "read_only": 1},
+  {"fieldname": "anonymization_hash", "fieldtype": "Data", "label": "Irreversible Anonymization Hash", "read_only": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Privacy Event",
+ "naming_rule": "Expression (old style)",
+ "permissions": [
+  {"read": 1, "report": 1, "role": "Ответственный за ПДн"},
+  {"read": 1, "report": 1, "role": "Менеджер персональных данных"},
+  {"read": 1, "report": 1, "role": "Генеральный директор"},
+  {"read": 1, "report": 1, "role": "Ответственный за ИБ"}
+ ],
+ "sort_field": "occurred_at",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

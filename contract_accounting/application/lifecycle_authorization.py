@@ -6,7 +6,6 @@ from collections.abc import Iterable
 
 from contract_accounting.domain.lifecycle import LifecycleTransitionError
 
-
 LEGAL_COMMAND_ROLES = frozenset(
 	{"System Manager", "Юрист", "Руководитель проектов", "Генеральный директор"}
 )

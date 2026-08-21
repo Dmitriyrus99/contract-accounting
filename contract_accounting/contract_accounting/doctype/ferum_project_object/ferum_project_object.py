@@ -8,7 +8,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import getdate
 
-
 DOCTYPE: Final[str] = "Ferum Project Object"
 AMENDMENT_DOCTYPE: Final[str] = "Ferum Contract Amendment"
 _IDENTITY_FIELDS: Final[tuple[str, ...]] = (

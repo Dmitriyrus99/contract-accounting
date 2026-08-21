@@ -1,32 +1,60 @@
 # 06. Roadmap внедрения системы учёта договоров
 
-**Цель документа:** разложить переход от подтверждённой AS-IS модели к целевой системе учёта договоров на проверяемые инкременты `CA-00…CA-15`, определить MVP, зависимости, миграции, критерии приёмки и риски.
+**Цель документа:** управлять завершением первого production-выпуска `contract_accounting`: сохранить техническую декомпозицию `CA-00…CA-15`, но вести оставшуюся работу от утверждённых release decisions к одному проверяемому RC, production launch и post-release completion.
 
-**Дата анализа:** 2026-08-17. **Решения синхронизированы:** 2026-08-18.
+**Дата исходного анализа:** 2026-08-17. **Release decisions синхронизированы:** 2026-08-19. **Текущие qualification evidence синхронизированы:** 2026-08-20.
 
-**Источник истины:** TARGET — `Structure of the contract accounting system.md`; требования и их назначение инкрементам — [04_coverage_matrix.csv](04_coverage_matrix.csv) и [07_traceability.csv](07_traceability.csv); AS-IS — [03_asis_model.md](03_asis_model.md); утверждённые owner decisions, оставшиеся вопросы и manual gates — [08_open_questions.md](08_open_questions.md). Целевая схема DocType должна быть сверена с [05_target_model.md](05_target_model.md).
+**Источник истины:** release boundary и operating policies — [Release Decisions v1](11_release_decisions_v1.md); последовательность закрытия — [10_remaining_questions_and_actions.md](10_remaining_questions_and_actions.md); TARGET — `Structure of the contract accounting system.md`; требования и их назначение инкрементам — [04_coverage_matrix.csv](04_coverage_matrix.csv) и [07_traceability.csv](07_traceability.csv); discovery AS-IS — [03_asis_model.md](03_asis_model.md); прежние owner decisions и история manual gates — [08_open_questions.md](08_open_questions.md).
 
 **Как проверить:** импортировать [07_traceability.csv](07_traceability.csv), сгруппировать строки по `increment` и сопоставить диапазоны ниже; для каждого инкремента выполнить критерии и сохранить машинные/ручные доказательства; утверждённое решение не считать реализацией, а MG-CA gate — PASS без указанного evidence. Итоговую проверку отразить в [09_verification_report.md](09_verification_report.md).
 
-## 1. Исходная точка и стратегия перехода
+## 1. Текущий статус и стратегия завершения первого выпуска
 
-На дату discovery в Claude working tree найдено 54 DocType, но ключевые целевые узлы — `Ferum Contract Obligation`, `Ferum Finding/Defect`, `Ferum Project Document`, `Ferum Contractor Assignment`, `Ferum Contract Requirement`, BPM Template/Instance, `Ferum Stage Gate`, `Ferum Process Evidence`, `Ferum Inspection` и generic deadline/event engine — отсутствуют (`contract-accounting/03_asis_model.md:L11-L13`; `contract-accounting/03_asis_model.md:L326-L338`). AS-IS уже содержит рабочие контуры объектов, Scope/Schedule/Visit, заявок, billing и финансового read-model, поэтому переход должен быть аддитивным и сохранять их доказанные инварианты (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/services/maintenance_visit_generation.py:L131-L168`; `Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/services/maintenance_visit_generation.py:L527-L638`; `Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/services/project_finance_summary.py:L403-L701`).
+`contract_accounting` утверждён как business replacement и technical standalone; новый production не устанавливает `ferum_custom` и не переносит его business data. Архитектурная граница зафиксирована в [ADR-CA-0002](implementation/CA-00/ADR-CA-0002-business-replacement-technical-standalone.md).
 
-Порядок реализации строится по следующим правилам:
+Утверждённый completion baseline — commit `7145d87`, version `0.16.2` от 2026-08-18. Текущий `v0.20.0` остаётся local review candidate и не заменяет baseline или RC. Local/remote annotated tag, source/schema manifest и clean `136/136` standalone evidence созданы; baseline-exact live inventory и restore остаются OPEN.
 
-> **Owner decision — 2026-08-18:** существующие данные приложения являются непродукционными тестовыми данными. Перенос legacy business records, исторических значений `Contract.status` и тестовой audit/status history в TARGET не требуется; тестовые записи могут быть сброшены или созданы заново. Migration logic не должна проектироваться только ради сохранения тестовых данных. При этом TARGET schema, lifecycle rules, integrity constraints и production-ready migration discipline для будущих релизов остаются обязательными.
+### 1.1. Status overview
 
-- сначала фиксируется воспроизводимый baseline и закрываются незавершённые W2-гейты;
+| Область | Состояние на 2026-08-20 | Вывод |
+| --- | --- | --- |
+| Decisions | 17/17 release decisions `APPROVED` | owner-question discovery завершён |
+| `CA-01…CA-07` | core code bench-verified | release/UAT/legal/performance gates не закрыты |
+| `CA-08…CA-15` | `PARTIAL` | обязательная product delta остаётся |
+| `CA-00` completion baseline | partial evidence PASS | local+remote tag/manifest/schema/standalone PASS; live inventory/restore OPEN |
+| Legacy migration | technical inventory/backup PASS; `MG-CA-001 N/A` по решению | 0 real records confirmed by `DP-02`; formal Data Owner signature + off-host retention remain OPEN |
+| Release Scope v1 | planning/evidence gate PASS | 557/557 rows; 554 mandatory, из них 280 Implemented / 274 Partial / 0 Absent |
+| Quality/CI profile | current published review-candidate automation PASS; RC/manual qualification incomplete | historical `161/161`/Bench `89/89`, earlier dirty-tree Bench `127/127`, and hosted run `32261790230` are retained as provenance; current published draft-PR head `e924856` has hosted `static-quality` PASS via runs `32476386503` and `32476389650`, while the same final-tree review candidate has static `212/212 PASS`, targeted Inspection `5/5 PASS`, exact-source Bench gate `179/179 OK` on isolated `ca01.localhost`, pinned repo-local browser runtime contract (`playwright-core 1.62.1`) with generated runtime forced into `.gitignore`, and verified `main`/`v*` GitHub protection; browser/human UAT, restore, performance and production gates remain OPEN |
+| `FR-02` master-data boundary | core CODE/schema/runtime PASS; manual gates OPEN | Party Identity + Address/Contact/Warehouse + Project/Task/Issue/Asset policy; Workflow/Communication, owner/browser/race/load acceptance OPEN |
+| `FR-03` production calendar | engineering/schema/runtime PASS; manual gates OPEN | official 2026 fixture, Company/Contract precedence, signature/customer-response sources, `83/83`; Operations/browser/performance OPEN |
+| `FR-04` notification delivery | engineering/local E2E PASS; manual transport gates OPEN | DP-06 thresholds, calendar-timezone digest, in-app/Email Queue, idempotency, retry/dead-letter; SMTP receipt/worker/RBAC/load OPEN |
+| `FR-05` contractor privacy/legal | decisions FILLED; ALL NAMED SIGN-OFFS CONFIRMED | owners, field registry, purpose/basis/retention, RBAC/export/private-file/break-glass утверждены; подтверждения Legal/Privacy/DPO, Security и Data Owner/HR аттестованы Product Owner без предоставленных номеров актов; FR-06 implementation/tests и production-PII permission остаются до `MG-CA-015 PASS` |
+| `FR-06` protected Worker/Credential/readiness | automated remediation, full-stack synthetic Engineer ACL and full disposable Bench verified; release `NOT READY` | current final-tree static `212/212 PASS`; targeted Inspection `5/5 PASS`; latest scoped privacy runtime is policy `9/9`, alias/retention `24/24`, File boundaries `3/3`, residue `0`; current exact-source Bench gate `179/179 OK`; own/foreign Engineer symmetric Form ACL, own-only List, foreign direct `403`, and full-stack `socket.io` polling `200` PASS on pinned repo-local browser runtime (`playwright-core 1.62.1`); latest post-browser exact reset `82 → 0` with stable Comment/Deleted Document/Version audit hashes; Workspace visibility remains an owner-review blocker, human UAT has not run |
+| Import Batch | out of first release | disabled/negative evidence обязательно |
+| Release / RC status | `NOT READY FOR PRODUCTION / RC NOT READY` | automated suites and structural demo verification do not replace authenticated browser/human UAT, restore/rollback, performance/race/load, clean Staging, production approval or deployment evidence |
 
-- миграции выполняются additive-first: новые поля и связи вводятся до переключения источника истины, старые зеркала удаляются только отдельным последующим решением;
+### 1.2. Roadmap view
 
-- юридически значимые и неоднозначные данные не восстанавливаются эвристикой без очереди ручной сверки;
+| Горизонт | Цель | Основные результаты | Gate |
+| --- | --- | --- | --- |
+| **Now — controlled UAT qualification** | завершить проверку воспроизводимого synthetic-контура без повышения release status | Product Owner UI review, full-stack synthetic browser rerun, фиксация дефектов и повторная проверка | Workspace/UI review remains `OPEN BLOCKER`; full-stack synthetic evidence is fixed only in a narrow automated scope; human UAT is not allowed until Product Owner approval |
+| **Next — product closure** | закрыть обязательный release scope и ручные gates | human role UAT, scanner/SMTP/scheduler checks, Evidence Policy, External Dependency, documents, materials/tools/reports | обязательная capability matrix подтверждена не только CODE, но и применимыми UAT/evidence gates |
+| **Qualification** | доказать production fitness | полная RBAC, clean Staging, load/race, UAT, restore/rollback/cutover | все technical/manual gates PASS на одном RC |
+| **Release** | ввести систему в эксплуатацию | immutable RC, production smoke/health, monitoring/backup, 10-day hypercare | production и post-release sign-off |
 
-- стандартные `Customer`, `Supplier`, `Company`, `Sales Invoice`, `Purchase Invoice`, `Payment Entry`, `GL Entry`, `File`, `Communication`, `Assignment` и `ToDo` остаются ERPNext SSOT/инфраструктурой; кастомный слой не создаёт вторую бухгалтерию или второй диспетчер задач (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/hooks.py:L359-L403`; `Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/plan/owner_decisions_2026-08-17_target_structure.md:L68-L72`);
+Точные календарные даты не назначаются до появления owner/capacity plan; roadmap фиксирует зависимости и gates, а не обещает неподтверждённые сроки.
 
-- автоматическое доказательство не заменяет UAT, юридическую проверку, решение владельца или стендовую DB-верификацию.
+Порядок исполнения строится по следующим правилам:
+
+- `contract_accounting` разворачивается clean; coexistence/shared schema с `ferum_custom` запрещены;
+- standard `Customer`, `Supplier`, `Company`, accounting documents, `GL Entry` и infrastructure DocType остаются ERPNext SSOT;
+- legacy business migration и Import Batch не входят в first release, но их N/A/disabled state должен быть доказан;
+- новый product CODE снимает fail-closed gate только после соответствующего configuration/legal decision;
+- автоматические тесты не заменяют UAT, legal/privacy, finance, restore, security или deployment evidence.
 
 ## 2. Сводный план инкрементов
+
+Таблица ниже сохраняет архитектурную декомпозицию 557 требований и историю реализации. Это component map, а не текущая последовательность выпуска; актуальный порядок работ задан [отдельным планом](10_remaining_questions_and_actions.md).
 
 | Инкремент | Название и результат | Закрываемые `req_id` | Зависимости | MVP | Оценка |
 | --- | --- | --- | --- | --- | --- |
@@ -45,9 +73,9 @@
 | `CA-12` | Семистадийный запуск, персонал и Inspection | `TCA-B-13…19-*`; `TCA-B-22…23-*` (84 точных ID в CSV) | `CA-04`, `CA-05`, `CA-08`, `CA-11` | После MVP | XL |
 | `CA-13` | Первое закрытие периода и Billing Cycle Gate | `TCA-B-21-01…TCA-B-21-11` | `CA-06`, `CA-11`, `CA-12` | После MVP | L |
 | `CA-14` | «Мои действия» и «Запуск проектов» | `TCA-B-31-01…TCA-B-31-05`; `TCA-B-32-01…TCA-B-32-09` | `CA-10`, `CA-11`, `CA-12` | После MVP | L |
-| `CA-15` | Интеграционное укрепление и end-to-end trace | `TCA-A-19-01…TCA-A-19-23`; `TCA-A-20-01…TCA-A-20-14`; `TCA-B-36-01…TCA-B-36-14` | `CA-01…CA-14`; MG-CA-023 только для production Import Batch claim | Финальный gate | XL |
+| `CA-15` | Интеграционное укрепление и end-to-end trace | `TCA-A-19-01…TCA-A-19-23`; `TCA-A-20-01…TCA-A-20-14`; `TCA-B-36-01…TCA-B-36-14` | `CA-01…CA-14`; DP-13 disabled/negative evidence для Import Batch | Финальный gate | XL |
 
-Диапазоны воспроизводят назначение всех 557 строк в [07_traceability.csv](07_traceability.csv); для длинных BPM-групп таблица использует wildcard по полностью перечисленным разделам, а точный перечень всех `req_id` хранится в CSV. Изменение состава инкрементов требует синхронного изменения этого CSV.
+Диапазоны воспроизводят назначение всех 557 строк в [07_traceability.csv](07_traceability.csv); для длинных BPM-групп таблица использует wildcard по полностью перечисленным разделам, а точный перечень всех `req_id` хранится в CSV. Изменение состава инкрементов требует синхронного изменения этого CSV. На текущем дереве `CA-01…CA-07` имеют bench-verified core, `CA-08…CA-15` остаются partial, а `CA-00` требует completion-baseline evidence.
 
 ## 3. Граф зависимостей
 
@@ -92,11 +120,11 @@ flowchart LR
 
 `CA-04` и минимальное ядро `CA-05` допускают параллельную реализацию после baseline; технический порядок «Finding(category=Defect) → Project Document → BPM» не меняет зависимость MVP от Service Project/Obligation/plan-fact (`Structure of the contract accounting system.md:L350-L397`; `Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/plan/owner_decisions_2026-08-17_target_structure.md:L224-L242`).
 
-## 4. MVP-контур
+## 4. Технический MVP-контур (не граница первого production-выпуска)
 
 ### 4.1. Состав MVP
 
-MVP считается достигнутым только после приёмки `CA-00…CA-07`. Он должен дать операционный ответ на вопрос «что мы обязаны сделать по договору, когда и где» и доказуемую цепочку:
+Исторический technical MVP `CA-00…CA-07` даёт data spine «что/когда/где» и цепочку ниже. Он не является достаточным release scope: утверждённый первый production-выпуск дополнительно включает обязательные capabilities `CA-08…CA-15` и `DP-03`.
 
 ```text
 Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
@@ -148,35 +176,35 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 ### CA-00. Baseline, ERPNext boundary и миграционная готовность
 
-**Цель:** превратить текущий working tree в воспроизводимую исходную точку и зафиксировать стандартные/кастомные границы до изменения данных.
+**Цель:** превратить утверждённый completion baseline в воспроизводимую исходную точку и зафиксировать standalone/ERPNext границы до qualification и release.
 
-**AS-IS:** W2-T11 содержит integration-tested conditional unique keys, но стендовый W2-V02 и W2-T12 остаются отдельными ручными/следующими gates (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/docs/plan/09_task_breakdown.md:L480-L515`). Длина generated-visit key требует именно стендового протокола, а не расчётного утверждения (`Вспомогательные/Claude ferum_custom/apps/ferum_custom/ferum_custom/patches/v0_2/add_unique_key_generated_visit.py:L20-L24`).
+**AS-IS:** прежний W2/`ferum_custom` baseline сохраняется только как discovery provenance. Для завершения первого выпуска утверждён новый code-bearing baseline репозитория `contract-accounting`: `7145d87` / `0.16.2`; текущее `0.16.3` является отдельной дельтой.
 
-**Owner decision:** OQ-CA-016 утверждает первый clean post-W2 commit до TARGET implementation как baseline; Claude dirty tree и более старый неполный Codex snapshot им не являются. Решение не создаёт evidence: результатом CA-00 должен стать закрытый MG-CA-016 с SHA/clean tree/diff hash/versions/schema/configuration/DB gates.
+**Owner decision:** `DP-04` утверждает точный baseline и требуемый tag `completion-baseline-v0.16.2`. Решение не создаёт evidence: SHA, tag, remote sync, clean-tree proof, versions, installed apps, schema/configuration и hashes должны войти в baseline manifest.
 
 **Состав:**
 
-- freeze commit/tag baseline после закрытия согласованных W2-задач;
+- annotated tag утверждённого commit `7145d87` без переназначения baseline;
 
-- inventory live schema, installed patches, Workflow, Custom Field, roles и Scheduled Job Type без чтения секретов;
+- inventory installed apps, live schema, patches, Workflow, Custom Field, roles/permissions и Scheduled Job Type без чтения секретов;
 
 - ADR по границе ERPNext/custom и Party Identity ownership;
 
-- baseline dataset, rollback rehearsal и обязательный формат migration evidence;
+- sanitized configuration/dataset manifest, hashes, rollback/restore rehearsal и обязательный формат release evidence;
 
 - фиксация ручных gates: DB, UAT, legal и permission review.
 
-**Миграция:** данных не переносит. Возможны только диагностические reconciliation reports. До W2-V02 нельзя считать DB uniqueness доказанной.
+**Миграция:** legacy business data не переносятся. Production создаётся clean. `MG-CA-001=N/A` требует signed zero-record inventory и контрольный backup до retirement legacy environment.
 
 **Критерии приёмки:**
 
-- commit/hash, версия schema и список применённых patches зафиксированы в release evidence;
+- baseline commit/tag, app/dependency versions, installed apps, schema/configuration и patches зафиксированы в manifest;
 
-- физические ключи W2 проверены на стенде протоколом владельца, включая duplicate-negative tests;
+- `0.16.3` и последующие изменения представлены как traceable post-baseline commits;
 
 - documented boundary подтверждает отсутствие кастомной записи в GL и повторного master/accounting SSOT;
 
-- rollback rehearsal восстанавливает schema/configuration baseline; сохранение или восстановление тестовых business records не является gate;
+- restore/rollback rehearsal восстанавливает clean environment и approved configuration; legacy test records не являются release data;
 
 - все незакрытые ручные gates имеют owner и статус, а не ложный PASS.
 
@@ -428,6 +456,8 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 **Результат реализации v0.9.0 — 2026-08-18:** `CA-08 PARTIAL / ASSIGNMENT-COMMERCIAL CORE BENCH VERIFIED`. Реализованы effective-dated Assignment, Internal/Contractor XOR schema, object/system/work-type scope, overlap guard, отдельные Commercial Terms с derived margin, связи Settlement/Material и Supplier-isolated contractor read. Worker/Credential установлены только как fail-closed schema/privacy spike: records/API/readiness заблокированы, паспортных полей нет, `PERSONNEL READY` не включён. Migrate и clean reinstall 35 DocType прошли; standalone suite `96/96`, полный Frappe suite до и после reinstall `47/47`. Employee positive runtime, cross-entity portal access, legacy migration, load/race, HR/privacy/legal UAT/sign-off и production deployment остаются OPEN; MG-CA-015 не закрыт. Evidence: [implementation/CA-08/README.md](implementation/CA-08/README.md), [runtime evidence](implementation/CA-08/runtime_evidence_v0_9_0_2026-08-18.md), [traceability](implementation/CA-08/traceability_v0_9_0.md).
 
+**Продолжение v0.20.0 — актуализировано 2026-08-21:** `LOCAL AUTOMATED REMEDIATION QUALIFIED / EXACT-SOURCE BENCH 179/179 OK / FULL-STACK SYNTHETIC ENGINEER SLICE PASS / PUBLISHED-HEAD HOSTED CI PASS / RC NOT READY`. Реализованы separate Synthetic/Production activation watermark, typed Worker/Credential FSM, exact policy hash, dual verification, full/masked/no-number field-level projections, pre-unlink guarded private File, live readiness fingerprint и `PERSONNEL_READY`, exact-target audited support read, joint legal hold и dry-run-first retention. После обнаруженного cross-project leak remediation и отрицательные проверки включены в current final-tree static `212/212 PASS`; targeted Inspection завершён `5/5 PASS`; latest scoped privacy runtime дал policy `9/9`, alias/retention `24/24`, File boundaries `3/3`, DB/path/ledger residue `0`. Более ранний full Bench `127/127 OK` предшествует расширению regression-набора и сохранён только как historical provenance; current published tree `e924856` прошёл exact-source `bench_quality_gate.py` on isolated `ca01.localhost` и дал full app tests `179/179 OK` in `4160.684s`. Source-controlled idempotent synthetic demo installer/reset/verifier установлен и runtime-qualified в составе текущего Bench. Source-controlled browser qualification harness теперь жёстко привязан к repo-local `playwright-core 1.62.1`, runtime contract покрыт в static `212/212`, а generated runtime path принудительно исключён через `.gitignore`. Historical hosted `static-quality` PASS on draft PR head `2865400` сохранён как provenance; current published draft-PR head `e924856` has hosted `static-quality` PASS via runs `32476386503` and `32476389650`. Authenticated synthetic browser rerun на том же published head подтвердил symmetric own/foreign Engineer Form ACL, own-only List, foreign direct `403`, and full-stack `socket.io` polling `200`; это automated synthetic evidence, не human UAT и не blanket browser acceptance. Browser teardown первоначально выявил registry-user `Activity Log`, а последующий exact no-registry detector — 72 исторических derived rows; узкая fail-closed ownership remediation принята. Latest post-browser reset удалил `82` exact owned/derived rows, повторный reset — `0`; контрольные наборы до/после совпали: Comment `159` / `b9d32dc17c2ab6553df0d1d4a777988b4345e55726099790ce33b93c98b6bc8f`, Deleted Document `340` / `34fd6a9d165891f1a3224a631c51a597335ad2c85c6a036af953269013fb3291`, Version `91` / `bec2d1a60e893f98c0fa78a558231f39d7ec5c33b0f8b0a758497303ce398e79`. Post-run synthetic DB/File/recovery residue был проверен; zero-DB synthetic test blobs and stale metadata-only demo recovery jobs were removed by exact path proof, final checked demo/credential/download/recovery categories — `0`. Workspace visibility остаётся `OPEN BLOCKER` до Product Owner review. Actual scanner integration, race/load, human HR/DPO/Security UAT, restore/rollback, clean Staging и production activation не выполнены либо не утверждены; `MG-CA-015` остаётся PARTIAL. Evidence: [design](implementation/CA-08/privacy_controls_v0_20_0.md), [verification evidence](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md), [authenticated synthetic browser UAT](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md).
+
 **Оценка:** L.
 
 ### CA-09. Derived deadline timeline
@@ -455,6 +485,10 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 - query latency укладывается в согласованный бюджет на репрезентативном объёме.
 
 **Результат реализации v0.10.0 — 2026-08-18:** `CA-09 PARTIAL / SOURCE TIMELINE BENCH VERIFIED`. Реализованы read-only normalized projection с точным `source_doctype/name/field`, source fingerprint и adapters Contract, Maintenance, Request, Stage acceptance/billing/payment, Security/Bank Guarantee, Project Document, Finding и submitted Sales Invoice; отдельный `Ferum Deadline/Milestone` не создан. Pure calendar engine требует явный immutable timezone/revision/holiday/cut-off snapshot и fail-closed отклоняет неизвестный trigger/config. Без `as_of` классификация выключена, а production warning/escalation остаётся `disabled_pending_MG-CA-013`. Migrate сохранил 35 DocType; standalone suite `100/100`, targeted Frappe `3/3`, полный suite `50/50`. Signature/customer-response/general-warranty source fields, BPM dates, representative-volume latency, notification delivery, UAT/sign-off и production deployment остаются OPEN; MG-CA-013 не закрыт. Evidence: [implementation/CA-09/README.md](implementation/CA-09/README.md), [runtime evidence](implementation/CA-09/runtime_evidence_v0_10_0_2026-08-18.md), [traceability](implementation/CA-09/traceability_v0_10_0.md).
+
+**Продолжение v0.18.0 — 2026-08-19:** `FR-03 ENGINEERING BOUNDARY PASS / MANUAL GATES OPEN`. Добавлены immutable Calendar Revision/Assignment/Calculation, source-controlled официальный календарь РФ 2026 (`247/118/4`, `Europe/Moscow`, `08:00–19:00`), Contract→Company precedence, signature deadline в Project Document и structured Customer Response source в External Dependency. Targeted `4/4+3/3`, полный Frappe suite `83/83`; mandatory `Absent` уменьшены `2→0`. Scheduler/notification delivery (FR-04), полный External Dependency flow (FR-08), annual Operations procedure, performance/race, UAT/sign-off и deployment остаются OPEN. Evidence: [design](implementation/CA-09/production_calendar_v0_18_0.md), [runtime](implementation/CA-09/runtime_evidence_v0_18_0_2026-08-19.md), [traceability](implementation/CA-09/traceability_v0_18_0_calendar.md).
+
+**Продолжение v0.19.0 — 2026-08-19:** `FR-04 ENGINEERING/LOCAL E2E PASS / PRODUCTION DELIVERY GATES OPEN`. Добавлены fail-closed activation watermark, DP-06 `−3/−1/due/overdue/+1`, short `50/80/breach`, permission-filtered in-app/Email Queue, calendar-timezone daily digest, deterministic correlation/delivery keys, retry/dead-letter и typed manual retry. Targeted `6/6`, полный Frappe suite `89/89`; после тестов settings принудительно оставлены disabled. Production activation, external SMTP receipt/bounce, scheduler worker heartbeat, browser/RBAC/load UAT, sign-off и deployment остаются OPEN. Evidence: [design](implementation/CA-09/notification_delivery_v0_19_0.md), [runtime](implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md), [traceability](implementation/CA-09/traceability_v0_19_0_notifications.md).
 
 **Оценка:** M.
 
@@ -630,11 +664,11 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 - каждая ссылка проходит forward/reverse integrity check, orphan count равен нулю либо имеет утверждённый exception;
 
-- permission matrix закрывает customer/contractor/PM/finance/director boundaries, включая API/export/report;
+- permission matrix закрывает internal roles, Company/Project/Assignment, API/export/report/print/private-file boundaries; Client/Contractor interactive access имеет negative evidence отсутствия;
 
 - scheduler/retry/idempotency tests не создают дубликаты;
 
-- Import Batch либо проходит MG-CA-023 E2E `create→start→process→success/failure→retry/rollback/audit` через поддерживаемый entrypoint, либо явно остаётся inactive/not production-proven и не входит в release capabilities;
+- Import Batch скрыт, не имеет user permission/API/job и проходит negative access test; `MG-CA-023=N/A FOR RELEASE`;
 
 - миграционный dry-run, cutover rehearsal и rollback имеют отдельные evidence artifacts;
 
@@ -654,7 +688,7 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 | Этап | Patch/reconciliation | Fail-closed правило | Rollback/контроль |
 | --- | --- | --- | --- |
-| `CA-00` | Инвентаризация schema/patches/workflows и W2-V02 | Нет runtime PASS без стендового протокола | Baseline backup + rollback rehearsal |
+| `CA-00` | Tag/manifest `7145d87`, installed-app/schema/config inventory и legacy zero-record act | Baseline decision не является evidence; секреты не включаются | Clean-environment backup + restore/rollback rehearsal |
 | `CA-01` | TARGET legal fields, утверждённая dual-status schema/configuration и перевод связей на Service Project root; тестовые записи reset/recreate | Только переходы и cross-state пары OQ-CA-003; legacy `Contract.status` и audit history не переносятся | Controlled rollback только schema/configuration, feature flag, новой логики и новых связей; обратного mapping в 12-state model нет |
 | `CA-02` | Scope→Obligation candidates | Создавать только при однозначных Contract/Object/System/effective dates | Idempotency key + candidate report |
 | `CA-03` | Visit/Schedule→Obligation provenance | Не нарушать generated-visit unique key; неоднозначные facts в review | Revert links, не удаляя факты |
@@ -688,7 +722,7 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 
 | Риск | Вероятность / влияние | Митигация | Проверяемое доказательство |
 | --- | --- | --- | --- |
-| Dirty W2 working tree и неисполненный DB gate | Высокая / критическое | Freeze baseline только после W2-V02/W2-T12 | Commit hash + DB protocol + clean diff scope |
+| Completion baseline не имеет annotated tag/полного manifest | Высокая / критическое | Зафиксировать `7145d87` без замены на текущий `0.16.3` | Tag + remote SHA + manifest + hashes |
 | Реализация отклоняется от утверждённой dual-status FSM | Средняя / критическое | Генерировать server policy/tests из versioned OQ-CA-003 matrix; запрещать UI-only transitions | Exact enum/matrix check + positive/negative server transition tests |
 | Дубли Scope/Obligation/Visit | Средняя / критическое | Conditional unique key, dry-run duplicate report | Negative DB test + idempotent second run |
 | Неизвестный статус бумажного оригинала | Высокая / высокое | Не ставить Received/Archived без evidence | Manual review report, zero inferred receipts |
@@ -698,7 +732,7 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 | Permission leakage через report/API/cache | Средняя / критическое | Permission query tests на каждом read path | Negative tests для customer/contractor/non-finance |
 | Existing projects получают ложный Completed process | Высокая / высокое | Preview/owner confirmation/evidence-backed mapping | Zero auto-completed steps without evidence |
 | Rollback удаляет юридические артефакты | Низкая / критическое | Rollback только links/projections, не File/Billing Artifact | Hash/count до и после rollback |
-| Import Batch ошибочно объявлен production-ready по наличию model/FSM | Высокая / высокое | MG-CA-023 runtime entrypoint + E2E; иначе capability inactive | Verified flow с success/failure/retry/rollback/audit либо явный NOT EVIDENCED |
+| Import Batch ошибочно экспонируется несмотря на исключение из release | Средняя / высокое | Скрыть menu/permissions/API/job, оставить feature disabled | Negative access/entrypoint/job evidence, `MG-CA-023=N/A FOR RELEASE` |
 
 ## 9. Организационные риски
 
@@ -708,19 +742,20 @@ Contract → Contract Obligation → Schedule/Planned Visit → Accepted Fact
 | Юристы не определили статусы оригинала и evidence акта | Нельзя принять `CA-05/CA-06` | Legal workshop на реальных документах, утверждённая status/evidence matrix | Legal Owner |
 | Операции не ведут Object/System/Scope качественно | Obligation и plan-fact недостоверны | Data stewardship, completeness dashboard, пилотные договоры | Operations Owner |
 | Квалификации персонала не имеют владельца/реестра | Personnel Gate формален | Назначить HR/HSE owner, регламент обновления и expiry alerts | HR/HSE Owner |
-| Подрядчики не готовы к новой матрице назначений | Workaround через свободный текст | Pilot, onboarding и portal UAT с 2–3 подрядчиками | Contractor Manager |
+| Внутренние владельцы не готовы поддерживать assignment/credential data | Readiness становится формальным либо устаревает | Pilot на representative projects, stewardship и регламент expiry | Contractor Manager |
 | Автотесты ошибочно принимаются за UAT/legal PASS | Ложная готовность релиза | Раздельные evidence gates и запрет синтетического approval | Release Manager |
-| Scope creep превращает MVP в полный BPM | Поздняя ценность и риск незавершения | Gate MVP=`CA-00…CA-07`; BPM финансируется отдельной волной | Steering Committee |
+| Исторический MVP ошибочно принимают за готовый first release | Пропускаются обязательные подрядчики, BPM, документы, RBAC и qualification | Release scope определяется `DP-03`, а не только `CA-00…CA-07` | Steering Committee |
 | Нет владельца exception backlog | Просрочки видимы, но не устраняются | SLA/owner/escalation для каждого класса исключений | Operations Director |
 
-## 10. Волны поставки и release gates
+## 10. Волны завершения и release gates
 
-| Волна | Инкременты | Выходной результат | Gate перехода |
+| Волна | Шаги | Выходной результат | Gate перехода |
 | --- | --- | --- | --- |
-| 0. Freeze | `CA-00` | Воспроизводимый baseline и границы SSOT | W2/DB/manual evidence закрыты |
-| 1. MVP data spine | `CA-01…CA-07` | «Что/когда/где» и plan→fact→act→invoice→payment→margin | Сквозной MVP-сценарий, migration rehearsal, UAT/legal/finance sign-off |
-| 2. Control | `CA-08…CA-10` | Подрядчики, сроки, Contract 360 и exceptions | Permission/performance/data-quality gates |
-| 3. Process | `CA-11…CA-14` | Versioned BPM, запуск, Billing Cycle, My Actions | Template/version/gate/timeout/evidence UAT |
-| 4. Integration | `CA-15` | Полная целевая трассировка и release candidate | Все 557 `req_id` имеют результат; OQ-CA-003 закрыт утверждением TARGET `legal_status`/`execution_status` FSM и transition matrix, а не legacy mapping; применимые MG-CA gates имеют evidence; owner approval не подменяет UAT/legal/runtime |
+| 0. Decisions | `1` | Release Decisions v1 и standalone ADR | документы согласованы и связаны |
+| 1. Freeze and truth | `2…5` | baseline/tag/manifest, legacy N/A, current capability delta, CI profile | воспроизводимый source+evidence baseline |
+| 2. Mandatory product closure | `6…14` | calendar, automation, contractor/evidence/request/document/report scope | mandatory matrix без `Absent`, legal gate закрыт |
+| 3. Qualification | `15…19` | RBAC, Staging, load/race, UAT, restore/rollback/cutover | все применимые gates PASS на одном tree |
+| 4. Release | `20…21` | immutable RC и наблюдённый production launch | approvals + smoke/health/monitoring/backup |
+| 5. Completion | `22` | hypercare exit, post-release review, legacy disposition | project completion sign-off |
 
-Первый рекомендуемый исполнимый шаг — `CA-00`, параллельно с проектированием `CA-04` и минимального `CA-05`. Первый бизнес-значимый gate — не отдельный экран, а завершённый MVP data spine `CA-01…CA-07`.
+Полная последовательность, owners и exit criteria находятся в [10_remaining_questions_and_actions.md](10_remaining_questions_and_actions.md), а текущая компактная последовательность — в [15_first_stage_completion_sequence.md](15_first_stage_completion_sequence.md). Completion tag, legacy technical inventory/backup, [Release Scope v1](12_release_scope_v1.md), local [Quality/CI Profile v1](14_quality_profile_v1.md), historical [hosted static PASS](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) и engineering core `FR-02/03/04` выполнены только в своей доказанной границе. Аудит полноты выявил отсутствие воспроизводимого demo/UAT dataset и cross-project authorization defect; remediation подтверждена current final-tree static `212/212 PASS`, targeted Inspection `5/5 PASS`, scoped runtime-наборами, exact-source Bench gate `179/179 OK`, current full-stack synthetic Engineer slice with `socket.io` polling `200`, pinned repo-local browser runtime contract, and verified GitHub protection for `main` plus blocked `v*` tags. Historical hosted `static-quality` PASS on draft PR head `2865400` сохранён как provenance; the draft PR has hosted `static-quality` PASS on an immutable published head, while any later local edits require a fresh hosted run. Release Scope при этом остаётся 557/557 строк: 554 обязательных, из них 280 `Implemented` и 274 `Partial`. Current authenticated synthetic browser evidence подтверждает только Engineer own/foreign Form/List/direct-URL/full-stack slice; Workspace visibility и human UAT остаются OPEN вместе с restore/rollback, performance/race/load, clean Staging и production deployment. Поэтому общий статус не повышается: `NOT READY FOR PRODUCTION / RC NOT READY`.

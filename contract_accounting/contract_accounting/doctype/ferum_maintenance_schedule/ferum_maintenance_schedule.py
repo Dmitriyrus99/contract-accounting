@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import date
 from typing import Final
 
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import getdate
-
 
 DOCTYPE: Final[str] = "Ferum Maintenance Schedule"
 _IDENTITY_FIELDS: Final[tuple[str, ...]] = (

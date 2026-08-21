@@ -9,8 +9,7 @@ from typing import Any, Final
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import cint, flt, getdate, get_datetime
-
+from frappe.utils import cint, flt, get_datetime, getdate
 
 DOCTYPE: Final[str] = "Ferum Billing Output"
 OUTPUT_WRITER_FLAG: Final[str] = "contract_accounting_billing_output_writer"

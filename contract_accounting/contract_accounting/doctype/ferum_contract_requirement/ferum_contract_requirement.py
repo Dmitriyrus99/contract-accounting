@@ -7,7 +7,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import now_datetime
 
-
 DOCTYPE: Final[str] = "Ferum Contract Requirement"
 TERMINAL_STATES: Final[frozenset[str]] = frozenset({"Approved", "Rejected"})
 TRANSITIONS: Final[dict[str, frozenset[str]]] = {

@@ -28,6 +28,7 @@ from contract_accounting.contract_accounting.doctype.ferum_billing_output.ferum_
 	OUTPUT_WRITER_FLAG,
 	snapshot_for_source,
 )
+from contract_accounting.infrastructure.file_access import get_authorized_file
 
 OUTPUT_DOCTYPE: Final[str] = "Ferum Billing Output"
 ARTIFACT_DOCTYPE: Final[str] = "Ferum Billing Artifact"
@@ -550,8 +551,7 @@ def _validate_output_write(output: Any) -> None:
 
 
 def _validate_file(name: str) -> None:
-	if not frappe.db.get_value("File", name, "content_hash"):
-		frappe.throw(_("Artifact требует File с content_hash."))
+	get_authorized_file(name)
 
 
 def _source_refs(value: str | list[dict[str, str]] | None) -> list[dict[str, str]]:

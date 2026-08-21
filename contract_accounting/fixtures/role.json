@@ -61,5 +61,40 @@
   "doctype": "Role",
   "name": "Подрядчик",
   "role_name": "Подрядчик"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Менеджер персональных данных",
+  "role_name": "Менеджер персональных данных"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Ответственный за ПДн",
+  "role_name": "Ответственный за ПДн"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Ответственный за ИБ",
+  "role_name": "Ответственный за ИБ"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Проверяющий допуски",
+  "role_name": "Проверяющий допуски"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "name": "Тендерный специалист",
+  "role_name": "Тендерный специалист"
  }
 ]

@@ -1,0 +1,1 @@
+"""Ferum Calendar Assignment DocType."""

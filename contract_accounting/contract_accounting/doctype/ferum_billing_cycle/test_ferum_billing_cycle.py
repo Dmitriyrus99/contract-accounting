@@ -35,6 +35,7 @@ from contract_accounting.contract_accounting.doctype.ferum_billing_output import
     test_ferum_billing_output as billing_output_fixture,
 )
 from contract_accounting.contract_accounting.doctype.ferum_service_project.test_ferum_service_project import (
+    _make_address,
     _make_project,
 )
 from contract_accounting.setup.billing_cycle_template import (
@@ -45,12 +46,8 @@ from contract_accounting.setup.billing_cycle_template import (
 
 class TestFerumBillingCycle(FrappeTestCase):
     _make_obligation = billing_output_fixture.TestFerumBillingOutput._make_obligation
-    _make_accepted_visit = (
-        billing_output_fixture.TestFerumBillingOutput._make_accepted_visit
-    )
-    _make_submitted_invoice = (
-        billing_output_fixture.TestFerumBillingOutput._make_submitted_invoice
-    )
+    _make_accepted_visit = billing_output_fixture.TestFerumBillingOutput._make_accepted_visit
+    _make_submitted_invoice = billing_output_fixture.TestFerumBillingOutput._make_submitted_invoice
     _save_file = staticmethod(billing_output_fixture.TestFerumBillingOutput._save_file)
 
     def setUp(self) -> None:
@@ -75,7 +72,7 @@ class TestFerumBillingCycle(FrappeTestCase):
                 "doctype": "Ferum Service Object",
                 "object_name": f"CA-13 Object {uuid4().hex[:10]}",
                 "customer": self.project.customer,
-                "address": "CA-13 runtime address",
+                "address": _make_address(self.project.customer, "CA-13 runtime address"),
             }
         ).insert(ignore_permissions=True)
         self.system = frappe.get_doc(
@@ -103,13 +100,29 @@ class TestFerumBillingCycle(FrappeTestCase):
         frappe.set_user(self._previous_user)
         super().tearDown()
 
+    def test_reference_cycle_rejects_non_key_field_drift(self) -> None:
+        template = ensure_reference_billing_cycle_template()
+        stage = frappe.db.get_value(
+            "Ferum Stage Template", {"process_template": template}, "name"
+        )
+        step = frappe.db.get_value(
+            "Ferum Step Template", {"stage_template": stage}, "name"
+        )
+        original = frappe.db.get_value("Ferum Step Template", step, "timeout_action")
+        frappe.db.set_value(
+            "Ferum Step Template", step, "timeout_action", "Synthetic drift"
+        )
+        try:
+            with self.assertRaisesRegex(frappe.ValidationError, "timeout_action"):
+                ensure_reference_billing_cycle_template()
+        finally:
+            frappe.db.set_value("Ferum Step Template", step, "timeout_action", original)
+
     def test_reference_cycle_projection_and_correction_keep_exact_trace(self) -> None:
         first_template = ensure_reference_billing_cycle_template()
         self.assertEqual(first_template, ensure_reference_billing_cycle_template())
         template = frappe.get_doc("Ferum Process Template", first_template)
-        self.assertEqual(
-            (template.code, template.status), ("FERUM-BILLING-CYCLE", "Published")
-        )
+        self.assertEqual((template.code, template.status), ("FERUM-BILLING-CYCLE", "Published"))
         stages = frappe.get_all(
             "Ferum Stage Template",
             filters={"process_template": template.name},
@@ -158,9 +171,7 @@ class TestFerumBillingCycle(FrappeTestCase):
         new = frappe.get_doc("Ferum Billing Output", correction["correction_output"])
         self.assertEqual(old.billing_cycle, result["billing_cycle"])
         self.assertEqual(new.billing_cycle, result["billing_cycle"])
-        reverse = resolve_billing_cycles_for_source(
-            "Ferum Maintenance Visit", self.visit.name
-        )
+        reverse = resolve_billing_cycles_for_source("Ferum Maintenance Visit", self.visit.name)
         self.assertEqual(reverse["billing_cycles"], [result["billing_cycle"]])
         trace = get_billing_cycle_projection(result["billing_cycle"])
         self.assertEqual(trace["documents"]["output_count"], 2)
@@ -178,9 +189,7 @@ class TestFerumBillingCycle(FrappeTestCase):
             generation_mode="Final",
         )
         issue_billing_output(output, f"ACT-{uuid4().hex[:8]}", "Issued")
-        generated_artifact = frappe.get_doc(
-            "Ferum Billing Artifact", generated["artifact"]
-        )
+        generated_artifact = frappe.get_doc("Ferum Billing Artifact", generated["artifact"])
         signed_file = self._save_file("Ferum Billing Output", output, "signed.txt")
         signed = register_billing_artifact(
             output,
@@ -271,9 +280,7 @@ class TestFerumBillingCycle(FrappeTestCase):
         self.assertEqual(completed["status"], "Completed")
         self.assertTrue(completed["payment"]["all_invoices_paid"])
         self.assertTrue(completed["documents"]["all_active_outputs_signed"])
-        payment_reverse = resolve_billing_cycles_for_source(
-            "Payment Entry", payment.name
-        )
+        payment_reverse = resolve_billing_cycles_for_source("Payment Entry", payment.name)
         self.assertEqual(payment_reverse["billing_cycles"], [cycle])
 
         timeline = __import__(
@@ -283,9 +290,7 @@ class TestFerumBillingCycle(FrappeTestCase):
             as_of=str(getdate() + timedelta(days=60)),
         )
         cycle_rows = [
-            row
-            for row in timeline["rows"]
-            if row["source_doctype"] == "Ferum Billing Cycle"
+            row for row in timeline["rows"] if row["source_doctype"] == "Ferum Billing Cycle"
         ]
         self.assertEqual(len(cycle_rows), 1)
         self.assertFalse(cycle_rows[0]["is_overdue"])

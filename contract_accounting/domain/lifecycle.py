@@ -216,6 +216,7 @@ def transition(
 
 	_validate_required_evidence(legal_target, execution_target, legal_changed, execution_changed, context)
 
+	suspended_from: ExecutionStatus | None
 	if execution_target is ExecutionStatus.SUSPENDED:
 		if execution_changed:
 			suspended_from = state.execution_status

@@ -1,0 +1,27 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["enabled", "activated_at", "activated_by", "configuration_revision", "last_reason", "max_attempts", "policy_version"],
+ "fields": [
+  {"default": "0", "fieldname": "enabled", "fieldtype": "Check", "label": "Enabled", "read_only": 1},
+  {"fieldname": "activated_at", "fieldtype": "Datetime", "label": "Activated At", "read_only": 1},
+  {"fieldname": "activated_by", "fieldtype": "Link", "label": "Activated By", "options": "User", "read_only": 1},
+  {"default": "0", "fieldname": "configuration_revision", "fieldtype": "Int", "label": "Configuration Revision", "read_only": 1},
+  {"fieldname": "last_reason", "fieldtype": "Small Text", "label": "Last Change Reason", "read_only": 1},
+  {"default": "3", "fieldname": "max_attempts", "fieldtype": "Int", "label": "Maximum Delivery Attempts", "read_only": 1},
+  {"default": "dp06-v1", "fieldname": "policy_version", "fieldtype": "Data", "label": "Policy Version", "read_only": 1}
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "module": "Contract Accounting",
+ "name": "Ferum Notification Settings",
+ "permissions": [
+  {"read": 1, "role": "System Manager"},
+  {"read": 1, "role": "Генеральный директор"},
+  {"read": 1, "role": "Руководитель проектов"}
+ ],
+ "states": [],
+ "track_changes": 1
+}

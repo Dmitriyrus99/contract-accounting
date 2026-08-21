@@ -4,7 +4,6 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 
-
 BILLING_EVENT_WRITER_FLAG = "contract_accounting_billing_event_writer"
 
 

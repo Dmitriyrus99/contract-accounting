@@ -6,7 +6,6 @@ from typing import Final
 
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
-
 CUSTOM_FIELDS: Final[dict[str, list[dict[str, object]]]] = {
 	"Sales Invoice": [
 		{

@@ -9,7 +9,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import now_datetime
 
-
 DOCTYPE: Final[str] = "Ferum Photo Evidence"
 ALLOWED_SOURCE_DOCTYPES: Final[frozenset[str]] = frozenset(
 	{

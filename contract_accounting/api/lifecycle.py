@@ -10,13 +10,13 @@ import frappe
 from frappe import _
 from frappe.utils import cint, getdate
 
+from contract_accounting.application.lifecycle_authorization import (
+	allowed_roles_for_command,
+)
 from contract_accounting.application.lifecycle_service import (
 	apply_lifecycle_transition,
 	resume_project_execution,
 	suspend_project_execution,
-)
-from contract_accounting.application.lifecycle_authorization import (
-	allowed_roles_for_command,
 )
 from contract_accounting.domain.lifecycle import (
 	ExecutionStatus,

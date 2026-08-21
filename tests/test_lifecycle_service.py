@@ -19,7 +19,6 @@ from contract_accounting.domain.lifecycle import (
 	TransitionContext,
 )
 
-
 PROJECT = "FSP-2026-00001"
 NOW = datetime(2026, 8, 18, 7, 0, tzinfo=timezone.utc)
 
