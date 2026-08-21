@@ -1,6 +1,6 @@
 # 14. Quality/CI Profile v1
 
-**Статус на 2026-08-21:** `CONFIGURED / LOCAL REVIEW CANDIDATE v0.20.0 / STATIC 212/212 PASS / EXACT-SOURCE BENCH 179/179 OK / FULL-STACK SYNTHETIC ENGINEER SLICE PASS / HOSTED CI FOR CURRENT CHANGE-SET OPEN / HUMAN UAT, RC AND RELEASE NOT READY`.
+**Статус на 2026-08-21:** `CONFIGURED / LOCAL REVIEW CANDIDATE v0.20.0 / STATIC 212/212 PASS / EXACT-SOURCE BENCH 179/179 OK / FULL-STACK SYNTHETIC ENGINEER SLICE PASS / LATEST PUBLISHED PR HEAD HOSTED CI PASS / HUMAN UAT, RC AND RELEASE NOT READY`.
 
 **Назначение:** один воспроизводимый профиль технических проверок первого выпуска. Профиль не подменяет RBAC/browser UAT, performance/load/race, restore, legal/finance/security approval, Staging или Production deployment.
 
@@ -16,7 +16,7 @@
 | Static assets | compileall, JSON parse, JS syntax, local Markdown links | [quality gate](scripts/quality_gate.py) | PASS в составе current static `212/212` profile |
 | Secret boundary | только Git-visible text; ignored env/site/private/backups не читаются | [quality gate](scripts/quality_gate.py) | PASS в составе current static profile; findings 0 |
 | Package | isolated sdist + wheel build | `build==1.5.0` | PASS: `0.20.0` sdist/wheel |
-| Hosted static CI | pull request, push to `main`/`agent/**`, manual dispatch после появления workflow на default branch | [static-quality workflow](.github/workflows/static-quality.yml) | historical PASS: draft PR head `2865400` via runs `32425117645` and `32425141660`, plus [run 32261790230](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) on head `9f2cce9`; hosted CI for the current local change-set remained OPEN at this evidence point |
+| Hosted static CI | pull request, push to `main`/`agent/**`, manual dispatch после появления workflow на default branch | [static-quality workflow](.github/workflows/static-quality.yml) | historical PASS: draft PR head `2865400` via runs `32425117645` and `32425141660`, plus [run 32261790230](implementation/CA-00/hosted_ci_evidence_v0_19_0_2026-08-19.md) on head `9f2cce9`; latest immutable published PR head `51d50aa8e079479513302b87fc6794e48b3a42ce` has hosted `static-quality` PASS via runs `32447011689` and `32447013606`; any later local edits require a fresh run |
 | Bench runtime | installed apps, migrate, asset build, full app tests | [Bench gate](scripts/bench_quality_gate.py) | current exact-source disposable gate: `179/179 OK` on `ca01.localhost` in `3711.997s`; not RC/UAT PASS and not hosted evidence |
 | Synthetic browser ACL | real Desk/List/Form/direct URL for owned/foreign Engineer users | [browser evidence](implementation/CA-08/authenticated_browser_uat_v0_20_0_2026-08-19.md) | symmetric Form ACL, own-only List and foreign direct `403` PASS; automated synthetic slice only |
 | Demo reset | exact registry ownership, derived-row cleanup and idempotent reset | [verification evidence](implementation/CA-08/verification_evidence_v0_20_0_2026-08-19.md) | exact `delete_count=74`, repeat `0`; stable audit sets: Comment `159`, Deleted Document `340`, Version `91` |
