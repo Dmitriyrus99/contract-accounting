@@ -1,7 +1,7 @@
 # Последовательность завершения первого этапа
 
 **Состояние на 2026-08-21:** engineering foundation `v0.20.0` — local review
-candidate, не RC. Current accepted technical evidence: static `211/211 PASS`,
+candidate, не RC. Current accepted technical evidence: static `212/212 PASS`,
 targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
 synthetic demo installer/reset/verifier, exact-source Bench gate `179/179 OK`
 on isolated `ca01.localhost` (`3711.997s`), historical hosted `static-quality`

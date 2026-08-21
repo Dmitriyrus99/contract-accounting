@@ -35,6 +35,10 @@ class DemoUATBrowserRuntimeContractTest(unittest.TestCase):
             self.assertNotIn("output/playwright/fullstack_runtime/node_modules", source)
             self.assertNotIn("createRequire(", source)
 
+    def test_generated_browser_runtime_is_gitignored(self) -> None:
+        gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+        self.assertIn("output/playwright/fullstack_runtime/", gitignore)
+
 
 if __name__ == "__main__":
     unittest.main()
