@@ -294,7 +294,7 @@ Model/FSM есть, orchestrator/API не найден (`Вспомогател�
 | --- | --- | --- |
 | `MG-CA-001` | signed inventory: real business records `0`; полный контрольный backup; N/A act | retirement legacy environment; business migration не входит |
 | `MG-CA-013` | `CODE/CONFIG PASS`; site assignment и Operations UAT OPEN — [calendar evidence](implementation/CA-09/runtime_evidence_v0_18_0_2026-08-19.md), [delivery evidence](implementation/CA-09/runtime_evidence_v0_19_0_2026-08-19.md) | production activation scheduler/SLA delivery и FR-08 |
-| `MG-CA-015` | FR-05 human sign-off подтверждён; FR-06 v0.20.0 CODE/final-tree STATIC `212/212 PASS`/exact-source Bench `179/179 OK`; latest immutable published PR head `dca6402b887ac1f85fc0b3fe6f38e669a13a0b48` has hosted `static-quality` PASS; browser/RBAC/private-file/scanner/HR-DPO-Security UAT и отдельное production-PII permission OPEN | production Worker/Credential data и release-qualified PERSONNEL READY |
+| `MG-CA-015` | FR-05 human sign-off подтверждён; FR-06 v0.20.0 CODE/final-tree STATIC `212/212 PASS`/exact-source Bench `179/179 OK`; the draft PR has hosted `static-quality` PASS on an immutable published head; browser/RBAC/private-file/scanner/HR-DPO-Security UAT и отдельное production-PII permission OPEN | production Worker/Credential data и release-qualified PERSONNEL READY |
 | `MG-CA-016` | tag/remote SHA `7145d87`, exact versions, installed apps, schema/config/permissions/fixture manifest и hashes | официальный completion baseline и release reproducibility |
 | `MG-CA-023` | disabled feature/menu/permission/API/job и negative access test | N/A for first release; future enablement reopens gate |
 

@@ -74,7 +74,7 @@ Live inventory зафиксирован в [live_inventory_w2t12b_2026-08-18.md]
 | Release Scope v1 | PASS | [557-row matrix](../../12_release_scope_matrix_v1.csv), [summary](../../12_release_scope_v1.md), [backlog](../../13_first_release_backlog_v1.md) |
 | local quality profile | HISTORICAL v0.19.0 PASS | committed baseline static `161/161` + disposable Bench `89/89`; historical, not v0.20.0 current-tree qualification; [v0.19.0 evidence](../CA-09/runtime_evidence_v0_19_0_2026-08-19.md) |
 | `FR-02` master-data core | PASS (automation) | [boundary](master_data_boundary_v0_17_0.md), [traceability](traceability_v0_17_0_master_data.md); owner/browser/race gates OPEN |
-| hosted CI on latest published PR head | PASS | immutable head `dca6402b887ac1f85fc0b3fe6f38e669a13a0b48`; `static-quality` success via runs `32447246141` and `32447249139`; any later local edits require a fresh run |
+| hosted CI on latest published PR head | PASS | see the draft PR checks for the exact immutable SHA and run URLs; any later local edits require a fresh run |
 
 Legacy `MG-CA-001=N/A` execution/sign-off protocol: [legacy_data_disposition_2026-08-19.md](legacy_data_disposition_2026-08-19.md). Count-only inventory and local full backup PASS; Data Owner signature, off-host retention and separate restore gate remain OPEN.
 
