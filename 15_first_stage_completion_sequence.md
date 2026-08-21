@@ -2,7 +2,7 @@
 
 **Состояние на 2026-08-21:** engineering foundation `v0.20.0` — published review
 candidate, не RC. Current accepted technical evidence: hosted `static-quality`
-PASS on current published draft-PR head `2e27643` via run `32470646882`, static `212/212 PASS`,
+PASS on current published draft-PR head `e924856` via runs `32476386503` and `32476389650`, static `212/212 PASS`,
 targeted Inspection `5/5 PASS`, scoped privacy runtime, source-controlled
 synthetic demo installer/reset/verifier, exact-source Bench gate `179/179 OK`
 on isolated `ca01.localhost`, historical hosted `static-quality`
